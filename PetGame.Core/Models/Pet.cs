@@ -55,7 +55,7 @@ namespace PetGame.Models
         const int MaxEndurance = 100;
         const int MinEndurance = 0;
 
-        public int Enduracnce
+        public int Endurance
         {
             get => _endurance;
             set
