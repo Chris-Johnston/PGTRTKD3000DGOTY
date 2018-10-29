@@ -2,6 +2,8 @@ version: 0.1.{build}
 image:
 - Visual Studio 2017
 - Ubuntu
+before_build:
+- nuget restore
 build:
   publish_aspnet_core: true
   verbosity: minimal
