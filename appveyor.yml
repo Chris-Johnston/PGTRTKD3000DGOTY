@@ -1,0 +1,7 @@
+version: 0.1.{build}
+image:
+- Visual Studio 2017
+- Ubuntu
+build:
+  publish_aspnet_core: true
+  verbosity: minimal
