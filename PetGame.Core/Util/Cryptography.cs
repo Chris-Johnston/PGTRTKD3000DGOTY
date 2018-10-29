@@ -43,7 +43,54 @@ namespace PetGame.Util
                 using (var sreader = new MemoryStream(Encoding.ASCII.GetBytes(plaintextPassword)))
                 {
                     var result = hmac.ComputeHash(sreader);
-                    return user.PasswordHash == result;
+                    return CryptographicCompare(user.PasswordHash, result);
+                }
+            }
+        }
+
+        public static bool CryptographicCompare(byte[] a, byte[] b)
+        {
+            // don't bother with null arrays
+            if (a == null || b == null)
+                return false;
+            bool eq = true;
+            for (int i = 0; i < a.Length; i++)
+            {
+                if (i < b.Length)
+                {
+                    if (a[i] != b[i])
+                        eq = false;
+                }
+            }
+            return eq && a.Length == b.Length;
+        }
+
+        public static void SetUserHMACKey(User user)
+        {
+            // fill the HMACKey with 256 random bytes
+            var gen = RandomNumberGenerator.Create();
+            user.HMACKey = new byte[256];
+            gen.GetBytes(user.HMACKey);
+        }
+
+        public static void SetUserPassword(User user, string plainTextPassword)
+        {
+            // check parameters
+            if (user == null)
+                throw new ArgumentNullException(nameof(user), "The user parameter may not be null.");
+            if (string.IsNullOrEmpty(plainTextPassword))
+                throw new ArgumentNullException(nameof(plainTextPassword), "The plaintext password parameter may not be null.");
+
+            // set a new hmac key for the user as well
+            SetUserHMACKey(user);
+
+            using (HMACSHA512 hmac = new HMACSHA512(user.HMACKey))
+            {
+                // create a reader for the pw string
+                using (var sreader = new MemoryStream(Encoding.ASCII.GetBytes(plainTextPassword)))
+                {
+                    // set the new password hash
+                    user.PasswordHash = hmac.ComputeHash(sreader);
                 }
             }
         }
