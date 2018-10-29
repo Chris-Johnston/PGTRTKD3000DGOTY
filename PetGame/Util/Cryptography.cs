@@ -30,7 +30,7 @@ namespace PetGame.Util
         /// <exception cref="ArgumentNullException">
         ///     Thrown if either the user or password parameters are null.
         /// </exception>
-        public bool VerifyUserPassword(User user, string plaintextPassword)
+        public static bool VerifyUserPassword(User user, string plaintextPassword)
         {
             if (user == null)
                 throw new ArgumentNullException(nameof(user), "The user parameter may not be null.");
@@ -43,11 +43,9 @@ namespace PetGame.Util
                 using (var sreader = new MemoryStream(Encoding.ASCII.GetBytes(plaintextPassword)))
                 {
                     var result = hmac.ComputeHash(sreader);
-
                     return user.PasswordHash == result;
                 }
             }
-            return false;
         }
     }
 }

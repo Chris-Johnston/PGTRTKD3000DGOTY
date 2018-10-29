@@ -14,6 +14,7 @@ namespace PetGame.Models
         ///     A user's unique identifier.
         /// </summary>
         public ulong UserId { get; set; }
+        // yes, I am being optimistic by making the UserId an unsigned long
 
         //TODO: Define a Regex for checking validity of usernames.
 
