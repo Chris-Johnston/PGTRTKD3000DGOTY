@@ -22,8 +22,10 @@ namespace PetGame
         public ActionResult Post([FromForm]string username, [FromForm]string password)
         { 
             //TODO: Run username and password against regex validation rules
-            if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password))
-                throw new ArgumentNullException("value", "Neither the Username or Password may be null.");
+            if (string.IsNullOrWhiteSpace(username))
+                throw new ArgumentNullException(nameof(username), "Neither the Username or Password may be null.");
+            if (string.IsNullOrWhiteSpace(password))
+                throw new ArgumentNullException(nameof(password), "Neither the Username or Password may be null.");
 
             //HACK: Need to actually set up the database so I can have a username and password
             // when this is done, get the user from the database with the requested username
