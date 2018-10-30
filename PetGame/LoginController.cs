@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using PetGame.Core;
 using PetGame.Models;
 using PetGame.Util;
 
@@ -13,6 +14,13 @@ namespace PetGame
     [Route("api/[controller]")]
     public class LoginController : Controller
     {
+        private readonly SqlManager sqlManager;
+
+        public LoginController(SqlManager sqlManager) : base()
+        {
+            this.sqlManager = sqlManager;
+        }
+
         /// <summary>
         ///     Collects login data and generates login tokens for the user to use.
         /// </summary>
@@ -36,6 +44,21 @@ namespace PetGame
             };
             // HACK: don't use the hardcoded password
             Cryptography.SetUserPassword(user, "test");
+
+            //TODO: TEST --- remove me when done
+            // example of how we should do SQL stuff without use of EF
+            using (var s = sqlManager.EstablishDataConnection)
+            {
+                var cmd = s.CreateCommand();
+                cmd.CommandText = "INSERT INTO [User] (UserId, Username, PasswordHash, HMACKey) VALUES (@UserId, @Username, @PasswordHash, @HMACKey);";
+                cmd.Parameters.AddWithValue("@UserId", 123);
+                cmd.Parameters.AddWithValue("@Username", "test person'");
+                cmd.Parameters.AddWithValue("@PasswordHash", user.PasswordHash);
+                cmd.Parameters.AddWithValue("@HMACKey", user.HMACKey);
+
+                int a = cmd.ExecuteNonQuery();
+                Console.WriteLine($"Affected {a}");
+            }
 
             // if password verified, create a new token for that user and return it for the client
             if (Cryptography.VerifyUserPassword(user, password))

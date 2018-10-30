@@ -33,6 +33,7 @@ namespace PetGame.Models
         /// <remarks>
         ///     We will use a HMAC SHA512 password hash method.
         ///     See https://docs.microsoft.com/en-us/dotnet/api/system.security.cryptography.hmacsha512
+        ///     This byte array will be 64 bytes in length.
         /// </remarks>
         public byte[] PasswordHash { get; set; }
 
@@ -43,7 +44,7 @@ namespace PetGame.Models
         ///     This information should be kept very private.
         /// </summary>
         /// <remarks>
-        ///     This byte array will be 64 bytes in length.
+        ///     This byte array will be 256 bytes in length.
         /// </remarks>
         public byte[] HMACKey { get; set; }
     }

@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
+using PetGame.Core;
 
 namespace PetGame
 {
@@ -16,6 +17,8 @@ namespace PetGame
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
+            //TODO: Move connection string to environment variables
+            services.AddSingleton<SqlManager>(new SqlManager("Server=COMPUTERMACHINE;Database=PetGame;Trusted_Connection=True;"));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
