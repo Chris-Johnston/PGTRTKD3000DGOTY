@@ -32,7 +32,6 @@ namespace PetGame
                 UserId = 1
             };
 
-            //return Json(user);
             return Content($"Hello {user.Username}");
         }
     }

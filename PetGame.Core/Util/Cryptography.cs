@@ -9,11 +9,13 @@ using PetGame.Models;
 
 namespace PetGame.Util
 {
-    public class Cryptography
+    /// <summary>
+    ///     Static methods that are used for Cryptographic actions.
+    /// </summary>
+    public static class Cryptography
     {
         const int TokenSize = 256;
         const int UserTokenSize = 64;
-
 
         /// <summary>
         ///     Verifies the given plain-text password with a 
