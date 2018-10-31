@@ -17,8 +17,7 @@ namespace PetGame
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
-            //TODO: Move connection string to environment variables
-
+            // connection string must be set in the environment variables to connect to a MSSQL db instance
             var connectionString = Environment.GetEnvironmentVariable("PETGAME_DB_CONNECTION_STRING");
             services.AddSingleton<SqlManager>(new SqlManager(connectionString));
         }
