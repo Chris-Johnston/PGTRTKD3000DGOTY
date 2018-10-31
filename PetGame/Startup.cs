@@ -18,7 +18,9 @@ namespace PetGame
         {
             services.AddMvc();
             //TODO: Move connection string to environment variables
-            services.AddSingleton<SqlManager>(new SqlManager("Server=COMPUTERMACHINE;Database=PetGame;Trusted_Connection=True;"));
+
+            var connectionString = Environment.GetEnvironmentVariable("PETGAME_DB_CONNECTION_STRING");
+            services.AddSingleton<SqlManager>(new SqlManager(connectionString));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
