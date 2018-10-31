@@ -5,9 +5,14 @@ VisualStudioVersion = 15.0.28010.2036
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PetGame", "PetGame\PetGame.csproj", "{83FBE126-F024-4308-93E0-6CC8144F980E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PetGame.Core", "PetGame.Core\PetGame.Core.csproj", "{8CA3DF83-9219-4B05-9C78-011E5A87A8CE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PetGame.Core", "PetGame.Core\PetGame.Core.csproj", "{8CA3DF83-9219-4B05-9C78-011E5A87A8CE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PetGame.Tests", "PetGame.Tests\PetGame.Tests.csproj", "{2D761E71-A446-4302-AFD8-07DA5A31B48E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PetGame.Tests", "PetGame.Tests\PetGame.Tests.csproj", "{2D761E71-A446-4302-AFD8-07DA5A31B48E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SQL", "SQL", "{9CFE5762-8644-4AB4-87A4-667E6AD08636}"
+	ProjectSection(SolutionItems) = preProject
+		SQL\Table_Users_Create.sql = SQL\Table_Users_Create.sql
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
