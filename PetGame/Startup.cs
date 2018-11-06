@@ -43,6 +43,12 @@ namespace PetGame
                         // todo add ValidIssuers
                         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey))
                     };
+                }).AddCookie(options =>
+                {
+                    options.Cookie.Expiration = TimeSpan.FromDays(7);
+                    options.SlidingExpiration = true;
+                    options.Cookie.HttpOnly = true;
+                    options.Cookie.Name = "auth_token";
                 });
         }
 

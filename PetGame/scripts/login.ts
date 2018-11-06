@@ -12,16 +12,20 @@ function tryLogin()
         "username": usernameField,
         "password": passwordField
     };
-    
-
     // register the callback to print out the request body
     request.onreadystatechange = function () {
         if (request.readyState == XMLHttpRequest.DONE) {
-            console.log(request.responseText);
-            alert(request.responseText);
+            if (request.status >= 400 && request.status < 500) {
+                alert('4xx error');
+            }
+            else {
+                console.log(request.responseText);
+                alert(request.responseText);
+
+                resultsField.innerText = request.responseText;
+            }
         }
     }
-
     request.setRequestHeader('Content-Type', 'application/json');
     console.log(`sending ${JSON.stringify(body)}`);
     request.send(JSON.stringify(body));

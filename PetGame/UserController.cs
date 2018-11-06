@@ -22,7 +22,13 @@ namespace PetGame
         public ActionResult Get()
         {
             var currentUser = HttpContext.User;
-            return Content($"Hello {currentUser}");
+
+            var useridclaim = currentUser.Claims.FirstOrDefault(x => x.Type == "jti").Value;
+            var usernameclaim = currentUser.Identities.FirstOrDefault()?.Name ?? "error";
+
+
+            //return Content($"Hello {currentUser.ToString()}");
+            return Content($"Hello {useridclaim} {usernameclaim}");
         }
     }
 }
