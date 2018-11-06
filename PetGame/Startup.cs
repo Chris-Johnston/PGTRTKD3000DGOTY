@@ -30,6 +30,7 @@ namespace PetGame
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseAuthentication();
             app.UseFileServer();
 
             app.UseMvc(routes =>

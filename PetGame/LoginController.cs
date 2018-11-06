@@ -21,26 +21,32 @@ namespace PetGame
             this.sqlManager = sqlManager;
         }
 
+        public class LoginData
+        {
+            public string username { get; set; }
+            public string password { get; set; }
+        }
+
         /// <summary>
         ///     Collects login data and generates login tokens for the user to use.
         /// </summary>
         /// <param name="value"></param>
         // POST api/<controller>
         [HttpPost]
-        public ActionResult Post([FromForm]string username, [FromForm]string password)
-        { 
+        public ActionResult Post([FromBody]LoginData data)
+        {
             //TODO: Run username and password against regex validation rules
-            if (string.IsNullOrWhiteSpace(username))
-                throw new ArgumentNullException(nameof(username), "Neither the Username or Password may be null.");
-            if (string.IsNullOrWhiteSpace(password))
-                throw new ArgumentNullException(nameof(password), "Neither the Username or Password may be null.");
+            //if (string.IsNullOrWhiteSpace(username))
+            //    throw new ArgumentNullException(nameof(username), "Neither the Username or Password may be null.");
+            //if (string.IsNullOrWhiteSpace(password))
+            //    throw new ArgumentNullException(nameof(password), "Neither the Username or Password may be null.");
 
             //HACK: Need to actually set up the database so I can have a username and password
             // when this is done, get the user from the database with the requested username
             User user = new User()
             {
                 UserId = 1,
-                Username = "DEV"
+                Username = data.username
             };
             // HACK: don't use the hardcoded password
             Cryptography.SetUserPassword(user, "test");
@@ -61,7 +67,7 @@ namespace PetGame
             }
 
             // if password verified, create a new token for that user and return it for the client
-            if (Cryptography.VerifyUserPassword(user, password))
+            if (Cryptography.VerifyUserPassword(user, data.password))
             {
                 // get a user token for this suer
                 var ut = Cryptography.MakeUserToken(user);
