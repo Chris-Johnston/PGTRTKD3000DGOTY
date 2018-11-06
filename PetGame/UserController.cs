@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PetGame.Models;
 
@@ -17,22 +18,11 @@ namespace PetGame
         /// </summary>
         /// <returns></returns>
         // GET: api/<controller>
-        [HttpGet]
+        [HttpGet, Authorize]
         public ActionResult Get()
         {
-            // get the authorization headers
-            var authorization = HttpContext.Request.Headers["Authorization"];
-
-            // HACK: Add graceful handling for when the request isn't specified, and add a utility function to get the user from the current httpcontext
-
-            //HACK: use the database to get the associated user id for a valid token that matches this authorization (if any)
-            var user = new User()
-            {
-                Username = "TEST",
-                UserId = 1
-            };
-
-            return Content($"Hello {user.Username}");
+            var currentUser = HttpContext.User;
+            return Content($"Hello {currentUser}");
         }
     }
 }
