@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
 using PetGame.Core;
 
 namespace PetGame
@@ -20,6 +23,27 @@ namespace PetGame
             // connection string must be set in the environment variables to connect to a MSSQL db instance
             var connectionString = Environment.GetEnvironmentVariable("PETGAME_DB_CONNECTION_STRING");
             services.AddSingleton<SqlManager>(new SqlManager(connectionString));
+
+            var jwtKey = Environment.GetEnvironmentVariable("PETGAME_JWT_KEY");
+
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
+                {
+                    options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters()
+                    {
+                        // validate that the server created the token
+                        ValidateIssuer = false,
+                        // ensure that the recipient of the token is authorized to recieve it
+                        ValidateAudience = false,
+                        // check that thetoken is not expired and the signing key of issuer is valid
+                        ValidateLifetime = true,
+                        // verify that the key used to sign the incoming token is part of a list of 
+                        // trusted keys
+                        ValidateIssuerSigningKey = true,
+                        // todo add ValidIssuers
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey))
+                    };
+                });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -30,6 +54,7 @@ namespace PetGame
                 app.UseDeveloperExceptionPage();
             }
 
+            // use JWT authentication
             app.UseAuthentication();
             app.UseFileServer();
 
