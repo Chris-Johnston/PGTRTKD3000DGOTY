@@ -3,15 +3,23 @@
 <head>
     <meta charset="utf-8" />
     <title>Login</title>
+    <!-- login.ts -->
+    <script src="scripts/login.js"></script>
 </head>
 <body>
     <h1>Login Page</h1>
 
-    <form action="/api/login" method="post">
-        Username: <input type="text" name="username" />
+    <!-- test typescript code pls ignore -->
+    <input id="button" type="button" onclick="tryLogin();" />
+
+
+    <form>
+        Username: <input id="username" type="text" name="username" />
         <br />
-        Password: <input type="password" name="password" />
+        Password: <input id="password" type="password" name="password" />
         <input type="submit" value="Submit">
     </form>
+
+    <p id="results">Results: </p>
 </body>
 </html>

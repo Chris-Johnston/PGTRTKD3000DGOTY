@@ -13,7 +13,7 @@
       "launchBrowser": true,
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
-        "PETGAME_DB_CONNECTION_STRING": "\"Server=localhost;Database=PetGame;Trusted_Connection=True;\""
+        "PETGAME_DB_CONNECTION_STRING": "Server=localhost;Database=PetGame;Trusted_Connection=True;"
       }
     },
     "PetGame": {

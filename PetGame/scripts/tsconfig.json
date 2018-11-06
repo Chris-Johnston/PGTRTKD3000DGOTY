@@ -1,0 +1,19 @@
+{
+    "compilerOptions": {
+        "noImplicitAny": true,
+        "noEmitOnError": true,
+        "removeComments": true,
+        "sourceMap": true,
+        "target": "es5"
+    },
+    // explicitly set all of the files that we wish to include,
+    // instead of just excluding directories
+    //"exclude": [
+    //    "node_modules",
+    //    "wwwroot"
+    //],
+    "files": [
+        "./login.ts"
+    ],
+    "compileOnSave": true
+}
