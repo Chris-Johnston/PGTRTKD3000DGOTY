@@ -26,6 +26,7 @@ namespace PetGame
             var useridclaim = currentUser.Claims.FirstOrDefault(x => x.Type == "jti").Value;
             var usernameclaim = currentUser.Identities.FirstOrDefault()?.Name ?? "error";
 
+            // test with a GET to /api/user with bearer authorization header from the login endpoint
 
             //return Content($"Hello {currentUser.ToString()}");
             return Content($"Hello {useridclaim} {usernameclaim}");
