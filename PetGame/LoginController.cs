@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PetGame.Core;
 using PetGame.Models;
@@ -21,25 +22,23 @@ namespace PetGame
             this.sqlManager = sqlManager;
         }
 
-        public class LoginData
-        {
-            public string username { get; set; }
-            public string password { get; set; }
-        }
-
         /// <summary>
         ///     Collects login data and generates login tokens for the user to use.
         /// </summary>
         /// <param name="value"></param>
         // POST api/<controller>
         [HttpPost]
-        public ActionResult Post([FromBody]LoginData data)
+        [AllowAnonymous]
+        public IActionResult Post([FromBody]LoginModel data)
         {
+            if (data == null)
+                throw new ArgumentNullException(nameof(data), "The login data may not be null.");
+
             //TODO: Run username and password against regex validation rules
-            //if (string.IsNullOrWhiteSpace(username))
-            //    throw new ArgumentNullException(nameof(username), "Neither the Username or Password may be null.");
-            //if (string.IsNullOrWhiteSpace(password))
-            //    throw new ArgumentNullException(nameof(password), "Neither the Username or Password may be null.");
+            if (string.IsNullOrWhiteSpace(data.username))
+                throw new ArgumentException("Neither the Username or Password may be null or whitespace.");
+            if (string.IsNullOrWhiteSpace(data.password))
+                throw new ArgumentException("Neither the Username or Password may be null or whitespace.");
 
             //HACK: Need to actually set up the database so I can have a username and password
             // when this is done, get the user from the database with the requested username
@@ -73,12 +72,11 @@ namespace PetGame
                 var ut = Cryptography.MakeUserToken(user);
                 Response.StatusCode = 200;
                 // return the user token
-                return Json(ut);
+                return Json(new { token = ut });
             }
             else
             {
-                Response.StatusCode = 403;
-                return Content("Invalid credentials.");
+                return Unauthorized();
             }
         }
     }
