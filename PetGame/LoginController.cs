@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PetGame.Core;
@@ -71,6 +73,27 @@ namespace PetGame
                 // get a user token for this suer
                 var ut = Cryptography.MakeUserToken(user);
                 Response.StatusCode = 200;
+
+                // make a new cookie
+                Response.Cookies.Append("auth_token", $"Bearer {ut}" , new Microsoft.AspNetCore.Http.CookieOptions()
+                {
+                    // so that these cannot be exposed from JS
+                    HttpOnly = true,
+                    Expires = DateTime.Now.AddDays(14)
+                    //TODO add the secure flag to CookieOptions
+                });
+
+                var claims = new List<Claim>()
+                {
+                    new Claim(ClaimTypes.Name, user.Username),
+                    new Claim(ClaimTypes.NameIdentifier, user.UserId.ToString())
+                };
+
+                var userid = new ClaimsIdentity(claims, "auth_token");
+                var pr = new ClaimsPrincipal(userid);
+                HttpContext.SignInAsync("Cookies", pr).Wait();
+                //HttpContext.Authentication.SignInAsync
+
                 // return the user token
                 return Json(new { token = ut });
             }

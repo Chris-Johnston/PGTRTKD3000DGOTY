@@ -17,9 +17,9 @@ namespace PetGame
         ///     Gets information from the user who is currently signed in, from the authorization header.
         /// </summary>
         /// <returns></returns>
-        // GET: api/<controller>
-        [HttpGet, Authorize]
-        public ActionResult Get()
+        // GET: api/<controller>/whoami
+        [HttpGet("whoami"), Authorize]
+        public ActionResult WhoAmI()
         {
             var currentUser = HttpContext.User;
 
@@ -30,6 +30,17 @@ namespace PetGame
 
             //return Content($"Hello {currentUser.ToString()}");
             return Content($"Hello {useridclaim} {usernameclaim}");
+        }
+
+        [HttpGet("whoami2"), Authorize]
+        public IActionResult WhoAmIRendered()
+        {
+            var currentUser = HttpContext.User;
+
+            var useridclaim = currentUser.Claims.FirstOrDefault(x => x.Type == "jti").Value;
+            var usernameclaim = currentUser.Identities.FirstOrDefault()?.Name ?? "error";
+
+            return Ok($"<html><body><h1>Hello {useridclaim} {usernameclaim}</h1></body></html>");
         }
     }
 }
