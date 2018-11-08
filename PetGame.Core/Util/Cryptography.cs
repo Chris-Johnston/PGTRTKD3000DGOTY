@@ -66,7 +66,7 @@ namespace PetGame.Util
         /// <returns>
         ///      A new UserToken.
         /// </returns>
-        public static string MakeUserToken(User user)
+        public static UserToken MakeUserToken(User user)
         {
             var ut = new UserToken()
             {
@@ -75,34 +75,15 @@ namespace PetGame.Util
                 LastUsed = DateTime.Now
             };
 
-            // create a JWT
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Environment.GetEnvironmentVariable("PETGAME_JWT_KEY")));
-            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512);
-            var issuer = "issuer";
-
-            var claims = new List<Claim>()
-            {
-                new Claim(JwtRegisteredClaimNames.Jti, user.UserId.ToString()),
-                new Claim(JwtRegisteredClaimNames.Aud, user.UserId.ToString()),
-                new Claim(JwtRegisteredClaimNames.UniqueName, user.Username),
-                new Claim(JwtRegisteredClaimNames.Iat, ((DateTimeOffset)DateTime.UtcNow).ToUnixTimeSeconds().ToString())
-            };
-
-            var token = new JwtSecurityToken(issuer, issuer, expires: DateTime.Now.AddMinutes(15), signingCredentials: creds, claims: claims);
-
-            return new JwtSecurityTokenHandler().WriteToken(token);
-
-
-
-            //// generate a new token
-            //var bytes = new byte[UserTokenSize];
-            //var gen = RandomNumberGenerator.Create();
-            //// get a bunch of random bytes
-            //gen.GetBytes(bytes);
-            //// encode as a string
-            //ut.Token = Convert.ToBase64String(bytes);
-            //// return this value
-            // return ut;
+            // generate a new token
+            var bytes = new byte[UserTokenSize];
+            var gen = RandomNumberGenerator.Create();
+            // get a bunch of random bytes
+            gen.GetBytes(bytes);
+            // encode as a string
+            ut.Token = Convert.ToBase64String(bytes);
+            // return this value
+            return ut;
         }
 
         public static bool CryptographicCompare(byte[] a, byte[] b)

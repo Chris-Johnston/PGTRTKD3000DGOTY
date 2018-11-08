@@ -46,7 +46,7 @@ namespace PetGame
             // when this is done, get the user from the database with the requested username
             User user = new User()
             {
-                UserId = 1,
+                UserId = 0,
                 Username = data.username
             };
             // HACK: don't use the hardcoded password
@@ -57,14 +57,20 @@ namespace PetGame
             using (var s = sqlManager.EstablishDataConnection)
             {
                 var cmd = s.CreateCommand();
-                cmd.CommandText = "INSERT INTO [User] (UserId, Username, PasswordHash, HMACKey) VALUES (@UserId, @Username, @PasswordHash, @HMACKey);";
-                cmd.Parameters.AddWithValue("@UserId", 123);
+                cmd.CommandText = "INSERT INTO [User] (Username, PasswordHash, HMACKey) OUTPUT INSERTED.UserID VALUES (@Username, @PasswordHash, @HMACKey);";
+                // cmd.Parameters.AddWithValue("@UserId", 123);
                 cmd.Parameters.AddWithValue("@Username", "test person'");
                 cmd.Parameters.AddWithValue("@PasswordHash", user.PasswordHash);
                 cmd.Parameters.AddWithValue("@HMACKey", user.HMACKey);
 
-                int a = cmd.ExecuteNonQuery();
-                Console.WriteLine($"Affected {a}");
+                var reader = cmd.ExecuteReader();
+                while (reader.Read())
+                {
+                    var id = (ulong)reader.GetInt64(0);
+                    // set the user id
+                    user.UserId = id;
+                }
+                reader.Close();
             }
 
             // if password verified, create a new token for that user and return it for the client
@@ -74,13 +80,9 @@ namespace PetGame
                 var ut = Cryptography.MakeUserToken(user);
                 Response.StatusCode = 200;
 
-                // make a new cookie
-                Response.Cookies.Append("auth_token", $"Bearer {ut}" , new Microsoft.AspNetCore.Http.CookieOptions()
+                Response.Cookies.Append("auth_token", ut.Token, new Microsoft.AspNetCore.Http.CookieOptions()
                 {
-                    // so that these cannot be exposed from JS
-                    HttpOnly = true,
-                    Expires = DateTime.Now.AddDays(14)
-                    //TODO add the secure flag to CookieOptions
+                    HttpOnly = true
                 });
 
                 var claims = new List<Claim>()
@@ -91,11 +93,10 @@ namespace PetGame
 
                 var userid = new ClaimsIdentity(claims, "auth_token");
                 var pr = new ClaimsPrincipal(userid);
-                HttpContext.SignInAsync("Cookies", pr).Wait();
-                //HttpContext.Authentication.SignInAsync
-
+                HttpContext.SignInAsync(pr).Wait();
+                
                 // return the user token
-                return Json(new { token = ut });
+                return Json(ut);
             }
             else
             {
