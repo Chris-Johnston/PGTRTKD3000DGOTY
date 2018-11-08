@@ -27,34 +27,40 @@ namespace PetGame
 
             var jwtKey = Environment.GetEnvironmentVariable("PETGAME_JWT_KEY");
 
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie(options =>
+                {
+                    options.Cookie.Name = "auth_token";
+                });
+
             // cookie authentication scheme
             //services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
             //    .AddCookie();
             // jwt authentication scheme
-            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-                .AddJwtBearer(options =>
-                {
-                    options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters()
-                    {
-                        // validate that the server created the token
-                        ValidateIssuer = false,
-                        // ensure that the recipient of the token is authorized to recieve it
-                        ValidateAudience = false,
-                        // check that thetoken is not expired and the signing key of issuer is valid
-                        ValidateLifetime = true,
-                        // verify that the key used to sign the incoming token is part of a list of 
-                        // trusted keys
-                        ValidateIssuerSigningKey = true,
-                        // todo add ValidIssuers
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey))
-                    };
-                }).AddCookie(options =>
-                {
-                    options.Cookie.Expiration = TimeSpan.FromDays(7);
-                    options.SlidingExpiration = true;
-                    options.Cookie.HttpOnly = true;
-                    options.Cookie.Name = "auth_token";
-                });
+            //services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            //    .AddJwtBearer(options =>
+            //    {
+            //        options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters()
+            //        {
+            //            // validate that the server created the token
+            //            ValidateIssuer = false,
+            //            // ensure that the recipient of the token is authorized to recieve it
+            //            ValidateAudience = false,
+            //            // check that thetoken is not expired and the signing key of issuer is valid
+            //            ValidateLifetime = true,
+            //            // verify that the key used to sign the incoming token is part of a list of 
+            //            // trusted keys
+            //            ValidateIssuerSigningKey = true,
+            //            // todo add ValidIssuers
+            //            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey))
+            //        };
+            //    }).AddCookie(options =>
+            //    {
+            //        options.Cookie.Expiration = TimeSpan.FromDays(7);
+            //        options.SlidingExpiration = true;
+            //        options.Cookie.HttpOnly = true;
+            //        options.Cookie.Name = "auth_token";
+            //    });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

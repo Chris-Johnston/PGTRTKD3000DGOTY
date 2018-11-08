@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -35,12 +36,31 @@ namespace PetGame
         [HttpGet("whoami2"), Authorize]
         public IActionResult WhoAmIRendered()
         {
-            var currentUser = HttpContext.User;
+            var user = GetUserFromContext(HttpContext.User);
 
-            var useridclaim = currentUser.Claims.FirstOrDefault(x => x.Type == "jti").Value;
-            var usernameclaim = currentUser.Identities.FirstOrDefault()?.Name ?? "error";
+            return Ok($"<html><body><h1>Hello {user.Username} {user.UserId}</h1></body></html>");
+        }
 
-            return Ok($"<html><body><h1>Hello {useridclaim} {usernameclaim}</h1></body></html>");
+        private User GetUserFromContext(ClaimsPrincipal userClaims)
+        {
+            try
+            {
+                // get the userId from the claims of the user and convert it to a ulong type
+                var userid = Convert.ToUInt64(userClaims.Identities.FirstOrDefault().Claims.FirstOrDefault(z => z.Type == ClaimTypes.NameIdentifier)?.Value ?? "-1");
+                string username = userClaims.Identities.FirstOrDefault().Claims.FirstOrDefault(z => z.Type == ClaimTypes.Name)?.Value ?? "error";
+
+                // return a new user for this, without the password stuff
+                return new User()
+                {
+                    UserId = userid,
+                    Username = username
+                };
+            }
+            catch
+            {
+                // catch everything, fail silently
+                return null;
+            }
         }
     }
 }
