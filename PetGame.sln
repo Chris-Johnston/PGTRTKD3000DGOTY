@@ -9,7 +9,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PetGame.Core", "PetGame.Cor
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PetGame.Tests", "PetGame.Tests\PetGame.Tests.csproj", "{2D761E71-A446-4302-AFD8-07DA5A31B48E}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SQL", "SQL", "{1AF2AAEC-655D-4422-8AB3-8A00D2239AD3}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{EA421D73-09A6-4935-80B3-0F70945E9329}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SQL", "SQL", "{DAACEFFD-EAD5-434C-BD93-3F52EAF42A55}"
+	ProjectSection(SolutionItems) = preProject
+		SQL\deleteme.txt = SQL\deleteme.txt
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -32,6 +37,9 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{DAACEFFD-EAD5-434C-BD93-3F52EAF42A55} = {EA421D73-09A6-4935-80B3-0F70945E9329}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C7E7B090-53CD-4DB9-9654-87BAE753D9D3}
