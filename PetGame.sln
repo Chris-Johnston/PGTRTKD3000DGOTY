@@ -15,6 +15,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SQL", "SQL", "{DAACEFFD-EAD
 	ProjectSection(SolutionItems) = preProject
 		SQL\Create_Race_DummyData.sql = SQL\Create_Race_DummyData.sql
 		SQL\Create_Race_Table.sql = SQL\Create_Race_Table.sql
+		SQL\Create_Table_User.sql = SQL\Create_Table_User.sql
 		SQL\deleteme.txt = SQL\deleteme.txt
 	EndProjectSection
 EndProject
