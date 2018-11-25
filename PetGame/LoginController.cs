@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using PetGame.Core;
 using PetGame.Models;
 using PetGame.Util;
@@ -27,81 +29,53 @@ namespace PetGame
         /// <summary>
         ///     Collects login data and generates login tokens for the user to use.
         /// </summary>
-        /// <param name="value"></param>
         // POST api/<controller>
         [HttpPost]
         [AllowAnonymous]
-        public IActionResult Post([FromBody]LoginModel data)
+        public IActionResult PostLogin()
         {
-            if (data == null)
-                throw new ArgumentNullException(nameof(data), "The login data may not be null.");
+            var svc = new LoginService(sqlManager);
+            var ut = svc.GetUserToken(this as ControllerBase);
 
-            //TODO: Run username and password against regex validation rules
-            if (string.IsNullOrWhiteSpace(data.username))
-                throw new ArgumentException("Neither the Username or Password may be null or whitespace.");
-            if (string.IsNullOrWhiteSpace(data.password))
-                throw new ArgumentException("Neither the Username or Password may be null or whitespace.");
-
-            //HACK: Need to actually set up the database so I can have a username and password
-            // when this is done, get the user from the database with the requested username
-            User user = new User()
-            {
-                UserId = 0,
-                Username = data.username
-            };
-            // HACK: don't use the hardcoded password
-            Cryptography.SetUserPassword(user, "test");
-
-            //TODO: TEST --- remove me when done
-            // example of how we should do SQL stuff without use of EF
-            using (var s = sqlManager.EstablishDataConnection)
-            {
-                var cmd = s.CreateCommand();
-                cmd.CommandText = "INSERT INTO [User] (Username, PasswordHash, HMACKey) OUTPUT INSERTED.UserID VALUES (@Username, @PasswordHash, @HMACKey);";
-                // cmd.Parameters.AddWithValue("@UserId", 123);
-                cmd.Parameters.AddWithValue("@Username", "test person'");
-                cmd.Parameters.AddWithValue("@PasswordHash", user.PasswordHash);
-                cmd.Parameters.AddWithValue("@HMACKey", user.HMACKey);
-
-                var reader = cmd.ExecuteReader();
-                while (reader.Read())
-                {
-                    var id = (ulong)reader.GetInt64(0);
-                    // set the user id
-                    user.UserId = id;
-                }
-                reader.Close();
-            }
-
-            // if password verified, create a new token for that user and return it for the client
-            if (Cryptography.VerifyUserPassword(user, data.password))
-            {
-                // get a user token for this suer
-                var ut = Cryptography.MakeUserToken(user);
-                Response.StatusCode = 200;
-
-                Response.Cookies.Append("auth_token", ut.Token, new Microsoft.AspNetCore.Http.CookieOptions()
-                {
-                    HttpOnly = true
-                });
-
-                var claims = new List<Claim>()
-                {
-                    new Claim(ClaimTypes.Name, user.Username),
-                    new Claim(ClaimTypes.NameIdentifier, user.UserId.ToString())
-                };
-
-                var userid = new ClaimsIdentity(claims, "auth_token");
-                var pr = new ClaimsPrincipal(userid);
-                HttpContext.SignInAsync(pr).Wait();
-                
-                // return the user token
-                return Json(ut);
-            }
-            else
-            {
+            if (ut == null)
                 return Unauthorized();
-            }
+            return Json(ut);
+        }
+
+        /// <summary>
+        ///     Collects login data and generates login tokens for the user
+        ///     for authentication.
+        ///     
+        ///     Returns with a rendered page showing that the user is logged in.
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost("whoami")]
+        [AllowAnonymous]
+        public IActionResult PostLoginWhoami()
+        {
+            var svc = new LoginService(sqlManager);
+            var ut = svc.GetUserToken(this as ControllerBase);
+
+            if (ut == null)
+                return Unauthorized();
+
+            return Ok($"Logged in as user id {ut.UserId}");
+        }
+
+        /// <summary>
+        ///     Registers a new user with the supplied credentials.
+        /// </summary>
+        [HttpPost("register")]
+        public IActionResult PostRegister()
+        {
+            var svc = new LoginService(sqlManager);
+            var ut = svc.RegisterNewUser(this as ControllerBase);
+
+            if (ut == null)
+                // bad data
+                return Unauthorized();
+
+            return Ok($"Registered a new user with id {ut.UserId}");
         }
     }
 }

@@ -111,6 +111,9 @@ namespace PetGame.Util
             gen.GetBytes(user.HMACKey);
         }
 
+        /// <summary>
+        ///     Updates a user's HMAC Key and password hash
+        /// </summary>
         public static void SetUserPassword(User user, string plainTextPassword)
         {
             // check parameters
