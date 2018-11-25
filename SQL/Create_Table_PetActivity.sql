@@ -1,6 +1,5 @@
+USE[PetGame]
 GO
-USE PetGame
-
 /**
 PetActivity Table keeps track of all activites PET's do in the PetGame
 
@@ -16,7 +15,7 @@ CREATE TABLE PetActivity
     PetId BIGINT FOREIGN KEY REFERENCES dbo.Pet(PetId)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
-    
+
     -- timestamp of activty
     Timestamp DateTime NOT NULL DEFAULT GETDATE(),   
     
