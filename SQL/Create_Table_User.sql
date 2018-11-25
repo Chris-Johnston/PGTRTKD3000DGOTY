@@ -25,7 +25,7 @@ GO
 
 CREATE TABLE [dbo].[User](
     -- UserId is an identity field, starting at 1, increments by 1
-	[UserId] [bigint] IDENTITY(1,1) UNIQUE NOT NULL,
+	[UserId] [bigint] IDENTITY(1,1) NOT NULL PRIMARY KEY,
 	[Username] [varchar](50) UNIQUE NOT NULL
     -- Check that the username is valid
     CONSTRAINT CHK_Username_Valid
