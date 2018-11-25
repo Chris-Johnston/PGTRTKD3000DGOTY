@@ -16,7 +16,7 @@ GO
 
 CREATE TABLE [dbo].[UserToken](
     -- UserTokenId is an identity field, starting at 1, increments by 1
-	[UserTokenId] [bigint] IDENTITY(1,1) UNIQUE NOT NULL,
+	[UserTokenId] [bigint] IDENTITY(1,1) NOT NULL PRIMARY KEY,
     -- Must reference a user. This will fail if the User table
     -- is not already created first.
     [UserId] [bigint] FOREIGN KEY REFERENCES [dbo].[User](UserId)
