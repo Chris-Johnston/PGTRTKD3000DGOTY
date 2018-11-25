@@ -11,7 +11,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PetGame.Tests", "PetGame.Te
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SQL", "SQL", "{9CFE5762-8644-4AB4-87A4-667E6AD08636}"
 	ProjectSection(SolutionItems) = preProject
-		SQL\Table_Users_Create.sql = SQL\Table_Users_Create.sql
+		SQL\Table_User_Create.sql = SQL\Table_User_Create.sql
+		Table_UserToken_Create.sql = Table_UserToken_Create.sql
 	EndProjectSection
 EndProject
 Global
