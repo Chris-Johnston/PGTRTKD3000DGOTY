@@ -36,9 +36,21 @@ namespace PetGame
         [HttpGet("whoami2"), Authorize]
         public IActionResult WhoAmIRendered()
         {
+            // don't rely on the claims, since we are using cookie authentication
             var user = GetUserFromContext(HttpContext.User);
+            var token = Request.Cookies["auth_token"];
+
+            var u = GetUserFromToken(token);
 
             return Ok($"Hello {user.Username} {user.UserId}");
+        }
+
+        // get only the username and user id that owns this token
+        // return null if invalid or out of date
+        private User GetUserFromToken(string token)
+        {
+            //TODO
+            return new User();
         }
 
         private User GetUserFromContext(ClaimsPrincipal userClaims)
