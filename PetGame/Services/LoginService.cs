@@ -22,7 +22,6 @@ namespace PetGame
             this.sqlManager = sqlManager;
         }
 
-
         /// <summary>
         ///     Handles the logic for getting the user token from
         ///     the supplied credentials.
@@ -70,65 +69,6 @@ namespace PetGame
                 return MakeUserToken(controllerContext, user);
             }
             return null;
-
-            ////HACK: Need to actually set up the database so I can have a username and password
-            //// when this is done, get the user from the database with the requested username
-            //User user = new User()
-            //{
-            //    UserId = 0,
-            //    Username = data.username
-            //};
-            //// HACK: don't use the hardcoded password
-            //Cryptography.SetUserPassword(user, "test");
-
-            ////TODO: TEST --- remove me when done
-            //// example of how we should do SQL stuff without use of EF
-            //using (var s = sqlManager.EstablishDataConnection)
-            //{
-            //    var cmd = s.CreateCommand();
-            //    cmd.CommandText = "INSERT INTO [User] (Username, PasswordHash, HMACKey) OUTPUT INSERTED.UserID VALUES (@Username, @PasswordHash, @HMACKey);";
-            //    // cmd.Parameters.AddWithValue("@UserId", 123);
-            //    cmd.Parameters.AddWithValue("@Username", "test person'");
-            //    cmd.Parameters.AddWithValue("@PasswordHash", user.PasswordHash);
-            //    cmd.Parameters.AddWithValue("@HMACKey", user.HMACKey);
-
-            //    using (var reader = cmd.ExecuteReader())
-            //    {
-            //        while (reader.Read())
-            //        {
-            //            var id = (ulong)reader.GetInt64(0);
-            //            // set the user id
-            //            user.UserId = id;
-            //        }
-                    
-            //        reader.Close();
-            //    }
-            //}
-
-            //// if password verified, create a new token for that user and return it for the client
-            //if (Cryptography.VerifyUserPassword(user, data.password))
-            //{
-            //    // get a user token for this suer
-            //    var ut = Cryptography.MakeUserToken(user);
-            //    controllerContext.Response.StatusCode = 200;
-
-            //    controllerContext.Response.Cookies.Append("auth_token", ut.Token, new Microsoft.AspNetCore.Http.CookieOptions()
-            //    {
-            //        HttpOnly = true
-            //    });
-
-            //    var claims = new List<Claim>()
-            //    {
-            //        new Claim(ClaimTypes.Name, user.Username),
-            //        new Claim(ClaimTypes.NameIdentifier, user.UserId.ToString())
-            //    };
-
-            //    var userid = new ClaimsIdentity(claims, "auth_token");
-            //    var pr = new ClaimsPrincipal(userid);
-            //    controllerContext.HttpContext.SignInAsync(pr).Wait();
-            //    return ut;
-            //}
-            //return null;
         }
 
         /// <summary>
@@ -227,7 +167,6 @@ namespace PetGame
                     {
                         u.UserId = (ulong)reader.GetInt64(0);
                     }
-
                     reader.Close();
                 }
             }
