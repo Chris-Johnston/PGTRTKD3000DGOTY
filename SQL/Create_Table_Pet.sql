@@ -11,7 +11,7 @@ GO
 **/
 CREATE TABLE [dbo].[Pet](
     -- Unique identifier for pet
-	[PetId] [bigint] IDENTITY(1,1) UNIQUE NOT NULL PRIMARY KEY,
+	[PetId] [bigint] IDENTITY(1,1) NOT NULL PRIMARY KEY,
     -- name of the pet, uses the same regex as a username, but with spaces
     -- can only have a single space between words, cannot have leading
     -- spaces, but *can* have trailing spaces
