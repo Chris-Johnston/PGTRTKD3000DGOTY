@@ -38,7 +38,7 @@ namespace PetGame
         {
             var user = GetUserFromContext(HttpContext.User);
 
-            return Ok($"<html><body><h1>Hello {user.Username} {user.UserId}</h1></body></html>");
+            return Ok($"Hello {user.Username} {user.UserId}");
         }
 
         private User GetUserFromContext(ClaimsPrincipal userClaims)

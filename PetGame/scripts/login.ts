@@ -1,5 +1,4 @@
 ﻿// Login code
-// bla bla bla
 function tryLogin()
 {
     const usernameField = (document.getElementById("username") as HTMLInputElement).value;
@@ -16,16 +15,15 @@ function tryLogin()
     request.onreadystatechange = function () {
         if (request.readyState == XMLHttpRequest.DONE) {
             if (request.status >= 400 && request.status < 500) {
-                alert('4xx error');
+                alert('4xx error when trying to login');
             }
             else {
+                // got a good response from the api login endpoint
                 console.log(request.responseText);
-                alert(request.responseText);
-
-                resultsField.innerText = request.responseText;
             }
         }
     }
+    // send json body for the username and password
     request.setRequestHeader('Content-Type', 'application/json');
     console.log(`sending ${JSON.stringify(body)}`);
     request.send(JSON.stringify(body));

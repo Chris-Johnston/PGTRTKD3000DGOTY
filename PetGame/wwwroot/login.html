@@ -8,18 +8,25 @@
 </head>
 <body>
     <h1>Login Page</h1>
-
-    <!-- test typescript code pls ignore -->
-    <input id="button" type="button" onclick="tryLogin();" />
-
-
-    <form>
+    <!-- test typescript code pls ignore. see login.ts -->
+    <!--<input id="button" type="button" onclick="tryLogin();" />-->
+    <!-- POST this data to /api/user/whoami. on successful login, will show name of logged in user-->
+    <form method="post" action="api/login/whoami">
         Username: <input id="username" type="text" name="username" />
         <br />
         Password: <input id="password" type="password" name="password" />
         <input type="submit" value="Submit">
     </form>
 
-    <p id="results">Results: </p>
+    <p>
+        Register a new user:
+    </p>
+    <form method="post" action="api/login/register">
+        Username: <input id="username_register" type="text" name="username" />
+        <br />
+        Password: <input id="password_register" type="password" name="password" />
+        TODO: Add a confirm password field
+        <input type="submit" value="Submit">
+    </form>
 </body>
 </html>
