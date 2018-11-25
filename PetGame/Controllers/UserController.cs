@@ -33,7 +33,7 @@ namespace PetGame
             return Content($"Hello {useridclaim} {usernameclaim}");
         }
 
-        [HttpGet("whoami2"), Authorize]
+        [HttpGet("whoami2"), AllowAnonymous]
         public IActionResult WhoAmIRendered()
         {
             // don't rely on the claims, since we are using cookie authentication
