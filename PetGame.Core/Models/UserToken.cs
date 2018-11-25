@@ -11,6 +11,11 @@ namespace PetGame.Models
     public class UserToken
     {
         /// <summary>
+        ///     Unique identifier for user tokens.
+        /// </summary>
+        public ulong UserTokenId { get; set; }
+
+        /// <summary>
         ///     Gets or sets the User (by Id) that this
         ///     token is for.
         /// </summary>
