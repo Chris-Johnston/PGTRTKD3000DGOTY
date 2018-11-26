@@ -21,6 +21,10 @@ GO
 
     Passwords may be the same, but because of the HMAC hashing algorithm (and randomly generated HMAC
     Keys), the same password will hash to a different result for two users. This is what we want.
+
+    Usernames must be between 2 and 50 characters. Their content is not validated,
+    at the SQL level, this is handled with a regular expression at the API level.
+    Usernames cannot contain whitespace
 **/
 
 CREATE TABLE [dbo].[User](
@@ -29,8 +33,9 @@ CREATE TABLE [dbo].[User](
 	[Username] [varchar](50) UNIQUE NOT NULL
     -- Check that the username is valid
     CONSTRAINT CHK_Username_Valid
-    -- Regex for usernames, any of these valid characters from 2-50 characters long
-    CHECK ([Username] LIKE '[^([!$?#\-_.0-9a-zA-Z]){2,50}$]'),
+    -- ensure that usernames are between 2 and 50 characters
+    -- and doesn't contain whitespace
+    CHECK ((LEN([Username]) BETWEEN 2 AND 50) AND [Username] NOT LIKE '% %'),
     -- don't need to constrain password hashes, these are set by only the API level programatically
     -- we can assume will always be valid
 	[PasswordHash] [binary](64) NOT NULL,
