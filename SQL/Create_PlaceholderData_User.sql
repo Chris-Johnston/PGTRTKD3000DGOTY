@@ -1,0 +1,1 @@
+-- Inserts some data into the User table
