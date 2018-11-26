@@ -1,6 +1,8 @@
 ﻿USE [PetGame]
 GO
 
+--This is garbage, made up data. It was created here without the use of an external application
+--Used PetId 1-10, to correspond with the placeholder Pets in this database
 INSERT INTO Race (Score, Timestamp, PetId) VALUES (10, GETDATE(), 1);
 INSERT INTO Race (Score, Timestamp, PetId) VALUES (12, GETDATE(), 2);
 INSERT INTO Race (Score, Timestamp, PetId) VALUES (15, GETDATE(), 3);

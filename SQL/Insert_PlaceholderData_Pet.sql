@@ -1,6 +1,8 @@
 ﻿USE [PetGame]
 GO
 
+--This is garbage, made up data. It was created here without the use of an external application
+--Used UserId 1-10, to correspond with the placeholder Users in this database
 INSERT INTO Pet (Name, Birthday, Strength, Endurance, IsDead, UserId) VALUES ('Saam''s Dragon', '04/02/2018 10:00:00 AM', 0, 0, 0, 1);
 INSERT INTO Pet (Name, Birthday, Strength, Endurance, IsDead, UserId) VALUES ('Pet', '04/02/2018 10:00:00 AM', 1, 1, 0, 2);
 INSERT INTO Pet (Name, Birthday, Strength, Endurance, IsDead, UserId) VALUES ('GTR', '04/02/2018 10:00:00 AM', 2, 2, 0, 3);
