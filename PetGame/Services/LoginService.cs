@@ -262,7 +262,8 @@ namespace PetGame
             // insert a new user token
             InsertToken(ut);
 
-            // TODO, re-use tokens and upload them into the SQL server
+            // TODO: re-use tokens that are already valid instead of just inserting new ones
+            // TODO: Consider tracking user agent with user tokens
             controllerContext.Response.StatusCode = 200;
 
             // delete the cookie
