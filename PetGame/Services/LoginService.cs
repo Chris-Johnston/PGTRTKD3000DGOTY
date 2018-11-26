@@ -22,6 +22,130 @@ namespace PetGame
             this.sqlManager = sqlManager;
         }
 
+        // get only the username and user id that owns this token
+        // return null if invalid or out of date
+
+        /// <summary>
+        ///     Gets the <see cref="User"/> that owns 
+        ///     the given token, if the token is valid and not expired.
+        /// </summary>
+        /// <param name="token">
+        ///     The user token to check.
+        /// </param>
+        /// <returns>
+        ///     A new <see cref="User"/> if the token was valid, 
+        ///     or null if invalid.
+        ///     Sensitive properties like the password hash and 
+        ///     HMAC key are not included
+        /// </returns>
+        private User GetUserFromToken(string token)
+        {
+            // validation of the token
+            if (string.IsNullOrWhiteSpace(token))
+                return null;
+
+            ulong userid = 0;
+            using (var conn = sqlManager.EstablishDataConnection)
+            {
+                // 0 is error case
+                ulong usertokenid = 0;
+
+                var cmd = conn.CreateCommand();
+                // get the user id and user token id from the UserToken token
+                // where the token has been used in the last 3 days
+                cmd.CommandText =
+                    @"SELECT UserId, UserTokenId FROM UserToken WHERE Token = @Token AND GETDATE() <= DATEADD(day, 3, GETDATE());";
+                // add the token parameter
+                cmd.Parameters.AddWithValue("@Token", token);
+
+                using (var reader = cmd.ExecuteReader())
+                {
+                    // read the results
+                    while (reader.Read())
+                    {
+                        userid = (ulong)reader.GetInt64(0);
+                        usertokenid = (ulong)reader.GetInt64(1);
+                    }
+                }
+
+                // query returned no results, or invalid
+                if (userid == 0 && usertokenid == 0)
+                {
+                    // return null for no results
+                    return null;
+                }
+
+                // update the last used time
+                var updatecmd = conn.CreateCommand();
+                updatecmd.CommandText =
+                    @"UPDATE UserToken SET LastUsed = GETDATE() WHERE UserTokenId = @UserTokenId;";
+                updatecmd.Parameters.AddWithValue("@UserTokenId", usertokenid.ToString());
+                updatecmd.ExecuteNonQuery();
+
+                // todo delete all UserToken that are out of date
+            }
+
+            return GetUserById(userid);
+        }
+
+        /// <summary>
+        ///     Gets a new <see cref="User"/> for the given ID.
+        /// </summary>
+        /// <param name="id">
+        ///     The user's id to get.
+        ///     0 is invalid.
+        /// </param>
+        /// <returns>
+        ///     A new User object if found, null otherwise.
+        /// </returns>
+        private User GetUserById(ulong id)
+        {
+            // todo add more input validation to GetUserById
+            if (id <= 0) return null;
+
+            User ret = null;
+
+            using (var conn = sqlManager.EstablishDataConnection)
+            {
+                var cmd = conn.CreateCommand();
+                cmd.CommandText =
+                    @"SELECT UserId, Username FROM [User] WHERE UserId = @UserId;";
+                cmd.Parameters.AddWithValue("@UserId", id.ToString());
+
+                using (var r = cmd.ExecuteReader())
+                {
+                    while (r.Read())
+                    {
+                        ret = new User();
+                        ret.UserId = id;
+                        ret.Username = r.GetString(1);
+                    }
+                }
+            }
+            return ret;
+        }   
+
+        /// <summary>
+        ///     Gets the User from the HttpContext.User, if 
+        ///     there is a User logged in.
+        /// </summary>
+        /// <param name="contextClaimsPrincipal"></param>
+        /// <returns>
+        ///     A <see cref="User"/> for the given 
+        ///     claims, or null if invalid or out of date
+        /// </returns>
+        public User GetUserFromContext(ClaimsPrincipal contextClaimsPrincipal)
+        {
+            string z = null;
+            if (contextClaimsPrincipal.HasClaim(x => x.Type == ClaimTypes.UserData))
+            {
+                var claim = contextClaimsPrincipal.Claims.First(x => x.Type == ClaimTypes.UserData);
+                z = claim.Value;
+            }
+
+            return GetUserFromToken(z);
+        }
+
         /// <summary>
         ///     Handles the logic for getting the user token from
         ///     the supplied credentials.
