@@ -26,23 +26,6 @@ namespace PetGame
         {
             this.sqlManager = sqlManager;
         }
-
-        /// <summary>
-        ///     Collects login data and generates login tokens for the user to use.
-        /// </summary>
-        // POST api/<controller>
-        [HttpPost]
-        [AllowAnonymous]
-        public IActionResult PostLogin()
-        {
-            var svc = new LoginService(sqlManager);
-            var ut = svc.GetUserToken(this as ControllerBase);
-
-            if (ut == null)
-                return Unauthorized();
-            return Json(ut);
-        }
-
         private void SignIn(UserToken ut)
         {
             var cp = new ClaimsPrincipal(new ClaimsIdentity(new List<Claim>()
@@ -62,9 +45,9 @@ namespace PetGame
         ///     Returns with a rendered page showing that the user is logged in.
         /// </summary>
         /// <returns></returns>
-        [HttpPost("whoami")]
+        [HttpPost()]
         [AllowAnonymous]
-        public IActionResult PostLoginWhoami()
+        public IActionResult PostLogin()
         {
             var svc = new LoginService(sqlManager);
             var ut = svc.GetUserToken(this as ControllerBase);
@@ -73,13 +56,14 @@ namespace PetGame
             if (ut == null)
                 return Unauthorized();
 
-            return Ok($"Logged in as user id {ut.UserId}");
+            return RedirectToAction("GetWhoAmI", "User");
         }
 
         /// <summary>
         ///     Registers a new user with the supplied credentials.
         /// </summary>
         [HttpPost("register")]
+        [AllowAnonymous]
         public IActionResult PostRegister()
         {
             var svc = new LoginService(sqlManager);
@@ -90,7 +74,7 @@ namespace PetGame
                 // bad data
                 return Unauthorized();
 
-            return Ok($"Registered a new user with id {ut.UserId}");
+            return RedirectToAction("GetWhoAmI", "User");
         }
     }
 }
