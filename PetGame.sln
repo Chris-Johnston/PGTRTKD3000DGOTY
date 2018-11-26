@@ -5,9 +5,27 @@ VisualStudioVersion = 15.0.28010.2036
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PetGame", "PetGame\PetGame.csproj", "{83FBE126-F024-4308-93E0-6CC8144F980E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PetGame.Core", "PetGame.Core\PetGame.Core.csproj", "{8CA3DF83-9219-4B05-9C78-011E5A87A8CE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PetGame.Core", "PetGame.Core\PetGame.Core.csproj", "{8CA3DF83-9219-4B05-9C78-011E5A87A8CE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PetGame.Tests", "PetGame.Tests\PetGame.Tests.csproj", "{2D761E71-A446-4302-AFD8-07DA5A31B48E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PetGame.Tests", "PetGame.Tests\PetGame.Tests.csproj", "{2D761E71-A446-4302-AFD8-07DA5A31B48E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{EA421D73-09A6-4935-80B3-0F70945E9329}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SQL", "SQL", "{DAACEFFD-EAD5-434C-BD93-3F52EAF42A55}"
+	ProjectSection(SolutionItems) = preProject
+		SQL\Create_Table_Activity.sql = SQL\Create_Table_Activity.sql
+		SQL\Create_Table_All.sql = SQL\Create_Table_All.sql
+		SQL\Create_Table_Pet.sql = SQL\Create_Table_Pet.sql
+		SQL\Create_Table_Race.sql = SQL\Create_Table_Race.sql
+		SQL\Create_Table_User.sql = SQL\Create_Table_User.sql
+		SQL\Create_Table_UserToken.sql = SQL\Create_Table_UserToken.sql
+		SQL\Insert_PlaceholderData_Activity.sql = SQL\Insert_PlaceholderData_Activity.sql
+		SQL\Insert_PlaceholderData_Pet.sql = SQL\Insert_PlaceholderData_Pet.sql
+		SQL\Insert_PlaceholderData_Race.sql = SQL\Insert_PlaceholderData_Race.sql
+		SQL\Insert_PlaceholderData_User.sql = SQL\Insert_PlaceholderData_User.sql
+		SQL\Insert_PlaceholderData_UserToken.sql = SQL\Insert_PlaceholderData_UserToken.sql
+		SQL\Insert_SampleData_All.sql = SQL\Insert_SampleData_All.sql
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -30,6 +48,9 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{DAACEFFD-EAD5-434C-BD93-3F52EAF42A55} = {EA421D73-09A6-4935-80B3-0F70945E9329}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C7E7B090-53CD-4DB9-9654-87BAE753D9D3}

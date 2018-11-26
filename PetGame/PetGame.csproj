@@ -13,5 +13,4 @@
   <ItemGroup>
     <ProjectReference Include="..\PetGame.Core\PetGame.Core.csproj" />
   </ItemGroup>
-
 </Project>
