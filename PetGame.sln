@@ -19,6 +19,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SQL", "SQL", "{DAACEFFD-EAD
 		SQL\Create_Table_Race.sql = SQL\Create_Table_Race.sql
 		SQL\Create_Table_User.sql = SQL\Create_Table_User.sql
 		SQL\Create_Table_UserToken.sql = SQL\Create_Table_UserToken.sql
+		SQL\Insert_PlaceholderData_Activity.sql = SQL\Insert_PlaceholderData_Activity.sql
 	EndProjectSection
 EndProject
 Global
