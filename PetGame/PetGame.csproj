@@ -14,4 +14,8 @@
     <ProjectReference Include="..\PetGame.Core\PetGame.Core.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="scripts\" />
+  </ItemGroup>
+
 </Project>

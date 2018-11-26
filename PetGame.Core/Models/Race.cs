@@ -6,14 +6,14 @@ using System.Threading.Tasks;
 namespace PetGame.Models
 {
     /// <summary>
-    ///     Represents a score on the leaderboard.
+    ///     Represents each race's outcome.
     /// </summary>
-    public class LeaderboardScore
+    public class Race
     {
         /// <summary>
-        ///     Gets or sets the score's unique identifier.
+        ///     Gets or sets the Race's unique identifier.
         /// </summary>
-        public ulong ScoreId { get; set; }
+        public ulong RaceId { get; set; }
 
         /// <summary>
         ///     Gets or sets the score.
