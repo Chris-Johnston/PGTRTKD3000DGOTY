@@ -22,12 +22,13 @@ CREATE TABLE [dbo].[Pet](
     -- when the pet was created, default to now
     [Birthday] DATETIME NOT NULL DEFAULT GETDATE(),
     -- strength is an int [0-100]
-    -- the API layer will randomly set a value for the strength
-    [Strength] INT NOT NULL DEFAULT 0
+    -- randomly set the initial strength to a random value between 
+    -- 0 and 10
+    [Strength] INT NOT NULL DEFAULT FLOOR(RAND() * 10)
     CONSTRAINT CHK_Strength_Range
     CHECK ([Strength] BETWEEN 0 AND 100),
     -- same with the endurance
-    [Endurance] INT NOT NULL DEFAULT 0
+    [Endurance] INT NOT NULL DEFAULT FLOOR(RAND() * 10)
     CONSTRAINT CHK_Endurance_Range
     CHECK ([Endurance] BETWEEN 0 AND 100),
     -- is the pet dead, defaults to alive
