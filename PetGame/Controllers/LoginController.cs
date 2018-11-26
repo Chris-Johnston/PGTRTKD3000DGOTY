@@ -5,6 +5,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -54,7 +55,48 @@ namespace PetGame
         public IActionResult PostLoginWhoami()
         {
             var svc = new LoginService(sqlManager);
+
+            // Response.Cookies.Delete("auth_token");
+            var result = SignOut(CookieAuthenticationDefaults.AuthenticationScheme);
+
             var ut = svc.GetUserToken(this as ControllerBase);
+
+            //var claims = new List<Claim>()
+            //{
+            //    // new Claim(ClaimTypes.Name, ut.Username),
+            //    new Claim(ClaimTypes.NameIdentifier, ut.UserId.ToString())
+            //};
+            var cp = new ClaimsPrincipal(new ClaimsIdentity(new List<Claim>()
+            {
+                new Claim(ClaimTypes.NameIdentifier, ut.UserId.ToString()),
+                new Claim(ClaimTypes.UserData, ut.Token)
+            }));
+
+            HttpContext.User = cp;
+
+            HttpContext.SignInAsync("Cookies", cp);
+
+            //HttpContext.User.AddIdentity(new ClaimsIdentity("Cookie")
+            //{
+
+            //});
+
+
+
+            //var r = HttpContext.AuthenticateAsync(CookieAuthenticationDefaults.AuthenticationScheme).Result;
+            //result.Properties = new AuthenticationProperties();
+            //result.Properties.UpdateTokenValue("auth_token", ut.Token);
+
+            //HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, r.Principal, r.Properties);
+
+            //var userid = new ClaimsIdentity(claims, "auth_token");
+            //var pr = new ClaimsPrincipal(userid);
+
+            
+
+            //var signinresult = SignIn(pr, CookieAuthenticationDefaults.AuthenticationScheme);
+
+
 
             if (ut == null)
                 return Unauthorized();
@@ -70,6 +112,12 @@ namespace PetGame
         {
             var svc = new LoginService(sqlManager);
             var ut = svc.RegisterNewUser(this as ControllerBase);
+
+            // Response.Cookies.Delete("auth_token");
+
+            // sign out of the authentication scheme
+            var result = SignOut(CookieAuthenticationDefaults.AuthenticationScheme);
+
 
             if (ut == null)
                 // bad data

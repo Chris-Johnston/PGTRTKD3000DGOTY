@@ -114,12 +114,35 @@ namespace PetGame
             return ret;
         }
 
+        private void InsertToken(UserToken userToken)
+        {
+            if (userToken == null) return;
+
+            using (var conn = sqlManager.EstablishDataConnection)
+            {
+                var cmd = conn.CreateCommand();
+                cmd.CommandText =
+                    @"INSERT INTO UserToken (UserId, Token, LastUsed, Created) VALUES (@UserId, @Token, GETDATE(), GETDATE());";
+                cmd.Parameters.AddWithValue("@UserId", userToken.UserId.ToString());
+                cmd.Parameters.AddWithValue("@Token", userToken.Token);
+                
+                cmd.ExecuteNonQuery();
+            }
+        }
+
         private UserToken MakeUserToken(ControllerBase controllerContext, User user)
         {
             // get a user token for this suer
             var ut = Cryptography.MakeUserToken(user);
+
+            // insert a new user token
+            InsertToken(ut);
+
             // TODO, re-use tokens and upload them into the SQL server
             controllerContext.Response.StatusCode = 200;
+
+            // delete the cookie
+            controllerContext.Response.Cookies.Delete("auth_token");
 
             // set up cookies
             controllerContext.Response.Cookies.Append("auth_token", ut.Token, new Microsoft.AspNetCore.Http.CookieOptions()
@@ -135,6 +158,7 @@ namespace PetGame
 
             var userid = new ClaimsIdentity(claims, "auth_token");
             var pr = new ClaimsPrincipal(userid);
+
             controllerContext.HttpContext.SignInAsync(pr).Wait();
             return ut;
         }
