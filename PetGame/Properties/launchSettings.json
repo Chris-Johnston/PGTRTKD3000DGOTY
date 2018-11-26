@@ -12,7 +12,6 @@
       "commandName": "IISExpress",
       "launchBrowser": true,
       "environmentVariables": {
-        "PETGAME_JWT_KEY": "sampleKeyljasdfljasjldfljkadsfljkasdfjklasdfjk",
         "ASPNETCORE_ENVIRONMENT": "Development",
         "PETGAME_DB_CONNECTION_STRING": "Server=localhost;Database=PetGame;Trusted_Connection=True;"
       }
