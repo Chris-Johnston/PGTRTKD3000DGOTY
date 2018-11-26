@@ -1,7 +1,10 @@
 USE [PetGame] 
 GO
  -- inserts data into the Activty table
- -- resembles data assocaited with pets
+ -- resembles data associated with pets
+ -- data was created randomly by hand but associated with PetIds used in Placeholder data elsewhere in this database
+ -- some GetDate()'s were used to test function
+ -- ActivityId data will be auto populated and Type will be defaulted to 'd'
 INSERT INTO ACTIVITY (PetId, TimeStamp) VALUES (1, '03/07/2018 10:50:50 PM');
 INSERT INTO ACTIVITY (PetId, TimeStamp) VALUES (2, GetDate());
 INSERT INTO ACTIVITY (PetId, TimeStamp) VALUES (3, '03/09/2018 10:50:50 PM');
