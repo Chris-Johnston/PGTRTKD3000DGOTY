@@ -8,7 +8,7 @@ namespace PetGame.Models
     /// <summary>
     ///     Represents a Pet's activity.
     /// </summary>
-    public class PetActivity
+    public class Activity
     {
         /// <summary>
         ///     Gets or sets the unique identifier for this specific action.
