@@ -24,9 +24,6 @@ namespace PetGame
             // connection string must be set in the environment variables to connect to a MSSQL db instance
             var connectionString = Environment.GetEnvironmentVariable("PETGAME_DB_CONNECTION_STRING");
             services.AddSingleton<SqlManager>(new SqlManager(connectionString));
-
-            var jwtKey = Environment.GetEnvironmentVariable("PETGAME_JWT_KEY");
-
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie(options =>
                 {
