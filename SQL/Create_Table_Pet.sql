@@ -18,6 +18,7 @@ CREATE TABLE [dbo].[Pet](
 	[Name] [varchar](50) UNIQUE NOT NULL
     -- Check that the pet name is valid
     CONSTRAINT CHK_PetName_Valid
+	--name must be between 2 and 50 characters
     CHECK (LEN([Name]) BETWEEN 2 AND 50),
     -- when the pet was created, default to now
     [Birthday] DATETIME NOT NULL DEFAULT GETDATE(),
