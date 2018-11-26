@@ -1,7 +1,7 @@
 USE[PetGame]
 GO
 /**
-PetActivity Table keeps track of all activites PET's do in the PetGame
+PetActivity Table keeps track of all activities related to the pet
 
 Some activites that are included are Training and Default
 along with these meta data is stored such as timestamp of activty
