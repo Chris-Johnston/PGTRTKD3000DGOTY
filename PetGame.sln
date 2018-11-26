@@ -14,15 +14,17 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SQL", "SQL", "{DAACEFFD-EAD5-434C-BD93-3F52EAF42A55}"
 	ProjectSection(SolutionItems) = preProject
 		SQL\Create_Table_Activity.sql = SQL\Create_Table_Activity.sql
+		SQL\Create_Table_All.sql = SQL\Create_Table_All.sql
 		SQL\Create_Table_Pet.sql = SQL\Create_Table_Pet.sql
 		SQL\Create_Table_Race.sql = SQL\Create_Table_Race.sql
 		SQL\Create_Table_User.sql = SQL\Create_Table_User.sql
 		SQL\Create_Table_UserToken.sql = SQL\Create_Table_UserToken.sql
-		SQL\Insert_PlaceholderData_User.sql = SQL\Insert_PlaceholderData_User.sql
-		SQL\Insert_PlaceholderData_UserToken.sql = SQL\Insert_PlaceholderData_UserToken.sql
 		SQL\Insert_PlaceholderData_Activity.sql = SQL\Insert_PlaceholderData_Activity.sql
 		SQL\Insert_PlaceholderData_Pet.sql = SQL\Insert_PlaceholderData_Pet.sql
 		SQL\Insert_PlaceholderData_Race.sql = SQL\Insert_PlaceholderData_Race.sql
+		SQL\Insert_PlaceholderData_User.sql = SQL\Insert_PlaceholderData_User.sql
+		SQL\Insert_PlaceholderData_UserToken.sql = SQL\Insert_PlaceholderData_UserToken.sql
+		SQL\Insert_SampleData_All.sql = SQL\Insert_SampleData_All.sql
 	EndProjectSection
 EndProject
 Global
