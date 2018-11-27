@@ -155,7 +155,7 @@ namespace PetGame
         public UserToken GetUserToken(ControllerBase controllerContext)
         {
             // create LoginModel from the request
-            LoginModel data = new LoginModel();
+            UserLoginModel data = new UserLoginModel();
 
             // if request data is from the from, populate LoginModel from the form
             if (controllerContext.Request.HasFormContentType)
@@ -173,7 +173,7 @@ namespace PetGame
                     {
                         s.Write(sr.ReadToEnd());
                     }
-                    data = JsonConvert.DeserializeObject<LoginModel>(s.ToString());
+                    data = JsonConvert.DeserializeObject<UserLoginModel>(s.ToString());
                 }
             }
 
@@ -331,7 +331,7 @@ namespace PetGame
         public UserToken RegisterNewUser(ControllerBase controllerContext)
         {
             // create LoginModel from the request
-            LoginModel data = new LoginModel();
+            UserLoginModel data = new UserLoginModel();
 
             // if request data is from the from, populate LoginModel from the form
             if (controllerContext.Request.HasFormContentType)
@@ -349,7 +349,7 @@ namespace PetGame
                     {
                         s.Write(sr.ReadToEnd());
                     }
-                    data = JsonConvert.DeserializeObject<LoginModel>(s.ToString());
+                    data = JsonConvert.DeserializeObject<UserLoginModel>(s.ToString());
                 }
             }
 
