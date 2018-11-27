@@ -1,0 +1,28 @@
+﻿@page
+@using PetGame.Pages
+@model LoginModel
+@{
+    Layout = "~/Pages/_Layout.cshtml";
+    ViewBag.Title = "Login";
+}
+
+<h1>Login Page</h1>
+
+<!-- POST this data to /api/login on successful login, will show name of logged in user-->
+<form method="post" action="api/login">
+    Username: <input id="username" type="text" name="username" />
+    <br />
+    Password: <input id="password" type="password" name="password" />
+    <input type="submit" value="Submit">
+</form>
+<p>
+    Register a new user:
+</p>
+<form method="post" action="api/login/register">
+    Username: <input id="username_register" type="text" name="username" />
+    <br />
+    Password: <input id="password_register" type="password" name="password" />
+    <br />
+    TODO: Add a confirm password field
+    <input type="submit" value="Submit">
+</form>
