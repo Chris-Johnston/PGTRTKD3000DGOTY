@@ -43,15 +43,15 @@ namespace PetGame
 
         /// <summary>
         ///     Inserts a new Pet into the database.
+        ///     This action requires authentication.
         /// </summary>
         /// <param name="value"> The pet to add to the database. </param>
         // POST api/<controller>
-        [HttpPost]
-        public void Post([FromBody]Pet value)
+        [HttpPost, Authorize]
+        public Pet Post([FromBody]Pet value)
         {
             if (value == null) throw new ArgumentNullException(nameof(value), "The supplied Pet cannot be null.");
-
-            //TODO Add the pet to the database.
+            return petService.InsertPet(value);
         }
 
         /// <summary>
@@ -63,13 +63,14 @@ namespace PetGame
         /// <param name="value">
         ///     The values of the pet to update.
         /// </param>
-        // PUT api/<controller>/5
+        // PUT api/<controller>
         [HttpPut("{id}")]
-        public void Put(ulong id, [FromBody]Pet value)
+        public Pet Put(ulong id, [FromBody]Pet value)
         {
             if (value == null) throw new ArgumentNullException(nameof(value), "The supplied Pet cannot be null.");
-
-            // TODO: PetController PUT updates
+            // don't necessarily care if the PetId inside value does not match
+            // the id passed separately, since only the Id is going to be used
+            
         }
 
         /// <summary>
