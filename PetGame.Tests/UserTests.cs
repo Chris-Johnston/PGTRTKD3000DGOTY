@@ -35,6 +35,10 @@ namespace PetGame.Tests
         [InlineData("invalid   ")]
         [InlineData("<script>alert(1);</script>")]
         [InlineData("Bobby 'DROP TABLE [User];--")]
+        // 50 char
+        [InlineData("ljkasdfljkafsdjklfjkdjklfadsjkladfsjkladfsjklafdsj")]
+        // 51 char
+        [InlineData("ljkasdfljkafsdjklfjkdjklfadsjkladfsjkladfsjklafdsja")]
         public void TestInvalidUsernames(string name)
         {
             Assert.Throws<ArgumentException>(() =>
