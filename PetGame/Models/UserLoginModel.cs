@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace PetGame.Models
 {
-    public class LoginModel
+    public class UserLoginModel
     {
         public string username { get; set; }
         public string password { get; set; }
