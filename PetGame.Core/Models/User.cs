@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace PetGame.Models
@@ -11,21 +12,39 @@ namespace PetGame.Models
     public class User
     {
         /// <summary>
+        ///     Regular expression for valid usernames. All usernames must pass this validation.
+        ///     Allows for names betwen [2, 50] chars (inclusive) with the supported characters.
+        /// </summary>
+        public const string UsernameRegex = @"^([$@._/-?!0-9a-zA-Z]){2,50}$";
+
+        /// <summary>
         ///     A user's unique identifier.
         /// </summary>
         public ulong UserId { get; set; }
         // yes, I am being optimistic by making the UserId an unsigned long
             
-        //TODO: Define a Regex for checking validity of usernames.
-
         /// <summary>
         ///     A user's name.
         ///     This must not be null or whitespace, and must be less than 32 characters in length.
-        ///     It should match a-zA-Z0-9!?.
+        ///     It should match the regex defined by <see cref="UsernameRegex"/>
         /// </summary>
-        public string Username { get; set; }
-
-        //TODO: Define a regex for minimum (plaintext) password requirements.
+        public string Username
+        {
+            get => _Username;
+            set
+            {
+                if (string.IsNullOrWhiteSpace(value))
+                {
+                    throw new ArgumentNullException(nameof(value), "Usernames may not be null or whitespace.");
+                }
+                if (!Regex.IsMatch(value, UsernameRegex))
+                {
+                    throw new ArgumentException("The username must match the username requirements.", nameof(value));
+                }
+                _Username = value;
+            }
+        }
+        private string _Username;
 
         /// <summary>
         ///     Represents a user's hash value.

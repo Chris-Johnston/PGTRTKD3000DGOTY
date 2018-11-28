@@ -6,8 +6,10 @@ using System.Linq;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Microsoft.IdentityModel.Tokens;
+using PetGame.Core;
 using PetGame.Models;
 
 namespace PetGame.Util
@@ -19,6 +21,11 @@ namespace PetGame.Util
     {
         const int TokenSize = 256;
         const int UserTokenSize = 64;
+
+        /// <summary>
+        ///     Regex that defines the minimum password requirements.
+        /// </summary>
+        const string MinPasswordRegex = @"(.){8,}$";
 
         /// <summary>
         ///     Verifies the given plain-text password with a 
@@ -37,7 +44,7 @@ namespace PetGame.Util
         ///     user is trying to authenticate as.
         /// </param>
         /// <exception cref="ArgumentNullException">
-        ///     Thrown if either the user or password parameters are null.
+        ///     Thrown if either the user or password parameters are null or whitespace.
         /// </exception>
         public static bool VerifyUserPassword(User user, string plaintextPassword)
         {
@@ -45,6 +52,7 @@ namespace PetGame.Util
                 throw new ArgumentNullException(nameof(user), "The user parameter may not be null.");
             if (string.IsNullOrWhiteSpace(plaintextPassword))
                 throw new ArgumentNullException(nameof(plaintextPassword), "The password may not be null or whitespace.");
+            // don't run the password against regex validation here, that is only enforced when setting a password
             // create a new HMAC SHA512 from the user's unique HMAC key
             using (HMACSHA512 hmac = new HMACSHA512(user.HMACKey))
             {
@@ -114,6 +122,12 @@ namespace PetGame.Util
         /// <summary>
         ///     Updates a user's HMAC Key and password hash
         /// </summary>
+        /// <exception cref="ArgumentNullException">
+        ///     If either the user parameter is null, or the plaintext password is null or empty.
+        /// </exception>
+        /// <exception cref="InsecurePasswordException">
+        ///     Thrown if the plaintext password does not satisfy the <see cref="MinPasswordRegex"/>.
+        /// </exception>
         public static void SetUserPassword(User user, string plainTextPassword)
         {
             // check parameters
@@ -121,7 +135,9 @@ namespace PetGame.Util
                 throw new ArgumentNullException(nameof(user), "The user parameter may not be null.");
             if (string.IsNullOrEmpty(plainTextPassword))
                 throw new ArgumentNullException(nameof(plainTextPassword), "The plaintext password parameter may not be null.");
-
+            // validate user password
+            if (!Regex.IsMatch(plainTextPassword, MinPasswordRegex))
+                throw new InsecurePasswordException("The supplied password did not meet the minimum password requirements.");
             // set a new hmac key for the user as well
             SetUserHMACKey(user);
 

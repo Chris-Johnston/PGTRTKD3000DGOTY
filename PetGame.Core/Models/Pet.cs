@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace PetGame.Models
@@ -11,16 +12,37 @@ namespace PetGame.Models
     public class Pet
     {
         /// <summary>
+        ///     Regular expression for valid pet names. All pet names must pass this validation.
+        ///     Allows for names up to 50 char long that can contain spaces,
+        ///     but must not start or end with whitespace.
+        /// </summary>
+        public const string NameRegex = @"^([$@._/-?!0-9a-zA-Z])([$@._/-?!0-9a-zA-Z ]){0,48}[$@._/-?!0-9a-zA-Z]$";
+
+        /// <summary>
         ///     Gets or sets the unique Id of this pet.
         /// </summary>
         public ulong PetId { get; set; }
 
-        //TODO: Make a regex rule for pet names and apply it to the setter of the Name property
-
         /// <summary>
         ///     Gets or sets the name of this pet.
         /// </summary>
-        public string Name { get; set; }
+        public string Name
+        {
+            get => _Name;
+            set
+            {
+                if (string.IsNullOrWhiteSpace(value))
+                {
+                    throw new ArgumentNullException(nameof(value), "A pet name cannot be null or whitespace.");
+                }
+                if (!Regex.IsMatch(value, NameRegex))
+                {
+                    throw new ArgumentException("A pet name must meet the requirements.", nameof(value));
+                }
+                _Name = value;
+            }
+        }
+        private string _Name;
 
         /// <summary>
         ///     Gets or sets the birthday (and time) of when this pet was created.
