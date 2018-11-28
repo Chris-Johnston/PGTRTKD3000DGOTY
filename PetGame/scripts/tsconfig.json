@@ -13,7 +13,8 @@
     //    "wwwroot"
     //],
     "files": [
-        "./login.ts"
+      "./login.ts",
+      "./petDebugger.ts"
     ],
     "compileOnSave": true
 }
