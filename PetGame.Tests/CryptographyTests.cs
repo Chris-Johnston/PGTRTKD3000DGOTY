@@ -17,12 +17,12 @@ namespace PetGame.Tests
             var user = new User() { UserId = 1337, Username = "hackerman" };
 
             // check null or whitespace
-            Assert.Throws<ArgumentNullException>(() => { Cryptography.SetUserPassword(user, ""); });
-            Assert.Throws<ArgumentNullException>(() => { Cryptography.SetUserPassword(user, null); });
-            Assert.Throws<InsecurePasswordException>(() => { Cryptography.SetUserPassword(user, "  "); });
-            Assert.Throws<InsecurePasswordException>(() => { Cryptography.SetUserPassword(user, "\t"); });
+            Assert.Throws<ArgumentNullException>(() => { CryptographyUtil.SetUserPassword(user, ""); });
+            Assert.Throws<ArgumentNullException>(() => { CryptographyUtil.SetUserPassword(user, null); });
+            Assert.Throws<InsecurePasswordException>(() => { CryptographyUtil.SetUserPassword(user, "  "); });
+            Assert.Throws<InsecurePasswordException>(() => { CryptographyUtil.SetUserPassword(user, "\t"); });
             // check insecure (short) passwords
-            Assert.Throws<InsecurePasswordException>(() => { Cryptography.SetUserPassword(user, "short"); });
+            Assert.Throws<InsecurePasswordException>(() => { CryptographyUtil.SetUserPassword(user, "short"); });
         }
 
         [Fact]
