@@ -2,8 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using PetGame.Core;
 using PetGame.Models;
+using PetGame.Services;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -14,35 +17,13 @@ namespace PetGame
     [Route("api/[controller]")]
     public class PetController : Controller
     {
-        // GET: api/<controller>
-        [HttpGet]
-        public IEnumerable<Pet> Get()
+        private readonly SqlManager sqlManager;
+        private readonly PetService petService;
+
+        public PetController(SqlManager sqlManager)
         {
-            // gets all of the pets
-            // not sure if we should actually support this endpoint
-            return new List<Pet>()
-            {
-                new Pet()
-                {
-                    Birthday = DateTime.Now,
-                    Endurance = 50,
-                    IsDead = false,
-                    Name = "Bobby Tables",
-                    PetId = 123,
-                    Strength = 50,
-                    UserId = 1
-                },
-                new Pet()
-                {
-                    Birthday = DateTime.Today,
-                    Endurance = 10,
-                    IsDead = true,
-                    Name = "King Tables the Fourth",
-                    PetId = 111,
-                    Strength = 10,
-                    UserId = 2
-                }
-            };
+            this.sqlManager = sqlManager;
+            this.petService = new PetService(this.sqlManager);
         }
 
         // GET api/<controller>/5
@@ -51,10 +32,10 @@ namespace PetGame
         /// </summary>
         /// <param name="id">The ID of the Pet to get from the database.</param>
         /// <returns> A pet of the given ID, or null if unspecified. </returns>
-        [HttpGet("{id}")]
+        [HttpGet("{id}"), AllowAnonymous]
         public Pet Get(ulong id)
         {
-            return new Pet() { Birthday = DateTime.Now, Endurance = 50, IsDead = false, Name = "Bobby Tables", PetId = 123, Strength = 50, UserId = id };
+            return petService.GetPetById(id);
         }
 
         /// <summary>
