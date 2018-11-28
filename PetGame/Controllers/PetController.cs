@@ -52,7 +52,7 @@ namespace PetGame
         /// </summary>
         /// <param name="value"> The pet to add to the database. </param>
         // POST api/<controller>
-        [HttpPost, Authorize]
+        [HttpPost]
         public IActionResult Post([FromBody]Pet value)
         {
             if (value == null) throw new ArgumentNullException(nameof(value), "The supplied Pet cannot be null.");
@@ -77,7 +77,7 @@ namespace PetGame
         ///     The values of the pet to update.
         /// </param>
         // PUT api/<controller>
-        [HttpPut("{id}"), Authorize]
+        [HttpPut("{id}")]
         public IActionResult Put(ulong id, [FromBody]Pet value)
         {
             if (value == null) throw new ArgumentNullException(nameof(value), "The supplied Pet cannot be null.");
@@ -93,7 +93,7 @@ namespace PetGame
         /// </summary>
         /// <param name="id"></param>
         // DELETE api/<controller>/5
-        [HttpDelete("{id}"), Authorize]
+        [HttpDelete("{id}")]
         public IActionResult Delete(ulong id)
         {
             var user = loginService.GetUserFromContext(HttpContext.User);
