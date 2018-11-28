@@ -205,7 +205,7 @@ namespace PetGame
         {
             // get the User for the given username
             var user = GetUser(username);
-            if (user != null && Cryptography.VerifyUserPassword(user, password))
+            if (user != null && CryptographyUtil.VerifyUserPassword(user, password))
             {
                 return user;
             }
@@ -257,7 +257,7 @@ namespace PetGame
         private UserToken MakeUserToken(ControllerBase controllerContext, User user)
         {
             // get a user token for this suer
-            var ut = Cryptography.MakeUserToken(user);
+            var ut = CryptographyUtil.MakeUserToken(user);
 
             // insert a new user token
             InsertToken(ut);
@@ -299,7 +299,7 @@ namespace PetGame
                 Username = username
             };
 
-            Cryptography.SetUserPassword(u, plaintextPassword);
+            CryptographyUtil.SetUserPassword(u, plaintextPassword);
 
             // insert this user, and get the id
             using (var s = sqlManager.EstablishDataConnection)
