@@ -115,10 +115,56 @@ namespace PetGame.Services
         /// </summary>
         /// <param name="id">The ID of the pet to update.</param>
         /// <param name="pet">The pet data to update.</param>
-        /// <returns></returns>
+        /// <returns>
+        ///     A copy of the instance of Pet that was updated.
+        /// </returns>
+        /// <exception cref="ArgumentNullException">
+        ///     Thrown if the supplied pet paramter is null.
+        /// </exception>
         public Pet UpdatePet(ulong id, Pet pet)
         {
+            if (pet == null)
+                throw new ArgumentNullException(nameof(pet), "The value of Pet may not be null.");
 
+            Pet ret = null;
+
+            using (var conn = sqlManager.EstablishDataConnection)
+            {
+                var cmd = conn.CreateCommand();
+                cmd.CommandText =
+                    @"UPDATE Pet SET Name = @Name, Birthday = @Birthday, Strength = @Strength, Endurance = @Endurance, IsDead = @IsDead, UserId = @UserId
+                     WHERE PetId = @PetId;";
+                cmd.Parameters.AddWithValue("@Name", pet.Name);
+                cmd.Parameters.AddWithValue("@Birthday", pet.Birthday);
+                cmd.Parameters.AddWithValue("@Strength", pet.Strength);
+                cmd.Parameters.AddWithValue("@Endurance", pet.Endurance);
+                cmd.Parameters.AddWithValue("@IsDead", pet.IsDead);
+                cmd.Parameters.AddWithValue("@UserId", pet.UserId);
+                // use the separate ID provided, not the id from Pet
+                cmd.Parameters.AddWithValue("@PetId", $"{id}");
+
+                var results = cmd.ExecuteNonQuery();
+
+                if (results == 0)
+                {
+                    // no rows affected
+                }
+                else
+                {
+                    // at least 1 row affected (hopefully only 1)
+                    ret = new Pet()
+                    {
+                        PetId = id,
+                        Name = pet.Name,
+                        Birthday = pet.Birthday,
+                        Strength = pet.Strength,
+                        Endurance = pet.Endurance,
+                        IsDead = pet.IsDead,
+                        UserId = pet.UserId
+                    };
+                }
+            }
+            return ret;
         }
     }
 }

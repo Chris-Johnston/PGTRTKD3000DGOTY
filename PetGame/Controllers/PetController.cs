@@ -56,6 +56,7 @@ namespace PetGame
 
         /// <summary>
         ///     Updates a pet in the database.
+        ///     Requires authorization.
         /// </summary>
         /// <param name="id">
         ///     The ID of the pet to update.
@@ -64,13 +65,13 @@ namespace PetGame
         ///     The values of the pet to update.
         /// </param>
         // PUT api/<controller>
-        [HttpPut("{id}")]
+        [HttpPut("{id}"), Authorize]
         public Pet Put(ulong id, [FromBody]Pet value)
         {
             if (value == null) throw new ArgumentNullException(nameof(value), "The supplied Pet cannot be null.");
             // don't necessarily care if the PetId inside value does not match
             // the id passed separately, since only the Id is going to be used
-            
+            return petService.UpdatePet(id, value);
         }
 
         /// <summary>
@@ -78,7 +79,7 @@ namespace PetGame
         /// </summary>
         /// <param name="id"></param>
         // DELETE api/<controller>/5
-        [HttpDelete("{id}")]
+        [HttpDelete("{id}"), Authorize]
         public void Delete(ulong id)
         {
             //TODO: Delete this pet from the database.
