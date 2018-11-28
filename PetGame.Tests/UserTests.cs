@@ -50,7 +50,6 @@ namespace PetGame.Tests
             });
         }
 
-
         [Theory]
         [InlineData("chris")]
         [InlineData("hackerman")]
