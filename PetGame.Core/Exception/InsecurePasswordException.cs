@@ -12,5 +12,9 @@ namespace PetGame.Core
     {
         public InsecurePasswordException() : base() { }
         public InsecurePasswordException(string message) : base(message) { }
+
+        public InsecurePasswordException(string message, Exception innerException) : base(message, innerException)
+        {
+        }
     }
 }

@@ -79,7 +79,7 @@ namespace PetGame
                 var updatecmd = conn.CreateCommand();
                 updatecmd.CommandText =
                     @"UPDATE UserToken SET LastUsed = GETDATE() WHERE UserTokenId = @UserTokenId;";
-                updatecmd.Parameters.AddWithValue("@UserTokenId", usertokenid.ToString());
+                updatecmd.Parameters.AddWithValue("@UserTokenId", $"{usertokenid}");
                 updatecmd.ExecuteNonQuery();
 
                 // todo delete all UserToken that are out of date
@@ -110,7 +110,7 @@ namespace PetGame
                 var cmd = conn.CreateCommand();
                 cmd.CommandText =
                     @"SELECT UserId, Username FROM [User] WHERE UserId = @UserId;";
-                cmd.Parameters.AddWithValue("@UserId", id.ToString());
+                cmd.Parameters.AddWithValue("@UserId", $"{id}");
 
                 using (var r = cmd.ExecuteReader())
                 {
@@ -205,7 +205,7 @@ namespace PetGame
         {
             // get the User for the given username
             var user = GetUser(username);
-            if (user != null && Cryptography.VerifyUserPassword(user, password))
+            if (user != null && CryptographyUtil.VerifyUserPassword(user, password))
             {
                 return user;
             }
@@ -247,7 +247,7 @@ namespace PetGame
                 var cmd = conn.CreateCommand();
                 cmd.CommandText =
                     @"INSERT INTO UserToken (UserId, Token, LastUsed, Created) VALUES (@UserId, @Token, GETDATE(), GETDATE());";
-                cmd.Parameters.AddWithValue("@UserId", userToken.UserId.ToString());
+                cmd.Parameters.AddWithValue("@UserId", $"{userToken.UserId}");
                 cmd.Parameters.AddWithValue("@Token", userToken.Token);
                 
                 cmd.ExecuteNonQuery();
@@ -257,7 +257,7 @@ namespace PetGame
         private UserToken MakeUserToken(ControllerBase controllerContext, User user)
         {
             // get a user token for this suer
-            var ut = Cryptography.MakeUserToken(user);
+            var ut = CryptographyUtil.MakeUserToken(user);
 
             // insert a new user token
             InsertToken(ut);
@@ -278,7 +278,7 @@ namespace PetGame
             var claims = new List<Claim>()
             {
                 new Claim(ClaimTypes.Name, user.Username),
-                new Claim(ClaimTypes.NameIdentifier, user.UserId.ToString())
+                new Claim(ClaimTypes.NameIdentifier, $"{user.UserId}")
             };
 
             var userid = new ClaimsIdentity(claims, "auth_token");
@@ -299,7 +299,7 @@ namespace PetGame
                 Username = username
             };
 
-            Cryptography.SetUserPassword(u, plaintextPassword);
+            CryptographyUtil.SetUserPassword(u, plaintextPassword);
 
             // insert this user, and get the id
             using (var s = sqlManager.EstablishDataConnection)

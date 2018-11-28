@@ -17,12 +17,12 @@ namespace PetGame.Tests
             var user = new User() { UserId = 1337, Username = "hackerman" };
 
             // check null or whitespace
-            Assert.Throws<ArgumentNullException>(() => { Cryptography.SetUserPassword(user, ""); });
-            Assert.Throws<ArgumentNullException>(() => { Cryptography.SetUserPassword(user, null); });
-            Assert.Throws<InsecurePasswordException>(() => { Cryptography.SetUserPassword(user, "  "); });
-            Assert.Throws<InsecurePasswordException>(() => { Cryptography.SetUserPassword(user, "\t"); });
+            Assert.Throws<ArgumentNullException>(() => { CryptographyUtil.SetUserPassword(user, ""); });
+            Assert.Throws<ArgumentNullException>(() => { CryptographyUtil.SetUserPassword(user, null); });
+            Assert.Throws<InsecurePasswordException>(() => { CryptographyUtil.SetUserPassword(user, "  "); });
+            Assert.Throws<InsecurePasswordException>(() => { CryptographyUtil.SetUserPassword(user, "\t"); });
             // check insecure (short) passwords
-            Assert.Throws<InsecurePasswordException>(() => { Cryptography.SetUserPassword(user, "short"); });
+            Assert.Throws<InsecurePasswordException>(() => { CryptographyUtil.SetUserPassword(user, "short"); });
         }
 
         [Fact]
@@ -34,25 +34,25 @@ namespace PetGame.Tests
                 Username = "hackerman"
             };
             // set the user's password and hmac key
-            Cryptography.SetUserPassword(user, "Password123");
+            CryptographyUtil.SetUserPassword(user, "Password123");
 
             var pw1 = new byte[user.PasswordHash.Length];
             Array.Copy(user.PasswordHash, pw1, user.PasswordHash.Length);
 
-            Assert.True(Cryptography.VerifyUserPassword(user, "Password123"));
-            Assert.False(Cryptography.VerifyUserPassword(user, "Password123!"));
+            Assert.True(CryptographyUtil.VerifyUserPassword(user, "Password123"));
+            Assert.False(CryptographyUtil.VerifyUserPassword(user, "Password123!"));
 
             // if the HMAC key is set again, all passwords will be invalidated
-            Cryptography.SetUserHMACKey(user);
+            CryptographyUtil.SetUserHMACKey(user);
 
-            Assert.False(Cryptography.VerifyUserPassword(user, "Password123"));
+            Assert.False(CryptographyUtil.VerifyUserPassword(user, "Password123"));
 
-            Cryptography.SetUserPassword(user, "Password123");
+            CryptographyUtil.SetUserPassword(user, "Password123");
 
-            Assert.True(Cryptography.VerifyUserPassword(user, "Password123"));
+            Assert.True(CryptographyUtil.VerifyUserPassword(user, "Password123"));
 
             // assert that the password hash is different because the hmac keys have changed too
-            Assert.False(Cryptography.CryptographicCompare(pw1, user.PasswordHash));
+            Assert.False(CryptographyUtil.CryptographicCompare(pw1, user.PasswordHash));
         }
 
         [Fact]
@@ -63,7 +63,7 @@ namespace PetGame.Tests
             Assert.Null(user.PasswordHash);
             Assert.Null(user.HMACKey);
 
-            Cryptography.SetUserHMACKey(user);
+            CryptographyUtil.SetUserHMACKey(user);
 
             Assert.NotNull(user.HMACKey);
             Assert.Null(user.PasswordHash);
@@ -71,9 +71,9 @@ namespace PetGame.Tests
             var k = user.HMACKey;
 
             // set a new hmac
-            Cryptography.SetUserHMACKey(user);
+            CryptographyUtil.SetUserHMACKey(user);
             // keys should not be the same
-            Assert.False(Cryptography.CryptographicCompare(k, user.HMACKey));
+            Assert.False(CryptographyUtil.CryptographicCompare(k, user.HMACKey));
         }
 
         [Theory]
@@ -86,7 +86,7 @@ namespace PetGame.Tests
         [InlineData(null, new byte[] { 10 }, false)]
         public void TestCryptographicEquals(byte[] a, byte[] b, bool eq)
         {
-            Assert.Equal(eq, Cryptography.CryptographicCompare(a, b));
+            Assert.Equal(eq, CryptographyUtil.CryptographicCompare(a, b));
         }
     }
 }

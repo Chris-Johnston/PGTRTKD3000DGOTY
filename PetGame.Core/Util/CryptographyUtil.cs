@@ -17,7 +17,7 @@ namespace PetGame.Util
     /// <summary>
     ///     Static methods that are used for Cryptographic actions.
     /// </summary>
-    public static class Cryptography
+    public static class CryptographyUtil
     {
         const int TokenSize = 256;
         const int UserTokenSize = 64;
