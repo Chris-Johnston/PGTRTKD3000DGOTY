@@ -56,5 +56,69 @@ namespace PetGame.Services
             }
             return p;
         }
+
+        /// <summary>
+        ///     Inserts a new pet into the database.
+        /// </summary>
+        /// <remarks>
+        ///     The ID property of the pet must be left unset, because
+        ///     this is only determined after it is inserted into the 
+        ///     database.
+        ///     The returned entity will have this property set.
+        /// </remarks>
+        /// <param name="pet">
+        ///     The pet to insert into the database.
+        /// </param>
+        /// <returns>
+        ///     A copy of the pet inserted into the database, with the ID property set.
+        /// </returns>
+        /// <exception cref="ArgumentNullException">
+        ///     Thrown if the pet parameter is null.
+        /// </exception>
+        public Pet InsertPet(Pet pet)
+        {
+            if (pet == null)
+            {
+                throw new ArgumentNullException(nameof(pet), "A null pet cannot be inserted.");
+            }
+
+            using (var conn = sqlManager.EstablishDataConnection)
+            {
+                // create the insert command
+                var cmd = conn.CreateCommand();
+                cmd.CommandText =
+                    @"INSERT INTO Pet (Name, Birthday, Strength, Endurance, IsDead, UserId)
+                      OUTPUT INSERTED.PetId
+                      VALUES (@Name, @Birthday, @Strength, @Endurance, @IsDead, @UserId);";
+                cmd.Parameters.AddWithValue("@Name", pet.Name);
+                cmd.Parameters.AddWithValue("@Birthday", pet.Birthday);
+                cmd.Parameters.AddWithValue("@Strength", pet.Strength);
+                cmd.Parameters.AddWithValue("@Endurance", pet.Endurance);
+                cmd.Parameters.AddWithValue("@IsDead", pet.IsDead);
+                cmd.Parameters.AddWithValue("@UserId", $"{pet.UserId}");
+
+                // read the ID that was inserted
+                using (var reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        pet.PetId = (ulong) reader.GetInt64(0);
+                    }
+                }
+            }
+
+            return pet;
+        }
+
+        /// <summary>
+        ///     Updates a pet in the database.
+        /// </summary>
+        /// <param name="id">The ID of the pet to update.</param>
+        /// <param name="pet">The pet data to update.</param>
+        /// <returns></returns>
+        public Pet UpdatePet(ulong id, Pet pet)
+        {
+
+        }
     }
 }
