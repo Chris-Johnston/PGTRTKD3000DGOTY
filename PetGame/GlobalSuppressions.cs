@@ -5,4 +5,5 @@
 // a specific target and scoped to a namespace, type, member, etc.
 
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA2208:Instantiate argument exceptions correctly", Justification = "<Pending>", Scope = "member", Target = "~M:PetGame.LoginService.GetUserToken(Microsoft.AspNetCore.Mvc.ControllerBase)~PetGame.Models.UserToken")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA2208:Instantiate argument exceptions correctly", Justification = "<Pending>", Scope = "member", Target = "~M:PetGame.LoginService.RegisterNewUser(Microsoft.AspNetCore.Mvc.ControllerBase)~PetGame.Models.UserToken")]
 
