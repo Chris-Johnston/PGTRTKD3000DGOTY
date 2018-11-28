@@ -42,7 +42,7 @@ namespace PetGame
         {
             var pet = petService.GetPetById(id);
             if (pet == null)
-                return Unauthorized();
+                return NotFound();
             return Json(pet);
         }
 
