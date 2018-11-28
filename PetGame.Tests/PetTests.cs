@@ -70,19 +70,23 @@ namespace PetGame.Tests
         [Theory]
         [InlineData(null)]
         [InlineData("")]
-        [InlineData("s p a c e s")]
-        // 50 char
-        [InlineData("ljkasdfljkafsdjklfjkdjklfadsjkladfsjkladfsjklafdsj")]
         // 51 char
         [InlineData("ljkasdfljkafsdjklfjkdjklfadsjkladfsjkladfsjklafdsja")]
         public void TestInvalidPetNames(string name)
         {
-            Assert.ThrowsAny<ArgumentException>(() =>
+            var ex = Assert.ThrowsAny<Exception>(() =>
             {
                 _ = new Pet()
                 {
                     Name = name
                 };
+            });
+
+            // check that the exception is one of these types
+            Assert.Contains(ex.GetType(), new List<Type>()
+            {
+                typeof(ArgumentNullException),
+                typeof(ArgumentException)
             });
         }
 
@@ -91,6 +95,9 @@ namespace PetGame.Tests
         [InlineData("peeeet")]
         [InlineData("idk")]
         [InlineData("Fluffy Jr")]
+        [InlineData("s p a c e s")]
+        // 50 char
+        [InlineData("ljkasdfljkafsdjklfjkdjklfadsjkladfsjkladfsjklafdsj")]
         public void TestValidPetNames(string name)
         {
             _ = new Pet()
