@@ -35,7 +35,7 @@ namespace PetGame.Services
                 var cmd = conn.CreateCommand();
                 cmd.CommandText =
                     @"SELECT PetId, Name, Birthday, Strength, Endurance, IsDead, UserId FROM Pet WHERE PetId = @PetId;";
-                cmd.Parameters.AddWithValue("@PetId", petid);
+                cmd.Parameters.AddWithValue("@PetId", $"{petid}");
 
                 using (var reader = cmd.ExecuteReader())
                 {
@@ -139,7 +139,7 @@ namespace PetGame.Services
                 cmd.Parameters.AddWithValue("@Strength", pet.Strength);
                 cmd.Parameters.AddWithValue("@Endurance", pet.Endurance);
                 cmd.Parameters.AddWithValue("@IsDead", pet.IsDead);
-                cmd.Parameters.AddWithValue("@UserId", pet.UserId);
+                cmd.Parameters.AddWithValue("@UserId", $"{pet.UserId}");
                 // use the separate ID provided, not the id from Pet
                 cmd.Parameters.AddWithValue("@PetId", $"{id}");
 
