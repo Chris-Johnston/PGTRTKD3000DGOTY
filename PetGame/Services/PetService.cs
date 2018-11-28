@@ -166,5 +166,35 @@ namespace PetGame.Services
             }
             return ret;
         }
+
+        /// <summary>
+        ///     Deletes a pet by it's Id based on it's owner.
+        /// </summary>
+        /// <param name="petId">
+        ///     The Id of the pet.
+        /// </param>
+        /// <param name="ownerId">
+        ///     The Id of the pet's owner.
+        /// </param>
+        /// <returns>
+        ///     True if the pet was deleted, false if it wasn't found
+        ///     or if the user was unauthorized.
+        /// </returns>
+        public bool DeletePet(ulong petId, ulong ownerId)
+        {
+            int results = -1;
+            using (var conn = sqlManager.EstablishDataConnection)
+            {
+                var cmd = conn.CreateCommand();
+                cmd.CommandText =
+                    @"DELETE FROM Pet WHERE PetId = @PetId and UserId = @UserId;";
+                cmd.Parameters.AddWithValue("@PetId", $"{petId}");
+                cmd.Parameters.AddWithValue("@UserId", $"{ownerId}");
+
+                results = cmd.ExecuteNonQuery();
+            }
+            // return true if exactly one pet was deleted
+            return results == 1;
+        }
     }
 }
