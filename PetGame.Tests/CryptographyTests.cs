@@ -1,3 +1,4 @@
+using PetGame.Core;
 using PetGame.Models;
 using PetGame.Util;
 using System;
@@ -11,12 +12,26 @@ namespace PetGame.Tests
     public class CryptographyTests
     {
         [Fact]
+        public void TestBadPasswords()
+        {
+            var user = new User() { UserId = 1337, Username = "hackerman" };
+
+            // check null or whitespace
+            Assert.Throws<ArgumentNullException>(() => { Cryptography.SetUserPassword(user, ""); });
+            Assert.Throws<ArgumentNullException>(() => { Cryptography.SetUserPassword(user, null); });
+            Assert.Throws<InsecurePasswordException>(() => { Cryptography.SetUserPassword(user, "  "); });
+            Assert.Throws<InsecurePasswordException>(() => { Cryptography.SetUserPassword(user, "\t"); });
+            // check insecure (short) passwords
+            Assert.Throws<InsecurePasswordException>(() => { Cryptography.SetUserPassword(user, "short"); });
+        }
+
+        [Fact]
         public void TestLogin()
         {
             var user = new User()
             {
                 UserId = 0,
-                Username = "Test Dude"
+                Username = "hackerman"
             };
             // set the user's password and hmac key
             Cryptography.SetUserPassword(user, "Password123");
