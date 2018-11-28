@@ -16,7 +16,7 @@ namespace PetGame.Models
         ///     Allows for names up to 50 char long that can contain spaces,
         ///     but must not start or end with whitespace.
         /// </summary>
-        public const string NameRegex = @"^[^\s]([$@._/-?!0-9a-zA-Z ]){2,50}[^\s]$";
+        public const string NameRegex = @"^([$@._/-?!0-9a-zA-Z])([$@._/-?!0-9a-zA-Z ]){0,48}[$@._/-?!0-9a-zA-Z]$";
 
         /// <summary>
         ///     Gets or sets the unique Id of this pet.
