@@ -26,6 +26,9 @@ namespace PetGame
             this.petService = new PetService(this.sqlManager);
         }
 
+        // GET api/pet to return all is invalid, because that would
+        // result in a lot of data being returned
+
         // GET api/<controller>/5
         /// <summary>
         ///     Gets a Pet by Id.
