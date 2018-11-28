@@ -79,7 +79,7 @@ namespace PetGame
                 var updatecmd = conn.CreateCommand();
                 updatecmd.CommandText =
                     @"UPDATE UserToken SET LastUsed = GETDATE() WHERE UserTokenId = @UserTokenId;";
-                updatecmd.Parameters.AddWithValue("@UserTokenId", usertokenid.ToString());
+                updatecmd.Parameters.AddWithValue("@UserTokenId", $"{usertokenid}");
                 updatecmd.ExecuteNonQuery();
 
                 // todo delete all UserToken that are out of date
@@ -110,7 +110,7 @@ namespace PetGame
                 var cmd = conn.CreateCommand();
                 cmd.CommandText =
                     @"SELECT UserId, Username FROM [User] WHERE UserId = @UserId;";
-                cmd.Parameters.AddWithValue("@UserId", id.ToString());
+                cmd.Parameters.AddWithValue("@UserId", $"{id}");
 
                 using (var r = cmd.ExecuteReader())
                 {
@@ -247,7 +247,7 @@ namespace PetGame
                 var cmd = conn.CreateCommand();
                 cmd.CommandText =
                     @"INSERT INTO UserToken (UserId, Token, LastUsed, Created) VALUES (@UserId, @Token, GETDATE(), GETDATE());";
-                cmd.Parameters.AddWithValue("@UserId", userToken.UserId.ToString());
+                cmd.Parameters.AddWithValue("@UserId", $"{userToken.UserId}");
                 cmd.Parameters.AddWithValue("@Token", userToken.Token);
                 
                 cmd.ExecuteNonQuery();
@@ -278,7 +278,7 @@ namespace PetGame
             var claims = new List<Claim>()
             {
                 new Claim(ClaimTypes.Name, user.Username),
-                new Claim(ClaimTypes.NameIdentifier, user.UserId.ToString())
+                new Claim(ClaimTypes.NameIdentifier, $"{user.UserId}")
             };
 
             var userid = new ClaimsIdentity(claims, "auth_token");
