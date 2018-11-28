@@ -13,6 +13,11 @@ namespace PetGame
     {
         private readonly SqlManager sqlManager;
 
+        public LeaderboardController(SqlManager sqlManager) : base()
+        {
+            this.sqlManager = sqlManager;
+        }
+
         [HttpGet]
         public IActionResult Get()
         {
@@ -31,11 +36,7 @@ namespace PetGame
                 {
                     while (reader.Read())
                     {
-                        for (int i = 0; i < 10; i++)
-                        {
-                            TopTenRaces.Add(reader.GetString(i));
-                        }
-                        
+                        TopTenRaces.Add(reader.GetString(0));
                     }
                 }
             }
