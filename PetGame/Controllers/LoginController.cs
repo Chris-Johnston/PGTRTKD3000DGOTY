@@ -30,7 +30,7 @@ namespace PetGame
         {
             var cp = new ClaimsPrincipal(new ClaimsIdentity(new List<Claim>()
             {
-                new Claim(ClaimTypes.NameIdentifier, ut.UserId.ToString()),
+                new Claim(ClaimTypes.NameIdentifier, $"{ut.UserId}"),
                 new Claim(ClaimTypes.UserData, ut.Token)
             }));
 
