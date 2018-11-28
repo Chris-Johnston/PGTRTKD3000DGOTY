@@ -15,7 +15,7 @@ namespace PetGame.Models
         ///     Regular expression for valid usernames. All usernames must pass this validation.
         ///     Allows for names betwen [2, 50] chars (inclusive) with the supported characters.
         /// </summary>
-        public const string UsernameRegex = @"^[^\s]([$@._/-?!0-9a-zA-Z]){2,50}[^\s]$";
+        public const string UsernameRegex = @"^([$@._/-?!0-9a-zA-Z]){2,50}$";
 
         /// <summary>
         ///     A user's unique identifier.
