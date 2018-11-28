@@ -11,19 +11,27 @@
 </head>
 <body>
     <!-- Title shown at the top of the page, include a link to register. -->
-    <div id="header">
-        <h1><a href="/">PGTRTKD3000DGOTY</a></h1>
-        <div id="link">
-            <a href="/login">Login / Register</a>
-        </div>
-    </div>
-    <div>
+    <nav class="navbar navbar-dark bg-dark navbar-expand-lg">
+        <a class="navbar-brand" href="/">PGTRTKD3000DGOTY</a>
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+                <a class="nav-link" href="/login">Login/Register</a>
+            </li>
+        </ul>
+    </nav>
+    <div class="container">
         @RenderBody()
     </div>
-    <div id="footer">
-        PGTRTKD3000DGOTY
-        <a href="https://github.com/Chris-Johnston/PGTRTKD3000DGOTY">GitHub</a>
-    </div>
+    <footer>
+        <nav class="navbar fixed-bottom bg-dark text-white">
+            <span class="navbar-text">
+                PGTRTKD3000DGOTY
+            </span>
+            <div class="nav-item active">
+                <a class="nav-link" href="https://github.com/Chris-Johnston/PGTRTKD3000DGOTY">GitHub</a>
+            </div>
+        </nav>
+    </footer>
     <!-- JQuery and Popper.js, used by Bootstrap CSS -->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
