@@ -29,6 +29,7 @@ namespace PetGame.Tests
 
         [Theory]
         [InlineData("a")]
+        [InlineData("‽")]
         [InlineData("s p a c e s")]
         [InlineData(" invalid")]
         [InlineData("invalid   ")]
@@ -43,6 +44,25 @@ namespace PetGame.Tests
                     Username = name
                 };
             });
+        }
+
+
+        [Theory]
+        [InlineData("chris")]
+        [InlineData("hackerman")]
+        [InlineData("hackerman!!!")]
+        [InlineData("aa")]
+        [InlineData("ORANG")]
+        [InlineData("aAaAaAaA")]
+        [InlineData("!!!!!")]
+        [InlineData("!?")]
+        [InlineData("1337")]
+        public void TestValidUsernames(string name)
+        {
+            _ = new User()
+            {
+                Username = name
+            };
         }
     }
 }
