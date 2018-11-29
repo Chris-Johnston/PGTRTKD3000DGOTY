@@ -25,7 +25,4 @@
   <ItemGroup>
     <TypeScriptCompile Include="scripts\login.ts" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="wwwroot\" />
-  </ItemGroup>
 </Project>
