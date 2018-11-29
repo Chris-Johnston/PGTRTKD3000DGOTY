@@ -44,19 +44,27 @@ namespace PetGame
                     }
                 }
 
-                for (int i = 0; i < 10; i++)
+                if (TopTenScores.Count <= 0 || TopTenPetNames.Count <= 0 ||
+                    TopTenOwnerNames.Count <= 0)
                 {
-                    table[0, i] = TopTenPetNames[i];
+                    return Json("NoData");
                 }
-
-                for (int i = 0; i < 10; i++)
+                else
                 {
-                    table[1, i] = TopTenScores[i].ToString();
-                }
+                    for (int i = 0; i < 10; i++)
+                    {
+                        table[0, i] = TopTenPetNames[i];
+                    }
 
-                for (int i = 0; i < 10; i++)
-                {
-                    table[2, i] = TopTenOwnerNames[i];
+                    for (int i = 0; i < 10; i++)
+                    {
+                        table[1, i] = TopTenScores[i].ToString();
+                    }
+
+                    for (int i = 0; i < 10; i++)
+                    {
+                        table[2, i] = TopTenOwnerNames[i];
+                    }
                 }
             }
             //return races
