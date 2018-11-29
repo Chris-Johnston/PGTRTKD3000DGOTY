@@ -46,6 +46,19 @@ namespace PetGame
             return Json(pet);
         }
 
+        // in postman test with
+        /** POST /api/Pet
+         * {
+  "PetId": 123,
+  "Name": "So fluffy boi",
+  "Birthday": "2012-04-23T18:25:43.511Z",
+  "Strength": 5,
+  "Endurance": 55,
+  "IsDead": true,
+  "UserId": 35
+}
+            */
+
         /// <summary>
         ///     Inserts a new Pet into the database.
         ///     This action requires authentication.
@@ -53,7 +66,7 @@ namespace PetGame
         /// <param name="value"> The pet to add to the database. </param>
         // POST api/<controller>
         [HttpPost]
-        public IActionResult Post([FromBody]Pet value)
+        public IActionResult Post([FromBody] Pet value)
         {
             if (value == null) throw new ArgumentNullException(nameof(value), "The supplied Pet cannot be null.");
             // check user
@@ -63,7 +76,7 @@ namespace PetGame
                 return Json(petService.InsertPet(value));
             }
             // unauthorized
-            return Unauthorized();
+                return Unauthorized();
         }
 
         /// <summary>
