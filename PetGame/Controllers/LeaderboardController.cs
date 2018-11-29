@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using PetGame.Core;
-using PetGame.Models;
 
 namespace PetGame
 {
@@ -21,10 +18,15 @@ namespace PetGame
         [HttpGet]
         public IActionResult Get()
         {
-            //create list to hold the races
-            //List<Race> TopTenRaces = new List<Race>();
-            List<string> TopTenRaces = new List<string>();
-
+            //create lists to hold the informations
+            //names of pets on leaderboard
+            List<string> TopTenPetNames = new List<string>();
+            //scores of pets on leaderboard
+            List<Int32> TopTenScores = new List<Int32>();
+            //owner names of pets on leaderboard
+            List<string> TopTenOwnerNames = new List<string>();
+            //data structure to be returned as json
+            string[,] table = new string[3,10];
             //Query db for races
             using (var conn = sqlManager.EstablishDataConnection)
             {
@@ -36,12 +38,29 @@ namespace PetGame
                 {
                     while (reader.Read())
                     {
-                        TopTenRaces.Add(reader.GetString(0));
+                        TopTenPetNames.Add(reader.GetString(0));
+                        TopTenScores.Add(reader.GetInt32(1));
+                        TopTenOwnerNames.Add(reader.GetString(2));
                     }
+                }
+
+                for (int i = 0; i < 10; i++)
+                {
+                    table[0, i] = TopTenPetNames[i];
+                }
+
+                for (int i = 0; i < 10; i++)
+                {
+                    table[1, i] = TopTenScores[i].ToString();
+                }
+
+                for (int i = 0; i < 10; i++)
+                {
+                    table[2, i] = TopTenOwnerNames[i];
                 }
             }
             //return races
-            return Json(TopTenRaces);
+            return Json(table);
         }
     }
 }
