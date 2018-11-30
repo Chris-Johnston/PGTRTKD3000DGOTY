@@ -23,7 +23,8 @@ class Pet {
 function MakePetFromPost() : Pet {
     var p = new Pet();
     p.name = (document.getElementById('post_pet_name') as HTMLFormElement).value;
-    p.birthday = (document.getElementById('post_pet_birthday') as HTMLFormElement).valueAsDate;
+    // p.birthday = (document.getElementById('post_pet_birthday') as HTMLFormElement).valueAsDate;
+    p.birthday = new Date().toJSON();
     p.strength = (document.getElementById('post_pet_strength') as HTMLFormElement).valueAsNumber;
     p.endurance = (document.getElementById('post_pet_endurance') as HTMLFormElement).valueAsNumber;
     p.isdead = (document.getElementById('post_pet_isdead') as HTMLFormElement).value === "on";
@@ -36,7 +37,8 @@ function MakePetFromPost() : Pet {
 function MakePetFromPut(): Pet {
     var p = new Pet();
     p.name = (document.getElementById('put_pet_name') as HTMLFormElement).value;
-    p.birthday = (document.getElementById('put_pet_birthday') as HTMLFormElement).valueAsDate;
+    // p.birthday = (document.getElementById('put_pet_birthday') as HTMLFormElement).valueAsDate;
+    p.birthday = new Date().toJSON();
     p.strength = (document.getElementById('put_pet_strength') as HTMLFormElement).valueAsNumber;
     p.endurance = (document.getElementById('put_pet_endurance') as HTMLFormElement).valueAsNumber;
     p.isdead = (document.getElementById('put_pet_isdead') as HTMLFormElement).value === "on";
