@@ -70,7 +70,6 @@ namespace PetGame
                     $"Status: {context.HttpContext.Response.StatusCode}").ConfigureAwait(false);
             });
 
-
             // use JWT authentication
             app.UseAuthentication();
             app.UseFileServer();
