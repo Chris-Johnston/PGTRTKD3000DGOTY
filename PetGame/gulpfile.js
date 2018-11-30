@@ -21,7 +21,7 @@ gulp.task('default', function () {
     var lesscss = gulp.src('style/main.less')
         .pipe(less())
         .pipe(gulp.dest('wwwroot/css'));
-    return [ts, lesscss];
+    done();
 });
 
 gulp.task('less', function () {
