@@ -14,7 +14,7 @@ get compiled into regular js automatically.
 1. Make sure you have `npm` installed. This is bundled with Node JS, so you'll have to install that
 too.
 
-2. Install gulp: `npm i -g gulp gulp-cli less` (This may require sudo/admin)
+2. Install gulp: `npm i -g gulp gulp-cli less gulp-less` (This may require sudo/admin)
 
 
 ## Local Configuration

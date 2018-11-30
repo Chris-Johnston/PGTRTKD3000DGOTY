@@ -17,10 +17,11 @@ gulp.task('clean', function () {
 });
 
 gulp.task('default', function () {
-    gulp.src(paths.scripts).pipe(gulp.dest('wwwroot/scripts'))
-    return gulp.src('style/main.less')
+    var ts = gulp.src(paths.scripts).pipe(gulp.dest('wwwroot/scripts'));
+    var lesscss = gulp.src('style/main.less')
         .pipe(less())
         .pipe(gulp.dest('wwwroot/css'));
+    return [ts, lesscss];
 });
 
 gulp.task('less', function () {
