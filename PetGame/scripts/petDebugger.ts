@@ -28,7 +28,7 @@ function MakePetFromPost() : Pet {
     p.endurance = (document.getElementById('post_pet_endurance') as HTMLFormElement).valueAsNumber;
     p.isdead = (document.getElementById('post_pet_isdead') as HTMLFormElement).value === "on";
     p.userid = (document.getElementById('post_pet_userid') as HTMLFormElement).valueAsNumber;
-    // ignore 
+    // ignore
     p.petid = 0;
     return p;
 }
@@ -41,7 +41,7 @@ function MakePetFromPut(): Pet {
     p.endurance = (document.getElementById('put_pet_endurance') as HTMLFormElement).valueAsNumber;
     p.isdead = (document.getElementById('put_pet_isdead') as HTMLFormElement).value === "on";
     p.userid = (document.getElementById('put_pet_userid') as HTMLFormElement).valueAsNumber;
-    // ignore 
+    // ignore
     p.petid = 0;
     return p;
 }
