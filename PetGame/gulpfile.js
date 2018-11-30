@@ -17,8 +17,8 @@ gulp.task('clean', function () {
 });
 
 gulp.task('default', function () {
-    var ts = gulp.src(paths.scripts).pipe(gulp.dest('wwwroot/scripts'));
-    var lesscss = gulp.src('style/main.less')
+    gulp.src(paths.scripts).pipe(gulp.dest('wwwroot/scripts'));
+    gulp.src('style/main.less')
         .pipe(less())
         .pipe(gulp.dest('wwwroot/css'));
     done();
