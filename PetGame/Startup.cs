@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using PetGame.Core;
+using Microsoft.AspNetCore.Diagnostics;
 
 namespace PetGame
 {
@@ -34,10 +35,40 @@ namespace PetGame
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
+            // in development we should throw a more comprehensive exception page
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
+            else
+            {
+                // but in prod, only show minimal details
+                // in this case, we are probably fine just saying what type of Exception
+                // was thrown
+                app.UseExceptionHandler(options =>
+                {
+                    options.Run(async context =>
+                    {
+                        var errorFeature = context.Features.Get<IExceptionHandlerFeature>();
+                        var exception = errorFeature.Error;
+                        // return plaintext
+                        context.Response.ContentType = "text/plain";
+                        await context.Response.WriteAsync(
+                            $"Internal Server Error: {exception.GetType().ToString()}").ConfigureAwait(false);
+                    });
+                });
+            }
+
+            // run and forget without await
+            _ = app.UseStatusCodePages(async context =>
+            {
+                // return plaintext
+                context.HttpContext.Response.ContentType = "text/plain";
+                // just return "Status: 404" or whatever for all errors
+                // we *could* do something fancier here, but later
+                await context.HttpContext.Response.WriteAsync(
+                    $"Status: {context.HttpContext.Response.StatusCode}").ConfigureAwait(false);
+            });
 
             // for files under wwwroot
             app.UseStaticFiles();
