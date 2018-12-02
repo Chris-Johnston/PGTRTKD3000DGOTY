@@ -47,16 +47,17 @@ namespace PetGame
         }
 
         // in postman test with
+        // where UserId matches the currently signed-in user
         /** POST /api/Pet
          * {
-  "PetId": 123,
-  "Name": "So fluffy boi",
-  "Birthday": "2012-04-23T18:25:43.511Z",
-  "Strength": 5,
-  "Endurance": 55,
-  "IsDead": true,
-  "UserId": 35
-}
+          "PetId": 123,
+          "Name": "So fluffy boi",
+          "Birthday": "2012-04-23T18:25:43.511Z",
+          "Strength": 5,
+          "Endurance": 55,
+          "IsDead": true,
+          "UserId": 35
+            }
             */
 
         /// <summary>
@@ -76,7 +77,7 @@ namespace PetGame
                 return Json(petService.InsertPet(value));
             }
             // unauthorized
-                return Unauthorized();
+            return Unauthorized();
         }
 
         /// <summary>
