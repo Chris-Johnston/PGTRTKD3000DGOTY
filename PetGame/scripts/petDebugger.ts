@@ -20,15 +20,17 @@ class Pet {
     userid: number;
 }
 
-function MakePetFromPost() : Pet {
+function MakePetFromPost(): Pet {
     var p = new Pet();
-    p.name = (document.getElementById('post_pet_name') as HTMLFormElement).value;
-    // p.birthday = (document.getElementById('post_pet_birthday') as HTMLFormElement).valueAsDate;
+    p.name = (document.getElementById('post_pet_name') as HTMLInputElement).value;
+    // p.birthday = (document.getElementById('post_pet_birthday') as HTMLInputElement).valueAsDate;
     p.birthday = new Date().toJSON();
-    p.strength = (document.getElementById('post_pet_strength') as HTMLFormElement).valueAsNumber;
-    p.endurance = (document.getElementById('post_pet_endurance') as HTMLFormElement).valueAsNumber;
-    p.isdead = (document.getElementById('post_pet_isdead') as HTMLFormElement).value === "on";
-    p.userid = (document.getElementById('post_pet_userid') as HTMLFormElement).valueAsNumber;
+    p.strength = (document.getElementById('post_pet_strength') as HTMLInputElement).valueAsNumber;
+    p.endurance = (document.getElementById('post_pet_endurance') as HTMLInputElement).valueAsNumber;
+    // this value is being difficult for some reason
+    // p.isdead = (document.getElementById('post_pet_isdead') as HTMLInputElement).value === "on";
+    p.isdead = false;
+    p.userid = (document.getElementById('post_pet_userid') as HTMLInputElement).valueAsNumber;
     // ignore
     p.petid = 0;
     return p;
@@ -36,13 +38,15 @@ function MakePetFromPost() : Pet {
 
 function MakePetFromPut(): Pet {
     var p = new Pet();
-    p.name = (document.getElementById('put_pet_name') as HTMLFormElement).value;
-    // p.birthday = (document.getElementById('put_pet_birthday') as HTMLFormElement).valueAsDate;
+    p.name = (document.getElementById('put_pet_name') as HTMLInputElement).value;
+    // p.birthday = (document.getElementById('put_pet_birthday') as HTMLInputElement).valueAsDate;
     p.birthday = new Date().toJSON();
-    p.strength = (document.getElementById('put_pet_strength') as HTMLFormElement).valueAsNumber;
-    p.endurance = (document.getElementById('put_pet_endurance') as HTMLFormElement).valueAsNumber;
-    p.isdead = (document.getElementById('put_pet_isdead') as HTMLFormElement).value === "on";
-    p.userid = (document.getElementById('put_pet_userid') as HTMLFormElement).valueAsNumber;
+    p.strength = (document.getElementById('put_pet_strength') as HTMLInputElement).valueAsNumber;
+    p.endurance = (document.getElementById('put_pet_endurance') as HTMLInputElement).valueAsNumber;
+    //TODO this value is being difficult, always true for some reason
+    // p.isdead = (document.getElementById('put_pet_isdead') as HTMLInputElement).value === "on";
+    p.isdead = false;
+    p.userid = (document.getElementById('put_pet_userid') as HTMLInputElement).valueAsNumber;
     // ignore
     p.petid = 0;
     return p;
@@ -58,7 +62,7 @@ function requestCallback() {
 
 btn_get.addEventListener('click', function () {
     // on get click
-    var id = (document.getElementById('get_pet_id') as HTMLFormElement).valueAsNumber;
+    var id = (document.getElementById('get_pet_id') as HTMLInputElement).valueAsNumber;
     // make request
     var request = new XMLHttpRequest();
     request.addEventListener('load', requestCallback);
@@ -80,7 +84,7 @@ btn_post.addEventListener('click', function () {
 });
 
 btn_put.addEventListener('click', function () {
-    var id = (document.getElementById('put_pet_id') as HTMLFormElement).valueAsNumber;
+    var id = (document.getElementById('put_pet_id') as HTMLInputElement).valueAsNumber;
     var pet = MakePetFromPut();
     console.log(pet);
     // make request
@@ -94,7 +98,7 @@ btn_put.addEventListener('click', function () {
 
 btn_delete.addEventListener('click', function () {
     // on get click
-    var id = (document.getElementById('delete_pet_id') as HTMLFormElement).valueAsNumber;
+    var id = (document.getElementById('delete_pet_id') as HTMLInputElement).valueAsNumber;
     // make request
     var request = new XMLHttpRequest();
     request.addEventListener('load', requestCallback);
