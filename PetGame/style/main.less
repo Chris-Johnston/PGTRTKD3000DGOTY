@@ -1,4 +1,65 @@
 ﻿.body-container {
-    /* don't let the sticky footer overlap */
     margin-bottom: 60px;
+}
+
+.pets-container
+{
+    width: 100%;
+}
+
+.pet-box
+{
+    border-radius: 5px 5px;
+    display: inline-block;
+    position: relative;
+    width: 20%;
+    height: 20%;
+    margin: 5%;
+    border: 1px solid black;
+    padding: 5pt;
+}
+
+.pet-box:hover
+{
+    cursor: pointer;
+    .pet-name
+    {
+        text-decoration: underline;
+    }
+}
+
+/*.pet-1 { left: 5%; top: 5%; }
+.pet-2 { left: 30%; top: 5%; }
+.pet-3 { left: 60%; top: 5%; }
+.pet-4 { left: 5%; top: 30%; }*/
+
+.pet-name 
+{
+    position: center;
+    font-size: 24pt;
+    font-weight: bold;
+}
+
+.pet-box > img
+{
+    width: 100%;
+}
+
+.pet-label
+{
+    font-size: 14pt;
+}
+
+.pet-label.hunger::before
+{
+    content: "Hunger: ";
+}
+
+.pet-label.happy::before {
+    content: "Happy: ";
+}      
+
+.new-pet 
+{
+    border: 1px dashed #808080;
 }
