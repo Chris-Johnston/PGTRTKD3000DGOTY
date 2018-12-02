@@ -9,7 +9,13 @@ A game for CSS 475 (databases class).
 ## Building
 
 Building and running the application is done entirely in Visual Studio. All typescript files
-get compiled into regular js automatically. This may require the installation of `npm`.
+get compiled into regular js automatically.
+
+1. Make sure you have `npm` installed. This is bundled with Node JS, so you'll have to install that
+too.
+
+2. Install gulp: `npm i -g gulp gulp-cli less gulp-less` (This may require sudo/admin)
+
 
 ## Local Configuration
 
