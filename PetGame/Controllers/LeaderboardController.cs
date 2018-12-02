@@ -2,23 +2,10 @@
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using PetGame.Core;
+using PetGame.Models;
 
 namespace PetGame
 {
-    public class LeaderboardEntry
-    {
-        public string PetName { get; set; }
-        public int score { get; set; }
-        public string OwnerName { get; set; }
-
-        public LeaderboardEntry(string nPetName, int nScore, string nOwnerName)
-        {
-            PetName = nPetName;
-            score = nScore;
-            OwnerName = nOwnerName;
-        }
-    }
-
     [Route("api/[controller]")]
     public class LeaderboardController : Controller
     {
