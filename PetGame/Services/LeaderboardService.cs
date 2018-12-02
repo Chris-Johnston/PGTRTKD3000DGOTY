@@ -1,10 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
-using PetGame.Core;
+﻿using PetGame.Core;
 using PetGame.Models;
-using PetGame.Util;
 using System;
 using System.Collections.Generic;
+using System.Data;
 
 namespace PetGame
 {
@@ -17,7 +15,7 @@ namespace PetGame
             this.sqlManager = sqlManager;
         }
 
-        public IEnumerable<LeaderboardEntry> GetLeaderboardEntries(int NumResults)
+        public IEnumerable<LeaderboardEntry> GetLeaderboardEntries(int NumResults = 10)
         {
             //create list to hold the information
             //names of pets on leaderboard
@@ -52,6 +50,36 @@ namespace PetGame
             }
             //return races
             return ScoreList;
+        }
+
+        public LeaderboardEntry GetLeaderboardEntryByRaceId(ulong RaceId)
+        {
+            LeaderboardEntry ret = null;
+
+            using (var conn = sqlManager.EstablishDataConnection)
+            {
+                var cmd = conn.CreateCommand();
+
+                cmd.CommandText = @"SELECT Pet.[Name] AS 'PetName', Race.Score, [User].Username AS 'OwnerName'
+                                    FROM Pet, Race, [User]
+                                    WHERE Race.PetId = Pet.PetId AND [User].UserId = Pet.UserId AND Race.RaceId = @RaceID;";
+
+                cmd.Parameters.Add("@RaceID", SqlDbType.BigInt).Value = Convert.ToInt64(RaceId);
+
+                using (var reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        ret = new LeaderboardEntry()
+                        {
+                            PetName = reader.GetString(0),
+                            Score = reader.GetInt32(1),
+                            OwnerName = reader.GetString(2)
+                        };
+                    }
+                }
+            }
+            return ret;
         }
 
     }
