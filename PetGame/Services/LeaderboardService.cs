@@ -1,23 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using PetGame.Core;
 using PetGame.Models;
+using PetGame.Util;
+using System;
+using System.Collections.Generic;
 
 namespace PetGame
 {
-    [Route("api/[controller]")]
-    public class LeaderboardController : Controller
+    public class LeaderboardService
     {
         private readonly SqlManager sqlManager;
 
-        public LeaderboardController(SqlManager sqlManager)
+        public LeaderboardService(SqlManager sqlManager)
         {
             this.sqlManager = sqlManager;
         }
 
-        [HttpGet]
-        public IActionResult Get(int NumResults = 10)
+        public IEnumerable<LeaderboardEntry> GetLeaderboardEntries(int NumResults)
         {
             //create list to hold the information
             //names of pets on leaderboard
@@ -51,26 +51,8 @@ namespace PetGame
                 }
             }
             //return races
-            return Json(ScoreList);
+            return ScoreList;
         }
 
-        [HttpGet("{id}")]
-        public LeaderboardEntry Get(ulong id)
-        {
-            LeaderboardEntry ret;
-
-            using (var conn = sqlManager.EstablishDataConnection)
-            {
-                var cmd = conn.CreateCommand();
-
-                cmd.CommandText = @"SELECT Pet.[Name] AS 'PetName', Race.Score, [User].Username AS 'OwnerName'
-                                    FROM Pet, Race, [User]
-                                    WHERE Race.PetId = Pet.PetId AND [User].UserId = Pet.UserId AND Race.RaceId = @RaceID;";
-
-                cmd.Parameters.AddWithValue("@RaceID", id);
-
-            }
-
-        }
     }
 }
