@@ -1,4 +1,5 @@
-﻿using PetGame.Models;
+﻿using PetGame.Core;
+using PetGame.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,13 @@ namespace PetGame.Services
     // handles getting and inserting activities
     public class ActivityService
     {
+        private readonly SqlManager sqlManager;
+
+        public ActivityService(SqlManager sql)
+        {
+            sqlManager = sql;
+        }
+
         /// <summary>
         ///     Gets all of the activities (up to the limit specified)
         ///     that occurred after the given time (default is 1 day ago)
@@ -17,14 +25,49 @@ namespace PetGame.Services
         /// <param name="petId">The ID of the pet to get the activities for.</param>
         /// <param name="limit">The limit of activities to get.</param>
         /// <param name="after">The cut-off for how recent activities must be. Defaults to 1 day ago.</param>
+        /// <param name="type">The type of activity to get. Set this to null to disable filtering by type.</param>
         /// <returns>An IEnumerable of all activities for this pet.</returns>
-        public IEnumerable<Activity> GetActivities(ulong petId, int limit = 10, DateTime? after = null)
+        public IEnumerable<Activity> GetActivities(ulong petId, uint limit = 10, DateTime? after = null, ActivityType? type = null)
         {
             if (after == null)
                 // get the datetime a day ago
                 after = DateTime.Now.Subtract(TimeSpan.FromDays(1));
 
-            throw new NotImplementedException();
+            // list of the results to return
+            List<Activity> ret = new List<Activity>();
+            using (var conn = sqlManager.EstablishDataConnection)
+            {
+                var cmd = conn.CreateCommand();
+                // no need to use OFFSET FETCH here, since there won't be any use cases where a paginated
+                // view is necessary
+                cmd.CommandText =
+                    @"SELECT TOP @Limit ActivityId, PetId, Timestamp, Type FROM Activity
+                        FROM Activity
+                        WHERE PetId = @PetId AND Timestamp > @After AND (ISNULL(@Type) OR Type = @Type);";
+                cmd.Parameters.AddWithValue("@PetId", $"{petId}");
+                cmd.Parameters.AddWithValue("@After", after);
+                cmd.Parameters.AddWithValue("@Limit", limit);
+                // if type is null, then insert a null. this will disable filtering by type
+                cmd.Parameters.AddWithValue("@Type", (object) type ?? DBNull.Value);
+                
+                // read the results
+                using (var reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        var n = new Activity()
+                        {
+                            ActivityId = (ulong)reader.GetInt64(0),
+                            PetId = (ulong)reader.GetInt64(1),
+                            Timestamp = reader.GetDateTime(2),
+                            Type = (ActivityType)reader.GetChar(3)
+                        };
+                        ret.Add(n);
+                    }
+                }
+                // return all of the results
+                return ret;
+            }
         }
 
         /// <summary>
