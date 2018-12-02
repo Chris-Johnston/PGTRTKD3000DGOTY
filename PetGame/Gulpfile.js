@@ -1,4 +1,4 @@
-﻿/// <binding AfterBuild='default' Clean='clean' />
+﻿/// <binding BeforeBuild='default' Clean='clean' />
 /*
 This file is the main entry point for defining Gulp tasks and using Gulp plugins.
 Click here to learn more. http://go.microsoft.com/fwlink/?LinkId=518007
@@ -12,16 +12,17 @@ var paths = {
     scripts: ['scripts/**/*.js', 'scripts/**/*.ts', 'scripts/**/*.map'],
 };
 
-gulp.task('clean', function () {
+gulp.task('cleanscripts', function () {
     return del(['wwwroot/scripts/**/*']);
 });
+gulp.task('cleanless', function () {
+    return del(['wwwroot/css/**/*']);
+});
 
-gulp.task('default', function (done) {
-    gulp.src(paths.scripts).pipe(gulp.dest('wwwroot/scripts'));
-    gulp.src('style/main.less')
-        .pipe(less())
-        .pipe(gulp.dest('wwwroot/css'));
-    done();
+gulp.task('clean', gulp.parallel(['cleanscripts', 'cleanless']));
+
+gulp.task('scripts', function () {
+    return gulp.src(paths.scripts).pipe(gulp.dest('wwwroot/scripts'));
 });
 
 gulp.task('less', function () {
@@ -29,3 +30,5 @@ gulp.task('less', function () {
         .pipe(less())
         .pipe(gulp.dest('wwwroot/css'));
 });
+
+gulp.task('default', gulp.series(['clean', 'scripts', 'less']));
