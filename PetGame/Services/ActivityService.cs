@@ -79,7 +79,32 @@ namespace PetGame.Services
         /// </returns>
         public Activity GetActivityById(ulong activityId)
         {
-            throw new NotImplementedException();
+            Activity ret = null;
+            using (var conn = sqlManager.EstablishDataConnection)
+            {
+                var cmd = conn.CreateCommand();
+                cmd.CommandText =
+                    @"SELECT ActivityId, PetId, Timestamp, Type FROM Activity
+                        FROM Activity
+                        WHERE ActivityId = @ActivityId;";
+                cmd.Parameters.AddWithValue("@ActivityId", $"{activityId}");
+
+                // read the results
+                using (var reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        ret = new Activity()
+                        {
+                            ActivityId = (ulong)reader.GetInt64(0),
+                            PetId = (ulong)reader.GetInt64(1),
+                            Timestamp = reader.GetDateTime(2),
+                            Type = (ActivityType)reader.GetChar(3)
+                        };
+                    }
+                }
+                return ret;
+            }
         }
 
         /// <summary>
@@ -91,7 +116,31 @@ namespace PetGame.Services
         /// </returns>
         public Activity InsertActivity(Activity activity)
         {
-            throw new NotImplementedException();
+            if (activity == null)
+                throw new ArgumentNullException(paramName: nameof(activity),
+                    message: "The supplied Activity cannot be null.");
+
+            using (var conn = sqlManager.EstablishDataConnection)
+            {
+                var cmd = conn.CreateCommand();
+                cmd.CommandText =
+                    @"INSERT INTO Activity (PetId, Timestamp, Type)
+                      OUTPUT INSERTED.ActivityId 
+                      VALUES (@PetId, @Timestamp, @Type);";
+                cmd.Parameters.AddWithValue("@PetId", $"{activity.PetId}");
+                cmd.Parameters.AddWithValue("@Timestamp", $"{activity.Timestamp}");
+                cmd.Parameters.AddWithValue("@Type", $"{activity.Type}");
+
+                // read the results
+                using (var reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        activity.ActivityId = (ulong) reader.GetInt64(0);
+                    }
+                }
+                return activity;
+            }
         }
 
         /// <summary>
@@ -103,7 +152,6 @@ namespace PetGame.Services
         /// <returns>A new Activity object. </returns>
         public Activity MakeActivityForPet(ulong PetId, ActivityType type)
         {
-            //TODO: Parameter validation
             return InsertActivity(new Activity()
             {
                 ActivityId = 0,
