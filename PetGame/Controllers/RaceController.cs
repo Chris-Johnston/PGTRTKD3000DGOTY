@@ -89,6 +89,5 @@ namespace PetGame
                 return NotFound();
             return Ok(race);
         }
-
     }
 }
