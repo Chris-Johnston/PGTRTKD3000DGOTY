@@ -19,6 +19,10 @@ namespace PetGame
         [HttpGet]
         public IActionResult Get([FromBody] LeaderboardRequestModel Request)
         {
+            if (Request == null)
+            {
+                Request = new LeaderboardRequestModel() { NumRequests = 10, Offset = 3 };
+            }
 
             if (Request.NumRequests > 0)
             {
