@@ -39,6 +39,9 @@ namespace PetGame
                 app.UseDeveloperExceptionPage();
             }
 
+            // for files under wwwroot
+            app.UseStaticFiles();
+
             // use JWT authentication
             app.UseAuthentication();
             app.UseFileServer();
