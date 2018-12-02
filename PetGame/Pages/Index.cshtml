@@ -6,14 +6,101 @@
     ViewBag.Title = "Home";
 }
 
-<h1>
-    Pet GTR Turbo Kart Drift 3000 Deluxe Game of the Year Edition!!!
-</h1>
+@if (Model.CurrentUser != null)
+{
+    <h1>Hello @Model.CurrentUser.Username</h1>
 
+    <!-- LESS is blocked by a PR, so not going to bother styling this yet. -->
+    <div class="pets-container">
+        <div class="pet-box pet-1">
+            <div class="pet-name">Your Pet</div>
+            <img src="~/img/pets/default.jpg" alt="TODO: include the pet name in alt text." />
+            <div class="pet-label">Status:</div>
+            <div class="pet-label hunger">
+                50%
+            </div>
+            <div class="pet-label happy">
+                75%
+            </div>
+            <div class="pet-label strength">
+                50
+            </div>
+            <div class="pet-label endurance">
+                75
+            </div>
+            <div class="button pet-button pet-feed">
+                Feed
+            </div>
+            <div class="button pet-button pet-train">
+                Train
+            </div>
+            <div class="button pet-button pet-race">
+                Race
+            </div>
+        </div>
+
+        <div class="pet-box pet-2">
+            <div class="pet-name">Your Pet</div>
+            <img src="~/img/pets/default.jpg" alt="TODO: include the pet name in alt text." />
+            <div class="pet-label">Status:</div>
+            <div class="pet-label hunger">
+                50%
+            </div>
+            <div class="pet-label happy">
+                75%
+            </div>
+            <div class="pet-label strength">
+                50
+            </div>
+            <div class="pet-label endurance">
+                75
+            </div>
+            <div class="button pet-button pet-feed">
+                Feed
+            </div>
+            <div class="button pet-button pet-train">
+                Train
+            </div>
+            <div class="button pet-button pet-race">
+                Race
+            </div>
+        </div>
+
+        <div class="pet-box pet-3">
+            <div class="pet-name">Your Pet</div>
+            <img src="~/img/pets/default.jpg" alt="TODO: include the pet name in alt text." />
+            <div class="pet-label">Status:</div>
+            <div class="pet-label hunger">
+                50%
+            </div>
+            <div class="pet-label happy">
+                75%
+            </div>
+            <div class="pet-label strength">
+                50
+            </div>
+            <div class="pet-label endurance">
+                75
+            </div>
+            <div class="button pet-button pet-feed">
+                Feed
+            </div>
+            <div class="button pet-button pet-train">
+                Train
+            </div>
+            <div class="button pet-button pet-race">
+                Race
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    <h1><a href="login">Please Sign In</a></h1>
+}
 <h2>
     Debug Links:
 </h2>
-
 <ul>
     <li>
         <a href="/api/pet/1">API Example #1</a>
