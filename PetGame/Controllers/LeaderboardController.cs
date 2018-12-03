@@ -39,18 +39,27 @@ namespace PetGame
                 Request = new LeaderboardRequestModel() { Offset = 0, NumRequests = 10 };
             }
 
-            //get the list of entries by calling the function in LeaderboardService
-            var Entries = LeaderboardService.GetLeaderboardEntries(Request.Offset, Request.NumRequests);
-
-            //if the result is null, the target(s) were not found (404)
-            if (Entries == null)
+            //if the offset is >= 0 and the request number is > 0, the request is valid
+            if (Request.Offset >= 0 && Request.NumRequests > 0)
             {
-                return NotFound();
+                //get the list of entried by calling the function in LeaderboardService
+                var Entries = LeaderboardService.GetLeaderboardEntries(Request.Offset, Request.NumRequests);
+
+                //if the result is null, the target(s) were not found (404)
+                if (Entries == null)
+                {
+                    return NotFound();
+                }
+                //otherwise return the result as JSON (200)
+                else
+                {
+                    return Json(Entries);
+                }
             }
-            //otherwise return the result as JSON (200)
+            //if the request is invalid, return a 400
             else
             {
-                return Json(Entries);
+                return BadRequest();
             }
         }
 
