@@ -73,6 +73,7 @@ namespace PetGame
         [HttpPost]
         public IActionResult Post([FromBody] Pet value)
         {
+            //TODO: probably hsould return BadRequest instead of throw
             if (value == null) throw new ArgumentNullException(nameof(value), "The supplied Pet cannot be null.");
             // check user
             var user = loginService.GetUserFromContext(HttpContext.User);
@@ -98,6 +99,7 @@ namespace PetGame
         [HttpPut("{id}")]
         public IActionResult Put(ulong id, [FromBody]Pet value)
         {
+            //TODO: probably hsould return BadRequest instead of throw
             if (value == null) throw new ArgumentNullException(nameof(value), "The supplied Pet cannot be null.");
             // don't necessarily care if the PetId inside value does not match
             // the id passed separately, since only the Id is going to be used
