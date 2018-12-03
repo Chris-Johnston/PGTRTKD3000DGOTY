@@ -110,6 +110,5 @@ namespace PetGame
             //return the LeaderboardEntry
             return ret;
         }
-
     }
 }
