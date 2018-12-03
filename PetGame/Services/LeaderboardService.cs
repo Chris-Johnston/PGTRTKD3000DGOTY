@@ -88,7 +88,7 @@ namespace PetGame
                                     FROM Pet, Race, [User]
                                     WHERE Race.PetId = Pet.PetId AND [User].UserId = Pet.UserId AND Race.RaceId = @RaceID;";
 
-                cmd.Parameters.Add("@RaceID", SqlDbType.BigInt).Value = Convert.ToInt64(RaceId);
+                cmd.Parameters.AddWithValue("@RaceID", $"{RaceId}");
 
                 using (var reader = cmd.ExecuteReader())
                 {
