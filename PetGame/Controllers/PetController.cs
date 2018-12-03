@@ -140,17 +140,11 @@ namespace PetGame
         [HttpPost("{petId}/ActivityOptions")] // this must not be under /Activity, because that doesn't follow rest convention for POST
         public IActionResult GetRecentActivity(ulong petId, [FromBody] PetActivityRequestOptions options)
         {
-            //string text = null;
-            //using (var reader = new StreamReader(Request.Body))
-            //    text = reader.ReadToEnd();
+            // if GET, or options not specified
+            if (options == null)
+                options = new PetActivityRequestOptions();
 
-            //PetActivityRequestOptions options = new PetActivityRequestOptions();
-
-            //if (!string.IsNullOrWhiteSpace(text))
-            //{
-            //    options = JsonConvert.DeserializeObject<PetActivityRequestOptions>(text);
-            //}
-            
+            // get all of the activities using the request options
             var results = activityService.GetActivities(petId, options.Limit, options.After, options.FixedType);
             if (results == null)
                 return BadRequest();
@@ -168,6 +162,10 @@ namespace PetGame
     [HttpPost("{petId}/Activity")]
         public IActionResult PostNewActivity(ulong petid, Activity activity)
         {
+            // ensure validity of params
+            if (activity == null)
+                return BadRequest();
+
             // enforce the pet id
             activity.PetId = petid;
             var result = activityService.InsertActivity(activity);
@@ -183,7 +181,17 @@ namespace PetGame
         [HttpPost("{petId}/Activity/{type}")]
         public IActionResult PostNewActivity(ulong petid, char type)
         {
-            var result = activityService.MakeActivityForPet(petid, (ActivityType)type);
+            ActivityType t = ActivityType.Default;
+            try
+            {
+                t = (ActivityType)type;
+            }
+            catch (Exception)
+            {
+                // invalid type
+                return BadRequest();
+            }
+            var result = activityService.MakeActivityForPet(petid, t);
             if (result == null)
                 return BadRequest();
             return Ok(result);
