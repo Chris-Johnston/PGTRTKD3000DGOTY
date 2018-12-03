@@ -196,5 +196,10 @@ namespace PetGame.Services
             // return true if exactly one pet was deleted
             return results == 1;
         }
+
+        public PetStatus GetPetStatus(ulong PetId)
+        {
+
+        }
     }
 }
