@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -56,6 +57,7 @@ namespace PetGame.Models
         ///     Gets or sets the birthday (and time) of when this pet was created.
         /// </summary>
         [JsonProperty]
+        [JsonConverter(typeof(IsoDateTimeConverter))]
         public DateTime Birthday { get; set; }
 
         const int MaxStrength = 100;
