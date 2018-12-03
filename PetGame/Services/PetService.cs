@@ -199,7 +199,7 @@ namespace PetGame.Services
 
         public PetStatus GetPetStatus(ulong PetId)
         {
-
+            return new PetStatus();
         }
     }
 }
