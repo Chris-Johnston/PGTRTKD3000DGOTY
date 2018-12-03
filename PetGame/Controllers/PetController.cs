@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using PetGame.Core;
 using PetGame.Models;
 using PetGame.Services;
@@ -20,12 +22,14 @@ namespace PetGame
         private readonly SqlManager sqlManager;
         private readonly PetService petService;
         private readonly LoginService loginService;
+        private readonly ActivityService activityService;
 
         public PetController(SqlManager sqlManager)
         {
             this.sqlManager = sqlManager;
-            this.petService = new PetService(this.sqlManager);
-            this.loginService = new LoginService(this.sqlManager);
+            petService = new PetService(this.sqlManager);
+            loginService = new LoginService(this.sqlManager);
+            activityService = new ActivityService(this.sqlManager);
         }
 
         // GET api/pet to return all is invalid, because that would
@@ -122,6 +126,35 @@ namespace PetGame
             }
             // didn't delete Ok, either not found or wrong user
             return Unauthorized();
+        }
+
+        // Activity
+        // GET /api/Pet/petId/Activity
+        // POST /api/Pet/petId/ActivityOptions
+        // {
+	        //"Limit": 10,
+	        //"After": "2012-04-23T18:25:43.511Z",
+	        //"Type": 'd'
+         //   }
+    [HttpGet("{petId}/Activity")]
+        [HttpPost("{petId}/ActivityOptions")] // this must not be under /Activity, because that doesn't follow rest convention for POST
+        public IActionResult GetRecentActivity(ulong petId)
+        {
+            string text = null;
+            using (var reader = new StreamReader(Request.Body))
+                text = reader.ReadToEnd();
+
+            PetActivityRequestOptions options = new PetActivityRequestOptions();
+
+            if (!string.IsNullOrWhiteSpace(text))
+            {
+                options = JsonConvert.DeserializeObject<PetActivityRequestOptions>(text);
+            }
+            
+            var results = activityService.GetActivities(petId, options.Limit, options.After, options.FixedType);
+            if (results == null)
+                return BadRequest();
+            return Ok(results);
         }
     }
 }

@@ -27,11 +27,15 @@ namespace PetGame.Services
         /// <param name="after">The cut-off for how recent activities must be. Defaults to 1 day ago.</param>
         /// <param name="type">The type of activity to get. Set this to null to disable filtering by type.</param>
         /// <returns>An IEnumerable of all activities for this pet.</returns>
-        public IEnumerable<Activity> GetActivities(ulong petId, uint limit = 10, DateTime? after = null, ActivityType? type = null)
+        public IEnumerable<Activity> GetActivities(ulong petId, int limit = 10, DateTime? after = null, ActivityType? type = null)
         {
             if (after == null)
                 // get the datetime a day ago
                 after = DateTime.Now.Subtract(TimeSpan.FromDays(1));
+
+            // set the default limit to 10 entries
+            if (limit == null)
+                limit = 10;
 
             // list of the results to return
             List<Activity> ret = new List<Activity>();
@@ -41,14 +45,15 @@ namespace PetGame.Services
                 // no need to use OFFSET FETCH here, since there won't be any use cases where a paginated
                 // view is necessary
                 cmd.CommandText =
-                    @"SELECT TOP @Limit ActivityId, PetId, Timestamp, Type FROM Activity
+                    @"SELECT TOP (@Limit) ActivityId, PetId, Timestamp, Type
                         FROM Activity
-                        WHERE PetId = @PetId AND Timestamp > @After AND (ISNULL(@Type) OR Type = @Type);";
+                        WHERE PetId = @PetId AND Timestamp > @After AND (@Type IS NULL OR Type = @Type)
+                        ORDER BY Timestamp DESC;";
                 cmd.Parameters.AddWithValue("@PetId", $"{petId}");
                 cmd.Parameters.AddWithValue("@After", after);
                 cmd.Parameters.AddWithValue("@Limit", limit);
                 // if type is null, then insert a null. this will disable filtering by type
-                cmd.Parameters.AddWithValue("@Type", (object) type ?? DBNull.Value);
+                cmd.Parameters.AddWithValue("@Type", (object) (char)type ?? DBNull.Value);
                 
                 // read the results
                 using (var reader = cmd.ExecuteReader())
@@ -60,7 +65,8 @@ namespace PetGame.Services
                             ActivityId = (ulong)reader.GetInt64(0),
                             PetId = (ulong)reader.GetInt64(1),
                             Timestamp = reader.GetDateTime(2),
-                            Type = (ActivityType)reader.GetChar(3)
+                            // hack: get the first character from this col, read as a string
+                            Type = (ActivityType)reader.GetString(3)[0]
                         };
                         ret.Add(n);
                     }
