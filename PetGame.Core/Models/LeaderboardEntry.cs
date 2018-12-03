@@ -4,6 +4,9 @@ using System.Text;
 
 namespace PetGame.Models
 {
+    /// <summary>
+    /// A type that represents one entry (row) in the leaderboard
+    /// </summary>
     public class LeaderboardEntry
     {
         public int Score { get; set; }

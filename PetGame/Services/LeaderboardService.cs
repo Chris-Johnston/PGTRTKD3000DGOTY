@@ -15,7 +15,16 @@ namespace PetGame
             this.sqlManager = sqlManager;
         }
 
-        public IEnumerable<LeaderboardEntry> GetLeaderboardEntries(int NumResults = 10)
+        /// <summary>
+        /// Queries the database for the races with the highest scores. 
+        /// Results controlled by OFFSET and FETCH
+        /// </summary>
+        /// <param name="Offset">For the OFFSET in SQL</param>
+        /// <param name="NumResults">For the FETCH in SQL</param>
+        /// <returns>
+        /// List of LeaderboardEntry
+        /// </returns>
+        public IEnumerable<LeaderboardEntry> GetLeaderboardEntries(int Offset = 0, int NumResults = 10)
         {
             //create list to hold the information
             //names of pets on leaderboard
@@ -27,11 +36,13 @@ namespace PetGame
                 var cmd = conn.CreateCommand();
 
                 //to be optimized later, if time allows
-                cmd.CommandText = @"SELECT TOP (@Count) Race.Score, Race.Timestamp, Pet.[Name] AS 'PetName', Pet.PetId, [User].Username AS 'OwnerName', [User].UserId
+                cmd.CommandText = @"SELECT Race.Score, Race.Timestamp, Pet.[Name] AS 'PetName', Pet.PetId, [User].Username AS 'OwnerName', [User].UserId
                                     FROM Pet, Race, [User]
-                                    WHERE Race.PetId = Pet.PetId AND [User].UserId = Pet.UserId ORDER BY Score DESC;";
+                                    WHERE Race.PetId = Pet.PetId AND [User].UserId = Pet.UserId ORDER BY Score DESC
+                                    OFFSET @Offset ROWS FETCH NEXT @NumResults ROWS ONLY;";
 
-                cmd.Parameters.AddWithValue("@Count", NumResults);
+                cmd.Parameters.AddWithValue("@Offset", Offset);
+                cmd.Parameters.AddWithValue("@NumResults", NumResults);
 
                 //store the pet names, scores, and owner names in the lists
                 using (var reader = cmd.ExecuteReader())
@@ -55,12 +66,22 @@ namespace PetGame
             return ScoreList;
         }
 
+        /// <summary>
+        /// Gets a single LeaderboardEntry by RaceId
+        /// </summary>
+        /// <param name="RaceId">
+        /// The race to search for
+        /// </param>
+        /// <returns>
+        /// One LeaderboardEntry
+        /// </returns>
         public LeaderboardEntry GetLeaderboardEntryByRaceId(ulong RaceId)
         {
             LeaderboardEntry ret = null;
 
             using (var conn = sqlManager.EstablishDataConnection)
             {
+                //set the SQL query
                 var cmd = conn.CreateCommand();
 
                 cmd.CommandText = @"SELECT Race.Score, Race.Timestamp, Pet.[Name] AS 'PetName', Pet.PetId, [User].Username AS 'OwnerName', [User].UserId
@@ -73,6 +94,7 @@ namespace PetGame
                 {
                     while (reader.Read())
                     {
+                        //read the data from the query result
                         ret = new LeaderboardEntry()
                         {
                             Score = reader.GetInt32(0),
@@ -85,6 +107,7 @@ namespace PetGame
                     }
                 }
             }
+            //return the LeaderboardEntry
             return ret;
         }
 
