@@ -134,8 +134,8 @@ namespace PetGame.Services
                       OUTPUT INSERTED.ActivityId 
                       VALUES (@PetId, @Timestamp, @Type);";
                 cmd.Parameters.AddWithValue("@PetId", $"{activity.PetId}");
-                cmd.Parameters.AddWithValue("@Timestamp", $"{activity.Timestamp}");
-                cmd.Parameters.AddWithValue("@Type", $"{activity.Type}");
+                cmd.Parameters.AddWithValue("@Timestamp", activity.Timestamp);
+                cmd.Parameters.AddWithValue("@Type", (char)activity.Type);
 
                 // read the results
                 using (var reader = cmd.ExecuteReader())

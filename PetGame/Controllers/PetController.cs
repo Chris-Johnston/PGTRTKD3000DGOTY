@@ -136,7 +136,7 @@ namespace PetGame
 	        //"After": "2012-04-23T18:25:43.511Z",
 	        //"Type": 'd'
          //   }
-    [HttpGet("{petId}/Activity")]
+        [HttpGet("{petId}/Activity")]
         [HttpPost("{petId}/ActivityOptions")] // this must not be under /Activity, because that doesn't follow rest convention for POST
         public IActionResult GetRecentActivity(ulong petId)
         {
@@ -155,6 +155,38 @@ namespace PetGame
             if (results == null)
                 return BadRequest();
             return Ok(results);
+        }
+        
+        // POST /api/Pet/{petid}/Activity
+        // {
+//    "activityId": 0,
+//    "petId": 0,
+//    "timestamp": "2012-04-23T18:25:43.511Z",
+//    "type": 116
+//}
+        // creates a new activity
+        [HttpPost("{petId}/Activity")]
+        public IActionResult PostNewActivity(ulong petid, Activity activity)
+        {
+            // enforce the pet id
+            activity.PetId = petid;
+            var result = activityService.InsertActivity(activity);
+            if (result == null)
+                return BadRequest();
+            return Ok(result);
+        }
+        // TODO, need to require authorization, check that users may only modify their own pets
+
+        // POST /api/Pet/{petId}/Activity/{type}
+        // no request body required
+        // creates a new activity of the given type, using the current time
+        [HttpPost("{petId}/Activity/{type}")]
+        public IActionResult PostNewActivity(ulong petid, char type)
+        {
+            var result = activityService.MakeActivityForPet(petid, (ActivityType)type);
+            if (result == null)
+                return BadRequest();
+            return Ok(result);
         }
     }
 }
