@@ -28,6 +28,11 @@ namespace PetGame
         }
         private void SignIn(UserToken ut)
         {
+            // if the user token is null, don't sign them in
+            // and return without doing anything
+            if (ut == null)
+                return;
+
             var cp = new ClaimsPrincipal(new ClaimsIdentity(new List<Claim>()
             {
                 new Claim(ClaimTypes.NameIdentifier, $"{ut.UserId}"),
@@ -51,11 +56,9 @@ namespace PetGame
         {
             var svc = new LoginService(sqlManager);
             var ut = svc.GetUserToken(this as ControllerBase);
-            SignIn(ut);
-            
             if (ut == null)
                 return Unauthorized();
-
+            SignIn(ut);
             return RedirectToAction("GetWhoAmI", "User");
         }
 
@@ -68,12 +71,10 @@ namespace PetGame
         {
             var svc = new LoginService(sqlManager);
             var ut = svc.RegisterNewUser(this as ControllerBase);
-            SignIn(ut);
-
             if (ut == null)
                 // bad data
                 return Unauthorized();
-
+            SignIn(ut);
             return RedirectToAction("GetWhoAmI", "User");
         }
     }
