@@ -16,6 +16,11 @@ namespace PetGame
             LeaderboardService = new LeaderboardService(sqlManager);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="Request"></param>
+        /// <returns></returns>
         [HttpGet]
         public IActionResult Get([FromBody] LeaderboardRequestModel Request)
         {
@@ -41,7 +46,6 @@ namespace PetGame
             {
                 return BadRequest();
             }
-
         }
 
         [HttpGet("{id}")]

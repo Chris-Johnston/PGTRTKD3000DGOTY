@@ -27,7 +27,7 @@ namespace PetGame
                 var cmd = conn.CreateCommand();
 
                 //to be optimized later, if time allows
-                cmd.CommandText = @"SELECT TOP (@Count) Pet.[Name] AS 'PetName', Race.Score, [User].Username AS 'OwnerName'
+                cmd.CommandText = @"SELECT TOP (@Count) Race.Score, Race.Timestamp, Pet.[Name] AS 'PetName', Pet.PetId, [User].Username AS 'OwnerName', [User].UserId
                                     FROM Pet, Race, [User]
                                     WHERE Race.PetId = Pet.PetId AND [User].UserId = Pet.UserId ORDER BY Score DESC;";
 
@@ -41,9 +41,12 @@ namespace PetGame
                         //add each pet name/score/owner name to a new index in the list
                         ScoreList.Add(new LeaderboardEntry()
                         {
-                            PetName = reader.GetString(0),
-                            Score = reader.GetInt32(1),
-                            OwnerName = reader.GetString(2)
+                            Score = reader.GetInt32(0),
+                            Timestamp = reader.GetDateTime(1),
+                            PetName = reader.GetString(2),
+                            PetId = (ulong) reader.GetInt64(3),
+                            OwnerName = reader.GetString(4),
+                            OwnerId = (ulong) reader.GetInt64(5)
                         });
                     }
                 }
@@ -60,7 +63,7 @@ namespace PetGame
             {
                 var cmd = conn.CreateCommand();
 
-                cmd.CommandText = @"SELECT Pet.[Name] AS 'PetName', Race.Score, [User].Username AS 'OwnerName'
+                cmd.CommandText = @"SELECT Race.Score, Race.Timestamp, Pet.[Name] AS 'PetName', Pet.PetId, [User].Username AS 'OwnerName', [User].UserId
                                     FROM Pet, Race, [User]
                                     WHERE Race.PetId = Pet.PetId AND [User].UserId = Pet.UserId AND Race.RaceId = @RaceID;";
 
@@ -72,9 +75,12 @@ namespace PetGame
                     {
                         ret = new LeaderboardEntry()
                         {
-                            PetName = reader.GetString(0),
-                            Score = reader.GetInt32(1),
-                            OwnerName = reader.GetString(2)
+                            Score = reader.GetInt32(0),
+                            Timestamp = reader.GetDateTime(1),
+                            PetName = reader.GetString(2),
+                            PetId = (ulong)reader.GetInt64(3),
+                            OwnerName = reader.GetString(4),
+                            OwnerId = (ulong)reader.GetInt64(5)
                         };
                     }
                 }
