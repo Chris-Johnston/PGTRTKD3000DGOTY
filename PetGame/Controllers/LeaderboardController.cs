@@ -77,27 +77,18 @@ namespace PetGame
         [HttpGet("{id}")]
         public IActionResult Get(ulong id)
         {
-            //if the id is greater than or equal to 0, valid request
-            if (!(id <= 0))
-            {
-                //call the Service function to get the entry
-                var Entry = LeaderboardService.GetLeaderboardEntryByRaceId(id);
+            //call the Service function to get the entry
+            var Entry = LeaderboardService.GetLeaderboardEntryByRaceId(id);
 
-                //if the entry is not null, return it as Json, otherwise, return 404
-                if (Entry == null)
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    return Json(Entry);
-                }
+            //if the entry is not null, return it as Json, otherwise, return 404
+            if (Entry == null)
+            {
+                return NotFound();
             }
-            //if invalid request, return 400
             else
             {
-                return BadRequest();
-            }     
+                return Json(Entry);
+            }
         }
     }
 }

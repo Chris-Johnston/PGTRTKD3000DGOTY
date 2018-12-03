@@ -5,7 +5,7 @@
     /// </summary>
     public class LeaderboardRequestModel
     {
-        public int Offset { get; set; }
-        public int NumRequests { get; set; }
+        public uint Offset { get; set; }
+        public uint NumRequests { get; set; }
     }
 }
