@@ -50,6 +50,17 @@ namespace PetGame
             return Json(pet);
         }
 
+        [HttpGet("{id}/status"), AllowAnonymous]
+        public IActionResult Get(StatusRequest Request)
+        {
+            //pet stats
+            //happiness
+            //time of next feeding
+            //time of next training
+            return BadRequest();
+        }
+
+
         // in postman test with
         // where UserId matches the currently signed-in user
         /** POST /api/Pet
