@@ -16,6 +16,34 @@ namespace PetGame.Pages
 
         public User CurrentUser { get; private set; } = null;
 
+        public List<Pet> SamplePets
+        {
+            get =>
+                new List<Pet>()
+                {
+                    new Pet()
+                    {
+                        PetId = 1,
+                        Birthday = DateTime.Now,
+                        IsDead = false,
+                        Name = "The 1st Pet",
+                        Endurance = 100,
+                        Strength = 100,
+                        UserId = 1
+                    },
+                    new Pet()
+                    {
+                        PetId = 2,
+                        Birthday = DateTime.Now,
+                        IsDead = false,
+                        Name = "The 2nd Pet",
+                        Endurance = 100,
+                        Strength = 100,
+                        UserId = 1
+                    }
+                };
+        }
+
         public IndexModel(SqlManager sql)
         {
             this.sql = sql;

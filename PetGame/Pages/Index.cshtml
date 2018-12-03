@@ -5,37 +5,33 @@
     Layout = "~/Pages/_Layout.cshtml";
     ViewBag.Title = "Home";
 }
-
 @if (Model.CurrentUser != null)
 {
     <h1>Hello @Model.CurrentUser.Username</h1>
+
     <div class="pets-container">
-        <div class="pet-box pet-1">
-            <div class="pet-name">Your Pet</div>
-            <img src="~/img/pets/default.jpg" alt="TODO: include the pet name in alt text." />
-            <div class="pet-label">Status:</div>
-            <div class="pet-label hunger">
-                50%
-            </div>
-            <div class="pet-label happy">
-                75%
-            </div>
-        </div>
-        <div class="pet-box pet-2">
-            <div class="pet-name">Your Pet</div>
-            <img src="~/img/pets/default.jpg" alt="TODO: include the pet name in alt text." />
-            <div class="pet-label">Status:</div>
-            <div class="pet-label hunger">
-                50%
-            </div>
-            <div class="pet-label happy">
-                75%
-            </div>
-        </div>
-        <div class="pet-box pet-3 new-pet">
-            <div class="pet-name">New Pet</div>
-            <img src="~/img/pets/default.jpg" alt="TODO: include the pet name in alt text." />
-        </div>
+        <!-- https://stackoverflow.com/a/4337706 -->
+        @foreach (var x in Model.SamplePets.Select((value, index) => new { value, index }))
+        {
+            <a class="div-link pet-box pet-@x.index" href="/pet/@x.value.PetId">
+                <div class="pet-name">@x.value.Name</div>
+                <img src="~/img/pets/default.jpg" alt="Picture of @x.value.Name" />
+                <div class="pet-label">Status:</div>
+                <div class="pet-label hunger">
+                    50%
+                </div>
+                <div class="pet-label happy">
+                    75%
+                </div>
+            </a>
+        }
+        @if (Model.SamplePets.Count < 3)
+        {
+            <a class="div-link pet-box new-pet pet-@Model.SamplePets.Count" href="/newpet">
+                <div class="pet-name">New Pet</div>
+                <img src="~/img/pets/default.jpg" alt="Add a new pet." />
+            </a>
+        }
     </div>
 }
 else
