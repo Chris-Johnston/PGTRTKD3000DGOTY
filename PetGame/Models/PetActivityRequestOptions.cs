@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +13,7 @@ namespace PetGame.Models
         [JsonProperty]
         public int Limit { get; set; }
         [JsonProperty]
+        [JsonConverter(typeof(IsoDateTimeConverter))]
         public DateTime After { get; set; }
         [JsonProperty]
         public char Type { get; set; }

@@ -132,24 +132,24 @@ namespace PetGame
         // GET /api/Pet/petId/Activity
         // POST /api/Pet/petId/ActivityOptions
         // {
-	        //"Limit": 10,
-	        //"After": "2012-04-23T18:25:43.511Z",
-	        //"Type": 'd'
-         //   }
+        //"Limit": 10,
+        //"After": "2012-04-23T18:25:43Z",
+        //"Type": 'd'
+        //   }
         [HttpGet("{petId}/Activity")]
         [HttpPost("{petId}/ActivityOptions")] // this must not be under /Activity, because that doesn't follow rest convention for POST
-        public IActionResult GetRecentActivity(ulong petId)
+        public IActionResult GetRecentActivity(ulong petId, [FromBody] PetActivityRequestOptions options)
         {
-            string text = null;
-            using (var reader = new StreamReader(Request.Body))
-                text = reader.ReadToEnd();
+            //string text = null;
+            //using (var reader = new StreamReader(Request.Body))
+            //    text = reader.ReadToEnd();
 
-            PetActivityRequestOptions options = new PetActivityRequestOptions();
+            //PetActivityRequestOptions options = new PetActivityRequestOptions();
 
-            if (!string.IsNullOrWhiteSpace(text))
-            {
-                options = JsonConvert.DeserializeObject<PetActivityRequestOptions>(text);
-            }
+            //if (!string.IsNullOrWhiteSpace(text))
+            //{
+            //    options = JsonConvert.DeserializeObject<PetActivityRequestOptions>(text);
+            //}
             
             var results = activityService.GetActivities(petId, options.Limit, options.After, options.FixedType);
             if (results == null)
@@ -161,11 +161,11 @@ namespace PetGame
         // {
 //    "activityId": 0,
 //    "petId": 0,
-//    "timestamp": "2012-04-23T18:25:43.511Z",
+//    "timestamp": "2012-04-23T18:25:43Z",
 //    "type": 116
 //}
-        // creates a new activity
-        [HttpPost("{petId}/Activity")]
+    // creates a new activity
+    [HttpPost("{petId}/Activity")]
         public IActionResult PostNewActivity(ulong petid, Activity activity)
         {
             // enforce the pet id
