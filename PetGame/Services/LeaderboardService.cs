@@ -24,7 +24,7 @@ namespace PetGame
         /// <returns>
         /// List of LeaderboardEntry
         /// </returns>
-        public IEnumerable<LeaderboardEntry> GetLeaderboardEntries(int Offset = 0, int NumResults = 10)
+        public IEnumerable<LeaderboardEntry> GetLeaderboardEntries(uint Offset = 0, uint NumResults = 10)
         {
             //create list to hold the information
             //names of pets on leaderboard
