@@ -50,14 +50,32 @@ namespace PetGame
             return Json(pet);
         }
 
+        /// /api/Pet/[PetId]/status
+        /// <summary>
+        /// Returns the status of a single pet by its ID
+        /// </summary>
+        /// <param name="Request">
+        /// JSON request body containing the Pet's ID
+        /// </param>
+        /// <returns>
+        /// JSON of PetStatus object
+        /// </returns>
         [HttpGet("{id}/status"), AllowAnonymous]
         public IActionResult Get(StatusRequest Request)
         {
-            //pet stats
-            //happiness
-            //time of next feeding
-            //time of next training
-            return BadRequest();
+            //PetStatus object to be serialized and returned
+            PetStatus ret = petService.GetPetStatus(Request.id);
+            
+            //if not null, the call to GetPetStatus was successful
+            if (ret != null)
+            {
+                return Json(ret);
+            }
+            //else return 404
+            else
+            {
+                return NotFound();
+            }
         }
 
 
