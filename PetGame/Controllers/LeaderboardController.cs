@@ -16,10 +16,10 @@ namespace PetGame
             LeaderboardService = new LeaderboardService(sqlManager);
         }
 
-        /// GET /api/leaderboard/ (no requestbody)
+        /// GET /api/leaderboard/ (no request body)
         /// Gets top 10 scores
         /// 
-        /// GET /api/leaderboard/
+        /// GET /api/leaderboard/ (include request body)
         /// example JSON request body:
             /*
             {
