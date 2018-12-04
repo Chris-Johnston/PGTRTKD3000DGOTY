@@ -96,6 +96,7 @@ namespace PetGame.Tests
         [InlineData("idk")]
         [InlineData("Fluffy Jr")]
         [InlineData("s p a c e s")]
+        [InlineData("saam's dragon")]
         // 50 char
         [InlineData("ljkasdfljkafsdjklfjkdjklfadsjkladfsjkladfsjklafdsj")]
         public void TestValidPetNames(string name)

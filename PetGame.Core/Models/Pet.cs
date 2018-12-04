@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -9,23 +11,29 @@ namespace PetGame.Models
     /// <summary>
     ///     Represents a Pet.
     /// </summary>
+    [JsonObject]
+    [DebuggerDisplay("Pet {PetId} {Name}")]
     public class Pet
     {
+        public Pet() { Name = "Unnamed Pet"; }
+
         /// <summary>
         ///     Regular expression for valid pet names. All pet names must pass this validation.
         ///     Allows for names up to 50 char long that can contain spaces,
         ///     but must not start or end with whitespace.
         /// </summary>
-        public const string NameRegex = @"^([$@._/-?!0-9a-zA-Z])([$@._/-?!0-9a-zA-Z ]){0,48}[$@._/-?!0-9a-zA-Z]$";
+        public const string NameRegex = @"^^([\'$@._/-?!0-9a-zA-Z])([\'$@._/-?!0-9a-zA-Z ]){0,48}[\'$@._/-?!0-9a-zA-Z]$";
 
         /// <summary>
         ///     Gets or sets the unique Id of this pet.
         /// </summary>
+        [JsonProperty]
         public ulong PetId { get; set; }
 
         /// <summary>
         ///     Gets or sets the name of this pet.
         /// </summary>
+        [JsonProperty]
         public string Name
         {
             get => _Name;
@@ -47,6 +55,7 @@ namespace PetGame.Models
         /// <summary>
         ///     Gets or sets the birthday (and time) of when this pet was created.
         /// </summary>
+        [JsonProperty]
         public DateTime Birthday { get; set; }
 
         const int MaxStrength = 100;
@@ -58,6 +67,7 @@ namespace PetGame.Models
         /// <exception cref="ArgumentOutOfRangeException">
         ///     Thrown if the supplied value is out of the bounds of valid Strength values.
         /// </exception>
+        [JsonProperty]
         public int Strength
         {
             get => _strength;
@@ -77,6 +87,7 @@ namespace PetGame.Models
         const int MaxEndurance = 100;
         const int MinEndurance = 0;
 
+        [JsonProperty]
         public int Endurance
         {
             get => _endurance;
@@ -93,11 +104,13 @@ namespace PetGame.Models
         /// <summary>
         ///     Gets or sets if the pet is dead or not.
         /// </summary>
+        [JsonProperty]
         public bool IsDead { get; set; } = false;
 
         /// <summary>
         ///     Gets or sets the User Id of this Pet's owner.
         /// </summary>
+        [JsonProperty]
         public ulong UserId { get; set; }
     }
 }

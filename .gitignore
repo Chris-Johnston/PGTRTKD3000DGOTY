@@ -3,6 +3,8 @@
 */wwwroot/scripts/*.ts
 */wwwroot/scripts/*.json
 */wwwroot/scripts/*.map
+# ignore css from less
+*/wwwroot/css/*.css
 */scripts/*.js
 *.map
 

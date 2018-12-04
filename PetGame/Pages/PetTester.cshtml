@@ -1,0 +1,111 @@
+﻿@page
+@using PetGame.Pages
+@model PetTesterModel
+@{
+    Layout = "~/Pages/_Layout.cshtml";
+    ViewBag.Title = "Pet Debugger";
+}
+
+<h2>
+    Query Results
+</h2>
+<h3>
+    Code:
+    <span id="results-code">
+        xxx
+    </span>
+</h3>
+<code id="results-section">
+Nothing yet.
+</code>
+
+<h1>Get Pet By Id</h1>
+<form>
+    <div class="form-group">
+        <label for="get_pet_id">Pet ID:</label>
+        <input id="get_pet_id" type="number" name="get_pet_id" placeholder="1" min="0" />
+        <small class="form-text text-muted">
+            Pet IDs are unsigned 64-bit integers.
+        </small>
+    </div>
+</form>
+<button id="submit_get" value="Submit" class="btn btn-primary">Submit</button>
+
+<h1>Insert New Pet</h1>
+<form>
+    <div class="form-group">
+        <label for="post_pet_name">Name:</label>
+        <input id="post_pet_name" type="text" name="post_pet_name" placeholder="Fluffy" />
+    </div>
+    <div class="form-group">
+        <label for="post_pet_birthday">Birthday:</label>
+        <input id="post_pet_birthday" type="datetime" name="post_pet_birthday" />
+    </div>
+    <div class="form-group">
+        <label for="post_pet_strength">Strength:</label>
+        <input id="post_pet_strength" type="number" name="post_pet_strength" min="0" max="100" />
+    </div>
+    <div class="form-group">
+        <label for="post_pet_endurance">Endurance:</label>
+        <input id="post_pet_endurance" type="number" name="post_pet_endurance" min="0" max="100" />
+    </div>
+    <div class="form-group">
+        <label for="post_pet_isdead">Is Dead:</label>
+        <input id="post_pet_isdead" type="checkbox" name="post_pet_isdead" />
+    </div>
+    <div class="form-group">
+        <label for="post_pet_userid">User Id:</label>
+        <input id="post_pet_userid" type="number" name="post_pet_userid" min="0" />
+    </div>
+</form>
+<button id="submit_post" value="Submit" class="btn btn-primary">Submit</button>
+
+<h1>Update Existing Pet</h1>
+<form>
+    <div class="form-group">
+        <label for="put_pet_id">Pet ID:</label>
+        <input id="put_pet_id" type="number" name="put_pet_id" placeholder="1" min="0" />
+        <small class="form-text text-muted">
+            Pet IDs are unsigned 64-bit integers.
+        </small>
+    </div>
+    <div class="form-group">
+        <label for="put_pet_name">Name:</label>
+        <input id="put_pet_name" type="text" name="put_pet_name" placeholder="Fluffy" />
+    </div>
+    <div class="form-group">
+        <label for="put_pet_birthday">Birthday:</label>
+        <input id="put_pet_birthday" type="datetime" name="put_pet_birthday" />
+    </div>
+    <div class="form-group">
+        <label for="put_pet_strength">Strength:</label>
+        <input id="put_pet_strength" type="number" name="put_pet_strength" min="0" max="100" />
+    </div>
+    <div class="form-group">
+        <label for="put_pet_endurance">Endurance:</label>
+        <input id="put_pet_endurance" type="number" name="put_pet_endurance" min="0" max="100" />
+    </div>
+    <div class="form-group">
+        <label for="put_pet_isdead">Is Dead:</label>
+        <input id="put_pet_isdead" type="checkbox" name="put_pet_isdead" />
+    </div>
+    <div class="form-group">
+        <label for="put_pet_userid">User Id:</label>
+        <input id="put_pet_userid" type="number" name="put_pet_userid" min="0" />
+    </div>
+</form>
+<button id="submit_put" value="Submit" class="btn btn-primary">Submit</button>
+
+<h1>Delete Pet By Id</h1>
+<form>
+    <div class="form-group">
+        <label for="delete_pet_id">Pet ID:</label>
+        <input id="delete_pet_id" type="number" name="delete_pet_id" placeholder="1" min="0" />
+        <small class="form-text text-muted">
+            Pet IDs are unsigned 64-bit integers.
+        </small>
+    </div>
+</form>
+<button id="submit_delete" value="Submit" class="btn btn-primary">Submit</button>
+
+<script type="text/javascript" src="~/scripts/petDebugger.js"></script>

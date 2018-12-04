@@ -2,8 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using PetGame.Core;
 using PetGame.Models;
+using PetGame.Services;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -14,36 +17,19 @@ namespace PetGame
     [Route("api/[controller]")]
     public class PetController : Controller
     {
-        // GET: api/<controller>
-        [HttpGet]
-        public IEnumerable<Pet> Get()
+        private readonly SqlManager sqlManager;
+        private readonly PetService petService;
+        private readonly LoginService loginService;
+
+        public PetController(SqlManager sqlManager)
         {
-            // gets all of the pets
-            // not sure if we should actually support this endpoint
-            return new List<Pet>()
-            {
-                new Pet()
-                {
-                    Birthday = DateTime.Now,
-                    Endurance = 50,
-                    IsDead = false,
-                    Name = "Bobby Tables",
-                    PetId = 123,
-                    Strength = 50,
-                    UserId = 1
-                },
-                new Pet()
-                {
-                    Birthday = DateTime.Today,
-                    Endurance = 10,
-                    IsDead = true,
-                    Name = "King Tables the Fourth",
-                    PetId = 111,
-                    Strength = 10,
-                    UserId = 2
-                }
-            };
+            this.sqlManager = sqlManager;
+            this.petService = new PetService(this.sqlManager);
+            this.loginService = new LoginService(this.sqlManager);
         }
+
+        // GET api/pet to return all is invalid, because that would
+        // result in a lot of data being returned
 
         // GET api/<controller>/5
         /// <summary>
@@ -51,27 +37,52 @@ namespace PetGame
         /// </summary>
         /// <param name="id">The ID of the Pet to get from the database.</param>
         /// <returns> A pet of the given ID, or null if unspecified. </returns>
-        [HttpGet("{id}")]
-        public Pet Get(ulong id)
+        [HttpGet("{id}"), AllowAnonymous]
+        public IActionResult Get(ulong id)
         {
-            return new Pet() { Birthday = DateTime.Now, Endurance = 50, IsDead = false, Name = "Bobby Tables", PetId = 123, Strength = 50, UserId = id };
+            var pet = petService.GetPetById(id);
+            if (pet == null)
+                return NotFound();
+            return Json(pet);
         }
+
+        // in postman test with
+        // where UserId matches the currently signed-in user
+        /** POST /api/Pet
+         * {
+          "PetId": 123,
+          "Name": "So fluffy boi",
+          "Birthday": "2012-04-23T18:25:43.511Z",
+          "Strength": 5,
+          "Endurance": 55,
+          "IsDead": true,
+          "UserId": 35
+            }
+            */
 
         /// <summary>
         ///     Inserts a new Pet into the database.
+        ///     This action requires authentication.
         /// </summary>
         /// <param name="value"> The pet to add to the database. </param>
         // POST api/<controller>
         [HttpPost]
-        public void Post([FromBody]Pet value)
+        public IActionResult Post([FromBody] Pet value)
         {
             if (value == null) throw new ArgumentNullException(nameof(value), "The supplied Pet cannot be null.");
-
-            //TODO Add the pet to the database.
+            // check user
+            var user = loginService.GetUserFromContext(HttpContext.User);
+            if (user?.UserId == value.UserId)
+            {
+                return Json(petService.InsertPet(value));
+            }
+            // unauthorized
+            return Unauthorized();
         }
 
         /// <summary>
         ///     Updates a pet in the database.
+        ///     Requires authorization.
         /// </summary>
         /// <param name="id">
         ///     The ID of the pet to update.
@@ -79,13 +90,16 @@ namespace PetGame
         /// <param name="value">
         ///     The values of the pet to update.
         /// </param>
-        // PUT api/<controller>/5
+        // PUT api/<controller>
         [HttpPut("{id}")]
-        public void Put(ulong id, [FromBody]Pet value)
+        public IActionResult Put(ulong id, [FromBody]Pet value)
         {
             if (value == null) throw new ArgumentNullException(nameof(value), "The supplied Pet cannot be null.");
-
-            // TODO: PetController PUT updates
+            // don't necessarily care if the PetId inside value does not match
+            // the id passed separately, since only the Id is going to be used
+            var pet = petService.UpdatePet(id, value);
+            if (pet == null) return Unauthorized();
+            return Json(pet);
         }
 
         /// <summary>
@@ -94,9 +108,20 @@ namespace PetGame
         /// <param name="id"></param>
         // DELETE api/<controller>/5
         [HttpDelete("{id}")]
-        public void Delete(ulong id)
+        public IActionResult Delete(ulong id)
         {
-            //TODO: Delete this pet from the database.
+            var user = loginService.GetUserFromContext(HttpContext.User);
+
+            if (user == null)
+                return Unauthorized();
+
+            if (petService.DeletePet(id, user.UserId))
+            {
+                // deleted ok
+                return Ok();
+            }
+            // didn't delete Ok, either not found or wrong user
+            return Unauthorized();
         }
     }
 }
