@@ -20,6 +20,7 @@ namespace PetGame.Services
         private readonly string AuthToken;
         private readonly string PhoneNum;
         private readonly string DebugNum;
+        private readonly bool OnlyDebugNum;
 
         // phone # being sent from
         private readonly PhoneNumber FromPhone;
@@ -37,20 +38,23 @@ namespace PetGame.Services
         // the debug phone #
         // free trial of twilio requires that each phone number is verified beforehand
         // so we may have to only send messages to the debug phone number instead
-        const string ENV_VAR_DEBUGNUM = "PETGAME_TWILIO_DEBUG";
-        // enables this service, set to "True", "true", "on", "enable" to be enabled
+        const string ENV_VAR_DEBUGNUM = "PETGAME_TWILIO_DEBUGNUM";
+        // enables this service, set to "True" to be enabled
         const string ENV_VAR_ENABLE = "PETGAME_TWILIO_ENABLE";
+        // forces twilio to only use the debug phone number, set to "True" to be enabled
+        const string ENV_VAR_DEBUGONLY = "PETGAME_TWILIO_DEBUGONLY";
 
         public TwilioService()
         {
             // check if service is enabled
             var enableStr = Environment.GetEnvironmentVariable(ENV_VAR_ENABLE);
-            Enable = !string.IsNullOrWhiteSpace(enableStr) && (enableStr == "True" || enableStr == "true" || enableStr == "on" || enableStr == "enable");
+            Enable = !string.IsNullOrWhiteSpace(enableStr) && (enableStr == "True");
 
             // if not enabled, don't bother doing anything else
             if (!Enable)
                 return;
 
+            OnlyDebugNum = Environment.GetEnvironmentVariable(ENV_VAR_DEBUGONLY) == "True";
             // get configuration variables from environment
             AccountSid = Environment.GetEnvironmentVariable(ENV_VAR_ACCOUNTSID);
             AuthToken = Environment.GetEnvironmentVariable(ENV_VAR_AUTHTOKEN);
@@ -64,6 +68,7 @@ namespace PetGame.Services
             }
 
             // convert strings to PhoneNumbers
+            // if invalid, let it throw
             FromPhone = new PhoneNumber(PhoneNum);
             ToDebug = new PhoneNumber(DebugNum);
         }
@@ -75,15 +80,16 @@ namespace PetGame.Services
         /// <param name="message">The message to send</param>
         /// <param name="useDebugNumber">If enabled, ignores the phoneNumber param and always sends the message to the debug number.</param>
         /// <exception cref="ArgumentNullException">Thrown if the given message is null or whitespace.</exception>
-        public void SendMessage(string phoneNumber, string message, bool useDebugNumber = false)
+        public void SendMessage(string phoneNumber, string message)
         {
             // ensure enabled
             if (!Enable)
                 return;
-
+            // use the debug number if enforced
             PhoneNumber to;
-            if (useDebugNumber)
+            if (OnlyDebugNum)
                 to = DebugNum;
+            // otherwise get the number from input
             else if (!string.IsNullOrWhiteSpace(phoneNumber))
                 to = new PhoneNumber(phoneNumber);
             else
