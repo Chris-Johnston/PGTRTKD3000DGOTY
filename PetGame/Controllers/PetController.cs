@@ -50,7 +50,10 @@ namespace PetGame
             return Json(pet);
         }
 
-        /// /api/Pet/[PetId]/status (No Request Body)
+        /// /api/Pet/[PetId]/status (include request body)
+        /// Example JSON request body:
+        /// 
+        /// 
         /// <summary>
         /// Returns the status of a single pet by its ID
         /// </summary>
@@ -61,10 +64,10 @@ namespace PetGame
         /// JSON of PetStatus object
         /// </returns>
         [HttpGet("{id}/status"), AllowAnonymous]
-        public IActionResult GetPetStatusById(ulong id)
+        public IActionResult Get(StatusRequest Request)
         {
             //PetStatus object to be serialized and returned
-            PetStatus ret = petService.GetPetStatus(id);
+            PetStatus ret = petService.GetPetStatus(Request.id);
             
             //if not null, the call to GetPetStatus was successful
             if (ret != null)
@@ -77,6 +80,7 @@ namespace PetGame
                 return NotFound();
             }
         }
+
 
         // in postman test with
         // where UserId matches the currently signed-in user
