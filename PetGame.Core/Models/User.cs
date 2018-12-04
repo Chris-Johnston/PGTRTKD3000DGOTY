@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -9,6 +10,7 @@ namespace PetGame.Models
     /// <summary>
     ///     Represents information about a user.
     /// </summary>
+    [JsonObject]
     public class User
     {
         /// <summary>
@@ -20,6 +22,7 @@ namespace PetGame.Models
         /// <summary>
         ///     A user's unique identifier.
         /// </summary>
+        [JsonProperty]
         public ulong UserId { get; set; }
         // yes, I am being optimistic by making the UserId an unsigned long
             
@@ -28,6 +31,7 @@ namespace PetGame.Models
         ///     This must not be null or whitespace, and must be less than 32 characters in length.
         ///     It should match the regex defined by <see cref="UsernameRegex"/>
         /// </summary>
+        [JsonProperty]
         public string Username
         {
             get => _Username;
@@ -54,6 +58,7 @@ namespace PetGame.Models
         ///     See https://docs.microsoft.com/en-us/dotnet/api/system.security.cryptography.hmacsha512
         ///     This byte array will be 64 bytes in length.
         /// </remarks>
+        [JsonProperty]
         public byte[] PasswordHash { get; set; }
 
         /// <summary>
@@ -65,6 +70,7 @@ namespace PetGame.Models
         /// <remarks>
         ///     This byte array will be 256 bytes in length.
         /// </remarks>
+        [JsonProperty]
         public byte[] HMACKey { get; set; }
     }
 }
