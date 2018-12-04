@@ -17,6 +17,18 @@ namespace PetGame.Models
     {
         public Pet() { Name = "Unnamed Pet"; }
 
+        public Pet(string name, ulong userid)
+        {
+            Name = name;
+            UserId = userid;
+            PetId = 0;
+            Birthday = DateTime.Now;
+            IsDead = false;
+            // Easy TODO: Randomize the Strength and Endurance properties of pet when created for AddPet
+            Strength = 5;
+            Endurance = 5;
+        }
+
         /// <summary>
         ///     Regular expression for valid pet names. All pet names must pass this validation.
         ///     Allows for names up to 50 char long that can contain spaces,

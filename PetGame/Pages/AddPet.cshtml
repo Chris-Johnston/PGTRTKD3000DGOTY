@@ -10,11 +10,11 @@
 {
     <h1 class="display-2 text-center">Add a Pet</h1>
     <img class="add-pet-icon" src="~/img/pets/mysterypet.png" alt="Unknown Pet Icon." />
-    <form method="post">
+    <form method="post" action="/api/User/Pet">
         <div class="form-group">
             <label for="petname">Name your new pet:</label>
             <br />
-            <input id="petname" class="form-control form-control-lg" type="text" placeholder="Fluffy" />
+            <input id="petname" name="PetName" class="form-control form-control-lg" type="text" placeholder="Fluffy" maxlength="50"/>
             <small class="form-text text-muted">Names must be 2-50 characters, including letters, numbers, spaces, and <kbd>\'$.@@_/-?!</kbd>.</small>
         </div>
         <button type="submit" class="btn btn-primary">Submit</button>
