@@ -50,7 +50,10 @@ namespace PetGame
             return Json(pet);
         }
 
-        /// /api/Pet/[PetId]/status
+        /// /api/Pet/[PetId]/status (include request body)
+        /// Example JSON request body:
+        /// 
+        /// 
         /// <summary>
         /// Returns the status of a single pet by its ID
         /// </summary>
