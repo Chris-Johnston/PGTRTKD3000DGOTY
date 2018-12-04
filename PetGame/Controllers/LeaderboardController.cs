@@ -16,6 +16,19 @@ namespace PetGame
             LeaderboardService = new LeaderboardService(sqlManager);
         }
 
+        /// GET /api/leaderboard/ (no requestbody)
+        /// Gets top 10 scores
+        /// 
+        /// GET /api/leaderboard/
+        /// example JSON request body:
+            /*
+            {
+               "Offset": 2,
+               "NumItems": 2
+            }
+            */
+        ///skips the first 2 results and gets the next 2
+        /// 
         /// <summary>
         /// Returns a List of LeaderboardEntry as JSON.
         /// Can be offset and the number of results can be changed
@@ -64,6 +77,9 @@ namespace PetGame
             }
         }
 
+        /// GET /api/leaderboard/[PetId]/ (no request body)
+        /// Gets one Entry by PetId
+        /// 
         /// <summary>
         /// Gets a single LeaderboardEntry by RaceId. No request body
         /// </summary>
