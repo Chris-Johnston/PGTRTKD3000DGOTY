@@ -8,5 +8,9 @@
     "gulp-cli": "2.0.1",
     "gulp-less": "4.0.1",
     "less": "3.9.0"
+  },
+  "dependencies": {
+    "lodash": "^4.17.11",
+    "minimatch": "^3.0.4"
   }
 }
