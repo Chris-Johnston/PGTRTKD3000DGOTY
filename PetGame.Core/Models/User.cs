@@ -66,5 +66,10 @@ namespace PetGame.Models
         ///     This byte array will be 256 bytes in length.
         /// </remarks>
         public byte[] HMACKey { get; set; }
+
+        /// <summary>
+        ///     Gets or sets the User's phone number. If this value is null, the user has chosen not to recieve SMS notifications.
+        /// </summary>
+        public string PhoneNumber { get; set; } = null;
     }
 }

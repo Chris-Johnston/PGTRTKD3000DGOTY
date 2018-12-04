@@ -219,7 +219,7 @@ namespace PetGame
             {
                 var cmd = sql.CreateCommand();
                 cmd.CommandText =
-@"SELECT TOP 1 UserId, Username, PasswordHash, HMACKey FROM [User] WHERE Username = @Username;";
+@"SELECT TOP 1 UserId, Username, PasswordHash, HMACKey, PhoneNumber FROM [User] WHERE Username = @Username;";
                 cmd.Parameters.AddWithValue("@Username", username);
                 using (var reader = cmd.ExecuteReader())
                 {
@@ -230,6 +230,7 @@ namespace PetGame
                         ret.Username = reader.GetString(1);
                         ret.PasswordHash = reader.GetSqlBytes(2).Value;
                         ret.HMACKey = reader.GetSqlBytes(3).Value;
+                        ret.PhoneNumber = reader.IsDBNull(4) ? null : reader.GetString(4);
                     }
 
                     reader.Close();
@@ -305,10 +306,11 @@ namespace PetGame
             using (var s = sqlManager.EstablishDataConnection)
             {
                 var cmd = s.CreateCommand();
-                cmd.CommandText = "INSERT INTO [User] (Username, PasswordHash, HMACKey) OUTPUT INSERTED.UserID VALUES (@Username, @PasswordHash, @HMACKey);";
+                cmd.CommandText = "INSERT INTO [User] (Username, PasswordHash, HMACKey, PhoneNumber) OUTPUT INSERTED.UserID VALUES (@Username, @PasswordHash, @HMACKey, NULL);";
                 cmd.Parameters.AddWithValue("@Username", u.Username);
                 cmd.Parameters.AddWithValue("@PasswordHash", u.PasswordHash);
                 cmd.Parameters.AddWithValue("@HMACKey", u.HMACKey);
+                // TODO: Add the PhoneNumber to the user registration form
 
                 using (var reader = cmd.ExecuteReader())
                 {
