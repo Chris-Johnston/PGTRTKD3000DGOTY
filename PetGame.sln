@@ -27,6 +27,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SQL", "SQL", "{DAACEFFD-EAD
 		SQL\Insert_SampleData_All.sql = SQL\Insert_SampleData_All.sql
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Migrations", "Migrations", "{CBB52B42-9239-41FD-BC9C-7E50DC36718A}"
+	ProjectSection(SolutionItems) = preProject
+		SQL\Migrations\01_Alter_Table_User_PhoneNumber.sql = SQL\Migrations\01_Alter_Table_User_PhoneNumber.sql
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,6 +56,7 @@ Global
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{DAACEFFD-EAD5-434C-BD93-3F52EAF42A55} = {EA421D73-09A6-4935-80B3-0F70945E9329}
+		{CBB52B42-9239-41FD-BC9C-7E50DC36718A} = {DAACEFFD-EAD5-434C-BD93-3F52EAF42A55}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C7E7B090-53CD-4DB9-9654-87BAE753D9D3}
