@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PetGame.Core;
 using PetGame.Models;
+using PetGame.Services;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -41,5 +42,12 @@ namespace PetGame
                 return Ok($"Hello {u.Username} {u.UserId}");
             }
         }
+        // HACK: Only for testing. DO NOT EXPOSE THIS PUBLICLY
+        //[HttpGet("sms")]
+        //public IActionResult GetSMS([FromServices] TwilioService sms)
+        //{
+        //    sms.SendMessage(null, "Well, hello there.");
+        //    return Ok();
+        //}
     }
 }
