@@ -21,7 +21,7 @@ namespace PetGame
         /// Can be offset and the number of results can be changed
         /// using a raw JSON request body
         /// </summary>
-        /// <param name="Request"> 
+        /// <param name="LeaderboardRequest"> 
         /// JSON request body containing offset and desired number of results
         /// Defaults to 0 offset and 10 results if no request body is present
         /// </param>
@@ -30,20 +30,21 @@ namespace PetGame
         /// OwnerName, OwnerId
         /// </returns>
         [HttpGet]
-        public IActionResult Get([FromBody] LeaderboardRequestModel Request)
+        [HttpPost("options")]
+        public IActionResult Get([FromBody] LeaderboardRequestModel LeaderboardRequest)
         {
             //if no request body is specified, it will be null
             //if null, creates a new request with default values
-            if (Request == null)
+            if (LeaderboardRequest == null)
             {
-                Request = new LeaderboardRequestModel() { Offset = 0, NumRequests = 10 };
+                LeaderboardRequest = new LeaderboardRequestModel() { Offset = 0, NumItems = 10 };
             }
 
             //if the offset is >= 0 and the request number is > 0, the request is valid
-            if (Request.Offset >= 0 && Request.NumRequests > 0)
+            if (LeaderboardRequest.Offset >= 0 && LeaderboardRequest.NumItems > 0)
             {
                 //get the list of entried by calling the function in LeaderboardService
-                var Entries = LeaderboardService.GetLeaderboardEntries(Request.Offset, Request.NumRequests);
+                var Entries = LeaderboardService.GetLeaderboardEntries(LeaderboardRequest.Offset, LeaderboardRequest.NumItems);
 
                 //if the result is null, the target(s) were not found (404)
                 if (Entries == null)
