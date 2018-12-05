@@ -20,6 +20,13 @@ namespace PetGame.Models
         public const string UsernameRegex = @"^([$@._/-?!0-9a-zA-Z]){2,50}$";
 
         /// <summary>
+        ///     Regular expression for valid phone numbers. All phone numbers must pass this 
+        ///     validation, or be set to null. This same validation (equivalent) is a constraint in the database.
+        ///     Valid number example: +10001112222
+        /// </summary>
+        public const string PhoneNumberRegex = @"^\+1([0-9]){10}$";
+
+        /// <summary>
         ///     A user's unique identifier.
         /// </summary>
         [JsonProperty]
@@ -72,5 +79,32 @@ namespace PetGame.Models
         /// </remarks>
         [JsonProperty]
         public byte[] HMACKey { get; set; }
+
+        /// <summary>
+        ///     Gets or sets the User's phone number. If this value is null, the user has chosen not to recieve SMS notifications.
+        /// </summary>
+        public string PhoneNumber
+        {
+            get => _PhoneNumber;
+            set
+            {
+                if (value == null)
+                    _PhoneNumber = null;
+                else
+                {
+                    if (Regex.IsMatch(value, PhoneNumberRegex))
+                    {
+                        _PhoneNumber = value;
+                    }
+                    else
+                    {
+                        throw new ArgumentException(paramName: nameof(value), message:
+                            "The supplied phone number was not valid.");
+                    }
+                }
+            }
+        }
+        // backing field
+        private string _PhoneNumber = null;
     }
 }
