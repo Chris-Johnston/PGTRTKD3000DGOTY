@@ -47,9 +47,16 @@ namespace PetGame
         [HttpGet("{id}/status")]
         public IActionResult Get(StatusRequest StatusRequest)
         {
-            List<PetStatus> UserPets = petService.GetPetStatusList(StatusRequest.id);
+            var UserPets = petService.GetPetStatusList(StatusRequest.id);
 
-            //not sure where to put this, so here for now
+            if (UserPets == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                return Json(UserPets);
+            }
         }
     }
 }
