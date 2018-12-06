@@ -78,7 +78,6 @@ namespace PetGame
             }
         }
 
-
         // in postman test with
         // where UserId matches the currently signed-in user
         /** POST /api/Pet
