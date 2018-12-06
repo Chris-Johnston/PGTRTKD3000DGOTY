@@ -197,9 +197,117 @@ namespace PetGame.Services
             return results == 1;
         }
 
+        /// <summary>
+        /// Returns a PetStatus that contains the Pet, its hunger percentage,
+        /// its happiness percentage, and the DateTime of next interaction
+        /// </summary>
+        /// <param name="PetId"></param>
+        /// <returns>
+        /// PetStatus object
+        /// </returns>
         public PetStatus GetPetStatus(ulong PetId)
         {
-            return new PetStatus();
+            Pet toReturn = GetPetById(PetId);
+
+            //if this pet doesn't exist, don't go any further. return null
+            if (toReturn == null)
+            {
+                return null;
+            }
+
+            //hunger starts at 100%
+            double hungerPercentage = 1.0;
+
+            //happiness starts at 100%
+            double happinessPercentage = 1.0;
+
+            //
+            using (var conn = sqlManager.EstablishDataConnection)
+            {
+                List<Activity> LastTwoHoursActivities = new List<Activity>();
+                var cmd = conn.CreateCommand();
+
+                //gets all activities from the last 2 hours for specified pet
+                cmd.CommandText = @"SELECT Activity.ActivityId, Activity.PetId, Activity.Timestamp, Activity.Type 
+                                    FROM Activity 
+                                    WHERE Activity.Timestamp > DATEADD(HOUR, -2, GETDATE()) AND Pet.PetId = @PetId;";
+
+                //specify PetId
+                cmd.Parameters.AddWithValue("PetId", PetId);
+
+                //create and fill a list of the last two hours of activities for this pet
+                using (var reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        //convert string activity type to enum object
+                        string Type = reader.GetString(3);
+                        //assume defualt value is "Default"
+                        ActivityType ActivityTypeInput = ActivityType.Default;
+
+                        if (Type.Equals("Training"))
+                        {
+                            ActivityTypeInput = ActivityType.Training;
+                        }
+
+                        LastTwoHoursActivities.Add(new Activity() { ActivityId = (ulong) reader.GetInt64(0),
+                            PetId = (ulong) reader.GetInt64(1), Timestamp = reader.GetDateTime(2),
+                            Type = ActivityTypeInput });
+                    }
+                }//end
+
+                //calculate hunger
+                //if there are no activities in the last 2 hrs, subtract 10%
+                //5% per hour
+                if (LastTwoHoursActivities.Count == 0)
+                {
+                    hungerPercentage -= 0.1;
+                }
+                else
+                {
+                    //check the type of activity and subtract percentage accordingly
+                    foreach (Activity Activity in LastTwoHoursActivities)
+                    {
+                        //if only one hour has passed, subtract 5%
+                        if ((Activity.Timestamp.Hour + 1).Equals(DateTime.Now))
+                        {
+                            hungerPercentage -= 0.05;
+                        }
+                        //if a traing activity has occured, subtract 7%
+                        else if (Activity.Type.Equals(ActivityType.Training))
+                        {
+                            hungerPercentage -= 0.07;
+                        }
+                        //if a race has occured, subtract 15%
+                        else if (Activity.Type.Equals(ActivityType.Default))
+                        {
+                            hungerPercentage -= 0.15;
+                        }
+                        //else
+                        //else
+                        //{
+                        //    //bad default case?
+                        //    hungerPercentage -= 0.00;
+                        //}
+                    }
+                }//end
+
+                //get the last activity
+                Activity LastActivity = LastTwoHoursActivities[LastTwoHoursActivities.Count - 1];
+
+                //check the number of hours since the last activity
+                int HoursSinceLastActivity = DateTime.Now.Hour - LastActivity.Timestamp.Hour;
+
+                //multiply 10% by the number of hours and the hunger percentage to get the
+                //happiness percentage
+                happinessPercentage = (HoursSinceLastActivity * 0.10 * hungerPercentage);
+
+                //compile the data into a new PetStatus object
+                PetStatus ret = new PetStatus() { Pet = toReturn, Hunger = hungerPercentage, Happiness = happinessPercentage };
+
+                //return the new object
+                return ret;
+            }
         }
     }
 }
