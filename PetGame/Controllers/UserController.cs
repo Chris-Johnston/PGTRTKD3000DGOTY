@@ -46,9 +46,9 @@ namespace PetGame
         }
 
         [HttpGet("{id}/status")]
-        public IActionResult Get(StatusRequest StatusRequest)
+        public IActionResult Get(ulong id)
         {
-            var UserPets = petService.GetPetStatusList(StatusRequest.id);
+            var UserPets = petService.GetPetStatusList(id);
 
             if (UserPets == null)
             {
