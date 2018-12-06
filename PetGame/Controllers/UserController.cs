@@ -24,6 +24,7 @@ namespace PetGame
         {
             this.sqlManager = sqlManager;
             login = new LoginService(this.sqlManager);
+            petService = new PetService(this.sqlManager);
         }
 
         [HttpGet("whoami"), AllowAnonymous]
