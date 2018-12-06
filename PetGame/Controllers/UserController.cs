@@ -44,6 +44,13 @@ namespace PetGame
                 return Ok($"Hello {u.Username} {u.UserId}");
             }
         }
+        // HACK: Only for testing. DO NOT EXPOSE THIS PUBLICLY
+        //[HttpGet("sms")]
+        //public IActionResult GetSMS([FromServices] TwilioService sms)
+        //{
+        //    sms.SendMessage(null, "Well, hello there.");
+        //    return Ok();
+        //}
 
         // creates a new pet for the current user
         [HttpPost("Pet")]
