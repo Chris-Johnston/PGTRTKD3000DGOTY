@@ -231,7 +231,7 @@ namespace PetGame.Services
             //
             using (var conn = sqlManager.EstablishDataConnection)
             {
-                List<Activity> LastTwoHoursActivities = new List<Activity>();
+                List<Activity> LastIntervalActivities = new List<Activity>();
                 var cmd = conn.CreateCommand();
 
                 //gets all activities from the last 2 hours for specified pet
@@ -258,7 +258,7 @@ namespace PetGame.Services
                             ActivityTypeInput = ActivityType.Training;
                         }
 
-                        LastTwoHoursActivities.Add(new Activity() { ActivityId = (ulong) reader.GetInt64(0),
+                        LastIntervalActivities.Add(new Activity() { ActivityId = (ulong) reader.GetInt64(0),
                             PetId = (ulong) reader.GetInt64(1), Timestamp = reader.GetDateTime(2),
                             Type = ActivityTypeInput });
                     }
@@ -267,14 +267,14 @@ namespace PetGame.Services
                 //calculate hunger
                 //if there are no activities in the last 2 hrs, subtract 10%
                 //5% per hour
-                if (LastTwoHoursActivities.Count == 0)
+                if (LastIntervalActivities.Count == 0)
                 {
                     hungerPercentage -= (HungerDecreasePerHour * 2);
                 }
                 else
                 {
                     //check the type of activity and subtract percentage accordingly
-                    foreach (Activity Activity in LastTwoHoursActivities)
+                    foreach (Activity Activity in LastIntervalActivities)
                     {
                         //if only one hour has passed, subtract 5%
                         if ((Activity.Timestamp.Hour + 1).Equals(DateTime.Now))
@@ -295,13 +295,23 @@ namespace PetGame.Services
                     }
                 }//end
 
-                //get the last activity
-                Activity LastActivity = LastTwoHoursActivities[LastTwoHoursActivities.Count - 1];
-
                 //check the number of hours since the last activity
-                int HoursSinceLastActivity = DateTime.Now.Hour - LastActivity.Timestamp.Hour;
+                int HoursSinceLastActivity = 0;
 
-                //multiply 10% by the number of hours and the hunger percentage to get the
+                if (LastIntervalActivities.Count == 0)
+                {
+                    HoursSinceLastActivity = HoursToCheck;
+                }
+                else
+                {
+                    //get the last activity
+                    Activity LastActivity = LastIntervalActivities[LastIntervalActivities.Count - 1];
+
+                    //check the number of hours since the last activity
+                    HoursSinceLastActivity = DateTime.Now.Hour - LastActivity.Timestamp.Hour;
+                }
+
+                //multiply HappinessDecrease by the number of hours and the hunger percentage to get the
                 //happiness percentage
                 happinessPercentage = (HoursSinceLastActivity * HappinessDecreasePerHour * hungerPercentage);
 
