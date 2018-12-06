@@ -1,0 +1,41 @@
+﻿@page
+@using PetGame.Pages
+@model LeaderboardModel
+@{
+    Layout = "~/Pages/_Layout.cshtml";
+    ViewBag.Title = "Leaderboard";
+}
+
+<h1 class="display-2 text-center">Scoreboard</h1>
+
+<table class="table table-hover table-bordered">
+    <thead class="thead-dark">
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Pet Name</th>
+            <th scope="col">Owner</th>
+            <th scope="col">Score</th>
+            <th scope="col">Timestamp</th>
+        </tr>
+    </thead>
+    @foreach (var x in Model.LeaderboardItems.Select((value, index) => new { value, index }))
+    {
+        <tr>
+            <td scope="row">
+                @x.index
+            </td>
+            <td>
+                @x.value.PetName
+            </td>
+            <td>
+                @x.value.OwnerName
+            </td>
+            <td>
+                @x.value.Score
+            </td>
+            <td>
+                @x.value.Timestamp
+            </td>
+        </tr>
+    }
+</table>
