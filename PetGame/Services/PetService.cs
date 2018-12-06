@@ -16,8 +16,8 @@ namespace PetGame.Services
         const double DefaultDecrease = 0.07;
         const double TrainingDecrease = 0.10;
         const double RaceDecrease = 0.15;
-        const double HappinessDecreasePerHour = 0.10;
-        const int HoursToCheck = -12;
+        const double HappinessDecreasePerHour = 0.06;
+        const int HoursToCheck = 12;
 
         private readonly SqlManager sqlManager;
 
@@ -241,7 +241,7 @@ namespace PetGame.Services
 
                 //specify PetId
                 cmd.Parameters.AddWithValue("@PetId", $"{PetId}");
-                cmd.Parameters.AddWithValue("@Hours", HoursToCheck);
+                cmd.Parameters.AddWithValue("@Hours", (-1 * HoursToCheck));
 
                 //create and fill a list of the last two hours of activities for this pet
                 using (var reader = cmd.ExecuteReader())
@@ -275,7 +275,7 @@ namespace PetGame.Services
                 {
                     //check the type of activity and subtract percentage accordingly
                     foreach (Activity Activity in LastIntervalActivities)
-                    {
+                    { 
                         //if only one hour has passed, subtract 5%
                         if ((Activity.Timestamp.Hour + 1).Equals(DateTime.Now))
                         {
@@ -295,6 +295,11 @@ namespace PetGame.Services
                     }
                 }//end
 
+                if (hungerPercentage < 0.0)
+                {
+                    hungerPercentage = 0.0;
+                }
+
                 //check the number of hours since the last activity
                 int HoursSinceLastActivity = 0;
 
@@ -313,7 +318,13 @@ namespace PetGame.Services
 
                 //multiply HappinessDecrease by the number of hours and the hunger percentage to get the
                 //happiness percentage
-                happinessPercentage = (HoursSinceLastActivity * HappinessDecreasePerHour * hungerPercentage);
+                happinessPercentage = (HoursSinceLastActivity * HappinessDecreasePerHour);
+
+
+                if (happinessPercentage < 0.0)
+                {
+                    happinessPercentage = 0.0;
+                }
 
                 //compile the data into a new PetStatus object
                 //return the new object
