@@ -20,13 +20,13 @@ namespace PetGame.Models
         /// Represents the Pet's Happiness level as a ratio
         /// </summary>
         [JsonProperty]
-        public int Happiness { get; set; }
+        public double Happiness { get; set; }
 
         /// <summary>
         /// Represent's the Pet's Hunger level as a ratio
         /// </summary>
         [JsonProperty]
-        public int Hunger { get; set; }
+        public double Hunger { get; set; }
         
         /// <summary>
         /// Represents the time when the pet can be interacted with again
