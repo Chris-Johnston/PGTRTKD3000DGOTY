@@ -17,7 +17,7 @@ namespace PetGame.Services
         const double TrainingDecrease = 0.10;
         const double RaceDecrease = 0.15;
         const double HappinessDecreasePerHour = 0.10;
-        const int HoursToCheck = 12;
+        const int HoursToCheck = -12;
 
         private readonly SqlManager sqlManager;
 
@@ -237,11 +237,11 @@ namespace PetGame.Services
                 //gets all activities from the last 2 hours for specified pet
                 cmd.CommandText = @"SELECT Activity.ActivityId, Activity.PetId, Activity.Timestamp, Activity.Type 
                                     FROM Activity, Pet 
-                                    WHERE Activity.Timestamp > DATEADD(HOUR, -@Hours, GETDATE()) AND Pet.PetId = @PetId;";
+                                    WHERE Activity.Timestamp > DATEADD(HOUR, @Hours, GETDATE()) AND Pet.PetId = @PetId;";
 
                 //specify PetId
-                cmd.Parameters.AddWithValue("PetId", $"{PetId}");
-                cmd.Parameters.AddWithValue("Hours", HoursToCheck);
+                cmd.Parameters.AddWithValue("@PetId", $"{PetId}");
+                cmd.Parameters.AddWithValue("@Hours", HoursToCheck);
 
                 //create and fill a list of the last two hours of activities for this pet
                 using (var reader = cmd.ExecuteReader())
@@ -322,7 +322,7 @@ namespace PetGame.Services
 
                 cmd.CommandText = @"SELECT Pet.PetId FROM PET WHERE Pet.UserId = @UserId;";
 
-                cmd.Parameters.AddWithValue("UserId", $"{UserId}");
+                cmd.Parameters.AddWithValue("@UserId", $"{UserId}");
 
                 using (var reader = cmd.ExecuteReader())
                 {
