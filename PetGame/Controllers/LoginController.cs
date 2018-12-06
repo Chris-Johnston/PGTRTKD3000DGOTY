@@ -59,7 +59,8 @@ namespace PetGame
             if (ut == null)
                 return Unauthorized();
             SignIn(ut);
-            return RedirectToAction("GetWhoAmI", "User");
+            // return to landing page
+            return Redirect("/");
         }
 
         /// <summary>
@@ -75,7 +76,8 @@ namespace PetGame
                 // bad data
                 return Unauthorized();
             SignIn(ut);
-            return RedirectToAction("GetWhoAmI", "User");
+            // return to landing page
+            return Redirect("/");
         }
     }
 }

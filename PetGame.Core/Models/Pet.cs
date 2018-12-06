@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -16,6 +17,18 @@ namespace PetGame.Models
     public class Pet
     {
         public Pet() { Name = "Unnamed Pet"; }
+
+        public Pet(string name, ulong userid)
+        {
+            Name = name;
+            UserId = userid;
+            PetId = 0;
+            Birthday = DateTime.Now;
+            IsDead = false;
+            // Easy TODO: Randomize the Strength and Endurance properties of pet when created for AddPet
+            Strength = 5;
+            Endurance = 5;
+        }
 
         /// <summary>
         ///     Regular expression for valid pet names. All pet names must pass this validation.
@@ -56,6 +69,7 @@ namespace PetGame.Models
         ///     Gets or sets the birthday (and time) of when this pet was created.
         /// </summary>
         [JsonProperty]
+        [JsonConverter(typeof(IsoDateTimeConverter))]
         public DateTime Birthday { get; set; }
 
         const int MaxStrength = 100;

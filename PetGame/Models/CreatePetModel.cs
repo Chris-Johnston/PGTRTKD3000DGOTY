@@ -7,11 +7,10 @@ using System.Threading.Tasks;
 namespace PetGame.Models
 {
     [JsonObject]
-    public class UserLoginModel
+    public class CreatePetModel
     {
+        public CreatePetModel() { }
         [JsonProperty]
-        public string username { get; set; }
-        [JsonProperty]
-        public string password { get; set; }
+        public string PetName { get; set; } = null;
     }
 }

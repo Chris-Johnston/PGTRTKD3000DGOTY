@@ -18,11 +18,13 @@ namespace PetGame
     {
         private readonly SqlManager sqlManager;
         private readonly LoginService login;
+        private readonly PetService petService;
 
         public UserController(SqlManager sqlManager) : base()
         {
             this.sqlManager = sqlManager;
             login = new LoginService(this.sqlManager);
+            petService = new PetService(this.sqlManager);
         }
 
         [HttpGet("whoami"), AllowAnonymous]
@@ -49,5 +51,35 @@ namespace PetGame
         //    sms.SendMessage(null, "Well, hello there.");
         //    return Ok();
         //}
+
+        // creates a new pet for the current user
+        [HttpPost("Pet")]
+        public IActionResult PostPet([FromForm, FromBody] CreatePetModel model)
+        {
+            if (model == null || string.IsNullOrWhiteSpace(model.PetName))
+                return BadRequest();
+
+            var u = login.GetUserFromContext(HttpContext.User);
+            if (u == null)
+                return BadRequest();
+
+            // make a new pet
+            try
+            {
+                var pet = new Pet(model.PetName, u.UserId);
+                pet = petService.InsertPet(pet);
+                if (pet == null)
+                {
+                    return BadRequest();
+                }
+                // TODO: redirect the user to the pet status page for their new pet
+                // HACK: Throw the new pet id into the query string just so we know that an id was added
+                return Redirect($"/?PetId={pet.PetId}");
+            }
+            catch (ArgumentException e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
     }
 }

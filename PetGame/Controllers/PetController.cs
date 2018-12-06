@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using PetGame.Core;
 using PetGame.Models;
 using PetGame.Services;
@@ -20,12 +22,14 @@ namespace PetGame
         private readonly SqlManager sqlManager;
         private readonly PetService petService;
         private readonly LoginService loginService;
+        private readonly ActivityService activityService;
 
         public PetController(SqlManager sqlManager)
         {
             this.sqlManager = sqlManager;
-            this.petService = new PetService(this.sqlManager);
-            this.loginService = new LoginService(this.sqlManager);
+            petService = new PetService(this.sqlManager);
+            loginService = new LoginService(this.sqlManager);
+            activityService = new ActivityService(this.sqlManager);
         }
 
         // GET api/pet to return all is invalid, because that would
@@ -69,7 +73,8 @@ namespace PetGame
         [HttpPost]
         public IActionResult Post([FromBody] Pet value)
         {
-            if (value == null) throw new ArgumentNullException(nameof(value), "The supplied Pet cannot be null.");
+            if (value == null)
+                return BadRequest("The supplied Pet cannot be null.");
             // check user
             var user = loginService.GetUserFromContext(HttpContext.User);
             if (user?.UserId == value.UserId)
@@ -94,7 +99,8 @@ namespace PetGame
         [HttpPut("{id}")]
         public IActionResult Put(ulong id, [FromBody]Pet value)
         {
-            if (value == null) throw new ArgumentNullException(nameof(value), "The supplied Pet cannot be null.");
+            if (value == null)
+                return BadRequest("The supplied Pet cannot be null.");
             // don't necessarily care if the PetId inside value does not match
             // the id passed separately, since only the Id is going to be used
             var pet = petService.UpdatePet(id, value);
@@ -122,6 +128,75 @@ namespace PetGame
             }
             // didn't delete Ok, either not found or wrong user
             return Unauthorized();
+        }
+
+        // Activity
+        // GET /api/Pet/petId/Activity
+        // POST /api/Pet/petId/ActivityOptions
+        // {
+        //"Limit": 10,
+        //"After": "2012-04-23T18:25:43Z",
+        //"Type": 'd'
+        //   }
+        [HttpGet("{petId}/Activity")]
+        [HttpPost("{petId}/ActivityOptions")] // this must not be under /Activity, because that doesn't follow rest convention for POST
+        public IActionResult GetRecentActivity(ulong petId, [FromBody] PetActivityRequestOptions options)
+        {
+            // if GET, or options not specified
+            if (options == null)
+                options = new PetActivityRequestOptions();
+
+            // get all of the activities using the request options
+            var results = activityService.GetActivities(petId, options.Limit, options.After, options.FixedType);
+            if (results == null)
+                return BadRequest();
+            return Ok(results);
+        }
+        
+        // POST /api/Pet/{petid}/Activity
+        // {
+//    "activityId": 0,
+//    "petId": 0,
+//    "timestamp": "2012-04-23T18:25:43Z",
+//    "type": 116
+//}
+    // creates a new activity
+    [HttpPost("{petId}/Activity")]
+        public IActionResult PostNewActivity(ulong petid, Activity activity)
+        {
+            // ensure validity of params
+            if (activity == null)
+                return BadRequest();
+
+            // enforce the pet id
+            activity.PetId = petid;
+            var result = activityService.InsertActivity(activity);
+            if (result == null)
+                return BadRequest();
+            return Ok(result);
+        }
+        // TODO, need to require authorization, check that users may only modify their own pets
+
+        // POST /api/Pet/{petId}/Activity/{type}
+        // no request body required
+        // creates a new activity of the given type, using the current time
+        [HttpPost("{petId}/Activity/{type}")]
+        public IActionResult PostNewActivity(ulong petid, char type)
+        {
+            ActivityType t = ActivityType.Default;
+            try
+            {
+                t = (ActivityType)type;
+            }
+            catch (Exception)
+            {
+                // invalid type
+                return BadRequest();
+            }
+            var result = activityService.MakeActivityForPet(petid, t);
+            if (result == null)
+                return BadRequest();
+            return Ok(result);
         }
     }
 }
