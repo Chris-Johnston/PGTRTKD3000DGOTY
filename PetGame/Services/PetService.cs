@@ -207,6 +207,13 @@ namespace PetGame.Services
         /// </returns>
         public PetStatus GetPetStatus(ulong PetId)
         {
+            const double HungerDecreasePerHour = 0.05;
+            const double DefaultDecrease = 0.07;
+            const double TrainingDecrease = 0.10;
+            const double RaceDecrease = 0.15;
+            const double HappinessDecreasePerHour = 0.10;
+            const int HoursToCheck = 12;
+
             Pet toReturn = GetPetById(PetId);
 
             //if this pet doesn't exist, don't go any further. return null
@@ -229,11 +236,12 @@ namespace PetGame.Services
 
                 //gets all activities from the last 2 hours for specified pet
                 cmd.CommandText = @"SELECT Activity.ActivityId, Activity.PetId, Activity.Timestamp, Activity.Type 
-                                    FROM Activity 
-                                    WHERE Activity.Timestamp > DATEADD(HOUR, -2, GETDATE()) AND Pet.PetId = @PetId;";
+                                    FROM Activity, Pet 
+                                    WHERE Activity.Timestamp > DATEADD(HOUR, -@Hours, GETDATE()) AND Pet.PetId = @PetId;";
 
                 //specify PetId
-                cmd.Parameters.AddWithValue("PetId", PetId);
+                cmd.Parameters.AddWithValue("PetId", $"{PetId}");
+                cmd.Parameters.AddWithValue("Hours", HoursToCheck);
 
                 //create and fill a list of the last two hours of activities for this pet
                 using (var reader = cmd.ExecuteReader())
@@ -261,7 +269,7 @@ namespace PetGame.Services
                 //5% per hour
                 if (LastTwoHoursActivities.Count == 0)
                 {
-                    hungerPercentage -= 0.1;
+                    hungerPercentage -= (HungerDecreasePerHour * 2);
                 }
                 else
                 {
@@ -271,24 +279,19 @@ namespace PetGame.Services
                         //if only one hour has passed, subtract 5%
                         if ((Activity.Timestamp.Hour + 1).Equals(DateTime.Now))
                         {
-                            hungerPercentage -= 0.05;
+                            hungerPercentage -= HungerDecreasePerHour;
                         }
                         //if a traing activity has occured, subtract 7%
-                        else if (Activity.Type.Equals(ActivityType.Training))
-                        {
-                            hungerPercentage -= 0.07;
-                        }
-                        //if a race has occured, subtract 15%
                         else if (Activity.Type.Equals(ActivityType.Default))
                         {
-                            hungerPercentage -= 0.15;
+                            hungerPercentage -= DefaultDecrease;
                         }
-                        //else
-                        //else
-                        //{
-                        //    //bad default case?
-                        //    hungerPercentage -= 0.00;
-                        //}
+                        //if a race has occured, subtract 15%
+                        else if (Activity.Type.Equals(ActivityType.Training))
+                        {
+                            hungerPercentage -= TrainingDecrease;
+                        }
+                        //TODO: Add condition for Race. Blocked by update of enum
                     }
                 }//end
 
@@ -300,13 +303,11 @@ namespace PetGame.Services
 
                 //multiply 10% by the number of hours and the hunger percentage to get the
                 //happiness percentage
-                happinessPercentage = (HoursSinceLastActivity * 0.10 * hungerPercentage);
+                happinessPercentage = (HoursSinceLastActivity * HappinessDecreasePerHour * hungerPercentage);
 
                 //compile the data into a new PetStatus object
-                PetStatus ret = new PetStatus() { Pet = toReturn, Hunger = hungerPercentage, Happiness = happinessPercentage };
-
                 //return the new object
-                return ret;
+                return new PetStatus() { Pet = toReturn, Hunger = hungerPercentage, Happiness = happinessPercentage };
             }
         }//end of function
 
@@ -321,7 +322,7 @@ namespace PetGame.Services
 
                 cmd.CommandText = @"SELECT Pet.PetId FROM PET WHERE Pet.UserId = @UserId;";
 
-                cmd.Parameters.AddWithValue("UserId", UserId);
+                cmd.Parameters.AddWithValue("UserId", $"{UserId}");
 
                 using (var reader = cmd.ExecuteReader())
                 {

@@ -61,10 +61,10 @@ namespace PetGame
         /// JSON of PetStatus object
         /// </returns>
         [HttpGet("{id}/status"), AllowAnonymous]
-        public IActionResult Get(StatusRequest Request)
+        public IActionResult GetPetStatusById(ulong id)
         {
             //PetStatus object to be serialized and returned
-            PetStatus ret = petService.GetPetStatus(Request.id);
+            PetStatus ret = petService.GetPetStatus(id);
             
             //if not null, the call to GetPetStatus was successful
             if (ret != null)
