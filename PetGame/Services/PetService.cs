@@ -12,6 +12,13 @@ namespace PetGame.Services
     /// </summary>
     public class PetService
     {
+        const double HungerDecreasePerHour = 0.05;
+        const double DefaultDecrease = 0.07;
+        const double TrainingDecrease = 0.10;
+        const double RaceDecrease = 0.15;
+        const double HappinessDecreasePerHour = 0.10;
+        const int HoursToCheck = 12;
+
         private readonly SqlManager sqlManager;
 
         public PetService(SqlManager _sqlManager)
@@ -207,13 +214,6 @@ namespace PetGame.Services
         /// </returns>
         public PetStatus GetPetStatus(ulong PetId)
         {
-            const double HungerDecreasePerHour = 0.05;
-            const double DefaultDecrease = 0.07;
-            const double TrainingDecrease = 0.10;
-            const double RaceDecrease = 0.15;
-            const double HappinessDecreasePerHour = 0.10;
-            const int HoursToCheck = 12;
-
             Pet toReturn = GetPetById(PetId);
 
             //if this pet doesn't exist, don't go any further. return null
