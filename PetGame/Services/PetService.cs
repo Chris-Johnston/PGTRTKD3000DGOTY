@@ -331,6 +331,11 @@ namespace PetGame.Services
                     }
                 }
 
+                if (PetIdList.Count == 0)
+                {
+                    return null;
+                }
+
                 foreach (ulong Id in PetIdList)
                 {
                     PetStatusList.Add(GetPetStatus(Id));
