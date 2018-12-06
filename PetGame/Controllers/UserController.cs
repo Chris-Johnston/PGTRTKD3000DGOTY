@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PetGame.Core;
 using PetGame.Models;
+using PetGame.Services;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -17,6 +18,7 @@ namespace PetGame
     {
         private readonly SqlManager sqlManager;
         private readonly LoginService login;
+        private readonly PetService petService;
 
         public UserController(SqlManager sqlManager) : base()
         {
@@ -40,6 +42,14 @@ namespace PetGame
             {
                 return Ok($"Hello {u.Username} {u.UserId}");
             }
+        }
+
+        [HttpGet("{id}/status")]
+        public IActionResult Get(StatusRequest StatusRequest)
+        {
+            List<PetStatus> UserPets = petService.GetPetStatusList(StatusRequest.id);
+
+            //not sure where to put this, so here for now
         }
     }
 }

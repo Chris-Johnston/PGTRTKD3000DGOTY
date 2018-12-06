@@ -308,6 +308,35 @@ namespace PetGame.Services
                 //return the new object
                 return ret;
             }
+        }//end of function
+
+        public IEnumerable<PetStatus> GetPetStatusList(ulong UserId)
+        {
+            List<ulong> PetIdList = new List<ulong>();
+            List<PetStatus> PetStatusList = new List<PetStatus>();
+
+            using (var conn = sqlManager.EstablishDataConnection)
+            {
+                var cmd = conn.CreateCommand();
+
+                cmd.CommandText = @"SELECT Pet.PetId FROM PET WHERE Pet.UserId = @UserId;";
+
+                cmd.Parameters.AddWithValue("UserId", UserId);
+
+                using (var reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        PetIdList.Add((ulong) reader.GetInt64(0));
+                    }
+                }
+
+                foreach (ulong Id in PetIdList)
+                {
+                    PetStatusList.Add(GetPetStatus(Id));
+                }
+            }
+            return (PetStatusList);
         }
     }
 }
