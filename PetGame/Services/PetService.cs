@@ -320,7 +320,6 @@ namespace PetGame.Services
                 //happiness percentage
                 happinessPercentage = (HoursSinceLastActivity * HappinessDecreasePerHour);
 
-
                 if (happinessPercentage < 0.0)
                 {
                     happinessPercentage = 0.0;
