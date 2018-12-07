@@ -1,5 +1,6 @@
 @page
 @using PetGame.Pages
+@using PetGame
 @model IndexModel
 @{
     Layout = "~/Pages/_Layout.cshtml";
@@ -15,7 +16,7 @@
         {
             <a class="div-link pet-box pet-@x.index" href="/pet/@x.value.PetId">
                 <div class="pet-name">@x.value.Name</div>
-                <img src="~/img/pets/default.jpg" alt="Picture of @x.value.Name" />
+                <img src="@PetImages.GetImageById(x.value.PetImageId)" alt="Picture of @x.value.Name" />
                 <div class="pet-label">Status:</div>
                 <div class="pet-label hunger">
                     50%

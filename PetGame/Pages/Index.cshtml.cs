@@ -29,7 +29,8 @@ namespace PetGame.Pages
                         Name = "The 1st Pet",
                         Endurance = 100,
                         Strength = 100,
-                        UserId = 1
+                        UserId = 1,
+                        PetImageId = 2
                     },
                     new Pet()
                     {
@@ -39,7 +40,8 @@ namespace PetGame.Pages
                         Name = "The 2nd Pet",
                         Endurance = 100,
                         Strength = 100,
-                        UserId = 1
+                        UserId = 1,
+                        PetImageId = 8
                     }
                 };
         }
