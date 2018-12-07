@@ -24,6 +24,14 @@ namespace PetGame
         public static int Count
             => Images.Count;
 
+        private static Random rng = new Random();
+
+        /// <summary>
+        ///     Gets a random image id.
+        /// </summary>
+        public static int GetRandomId
+            => rng.Next(Count);
+
         private static Dictionary<int, (string Path, string MIME)> Images
             => new Dictionary<int, (string Path, string MIME)>()
             {

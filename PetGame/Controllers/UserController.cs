@@ -59,7 +59,7 @@ namespace PetGame
             // make a new pet
             try
             {
-                var pet = new Pet(model.PetName, u.UserId);
+                var pet = new Pet(model.PetName, u.UserId) { PetImageId = model.PetImageId};
                 pet = petService.InsertPet(pet);
                 if (pet == null)
                 {

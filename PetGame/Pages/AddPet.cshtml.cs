@@ -15,6 +15,7 @@ namespace PetGame.Pages
         private readonly LoginService login;
 
         public User CurrentUser { get; private set; } = null;
+        public int RandomImageId { get; private set; } = 0;
 
         public AddPetModel(SqlManager sql)
         {
@@ -25,6 +26,7 @@ namespace PetGame.Pages
         public void OnGet()
         {
             CurrentUser = login.GetUserFromContext(HttpContext.User);
+            RandomImageId = PetImages.GetRandomId;
         }
     }
 }

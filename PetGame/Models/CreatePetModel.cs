@@ -12,5 +12,7 @@ namespace PetGame.Models
         public CreatePetModel() { }
         [JsonProperty]
         public string PetName { get; set; } = null;
+        [JsonProperty]
+        public int PetImageId { get; set; } = 0;
     }
 }
