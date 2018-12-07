@@ -18,6 +18,12 @@ namespace PetGame
         public static (string Path, string MIME) DefaultImage
             => (Path: "~/img/pets/mysterypet.png", MIME: "image/png");
 
+        /// <summary>
+        ///     Gets the number of images.
+        /// </summary>
+        public static int Count
+            => Images.Count;
+
         private static Dictionary<int, (string Path, string MIME)> Images
             => new Dictionary<int, (string Path, string MIME)>()
             {

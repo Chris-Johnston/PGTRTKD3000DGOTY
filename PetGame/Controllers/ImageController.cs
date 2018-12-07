@@ -18,13 +18,23 @@ namespace PetGame.Controllers
         // it's both easier and faster to have a constant Dictionary of all the pet images,
         // instead of making a new table in the database.
 
+        /// <summary>
+        ///     Gets the number of images
+        /// </summary>
+        /// <returns>The count, boxed into json</returns>
+        /// GET /api/Images/count
+        [HttpGet("count")]
+        public IActionResult GetImageCount()
+        {
+            // return the number of images boxed in json (w/ anonymous type)
+            return Json(new { Count = PetImages.Count });
+        }
 
         /// <summary>
         /// Gets an image by it's Id.
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        // GET: /<controller>/
         [HttpGet("{id}")]
         public IActionResult GetImage(int id)
         {
