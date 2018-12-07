@@ -81,13 +81,5 @@ namespace PetGame
                 return BadRequest(e.Message);
             }
         }
-
-        // HACK: Only for testing. DO NOT EXPOSE THIS PUBLICLY
-        //[HttpGet("sms")]
-        //public IActionResult GetSMS([FromServices] TwilioService sms)
-        //{
-        //    sms.SendMessage(null, "Well, hello there.");
-        //    return Ok();
-        //}
     }
 }
