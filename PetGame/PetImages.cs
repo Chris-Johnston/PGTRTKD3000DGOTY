@@ -35,6 +35,7 @@ namespace PetGame
         private static Dictionary<int, (string Path, string MIME)> Images
             => new Dictionary<int, (string Path, string MIME)>()
             {
+                { 0, (Path: "~/img/pets/default.jpg", MIME: "image/jpeg") },
                 { 1, (Path: "~/img/pets/pet_01.png", MIME: "image/png") },
                 { 2, (Path: "~/img/pets/pet_02.png", MIME: "image/png") },
                 { 3, (Path: "~/img/pets/pet_03.png", MIME: "image/png")},
