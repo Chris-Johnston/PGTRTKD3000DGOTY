@@ -20,10 +20,12 @@ namespace PetGame.Services
         const int HoursToCheck = 12;
 
         private readonly SqlManager sqlManager;
+        private readonly ActivityService activityService;
 
         public PetService(SqlManager _sqlManager)
         {
             this.sqlManager = _sqlManager;
+            activityService = new ActivityService(this.sqlManager);
         }
         /// <summary>
         ///     Gets an instance of a pet by id, if it exists.
@@ -231,57 +233,26 @@ namespace PetGame.Services
             //
             using (var conn = sqlManager.EstablishDataConnection)
             {
-                List<Activity> LastIntervalActivities = new List<Activity>();
-                var cmd = conn.CreateCommand();
-
-                //gets all activities from the last 2 hours for specified pet
-                cmd.CommandText = @"SELECT Activity.ActivityId, Activity.PetId, Activity.Timestamp, Activity.Type 
-                                    FROM Activity, Pet 
-                                    WHERE Activity.Timestamp > DATEADD(HOUR, @Hours, GETDATE()) AND Pet.PetId = @PetId;";
-
-                //specify PetId
-                cmd.Parameters.AddWithValue("@PetId", $"{PetId}");
-                cmd.Parameters.AddWithValue("@Hours", (-1 * HoursToCheck));
-
-                //create and fill a list of the last two hours of activities for this pet
-                using (var reader = cmd.ExecuteReader())
-                {
-                    while (reader.Read())
-                    {
-                        //convert string activity type to enum object
-                        string Type = reader.GetString(3);
-                        //assume defualt value is "Default"
-                        ActivityType ActivityTypeInput = ActivityType.Default;
-
-                        if (Type.Equals("Training"))
-                        {
-                            ActivityTypeInput = ActivityType.Training;
-                        }
-
-                        LastIntervalActivities.Add(new Activity() { ActivityId = (ulong) reader.GetInt64(0),
-                            PetId = (ulong) reader.GetInt64(1), Timestamp = reader.GetDateTime(2),
-                            Type = ActivityTypeInput });
-                    }
-                }//end
+                var PastActivities = activityService.GetActivities(PetId);
 
                 //calculate hunger
                 //if there are no activities in the last 2 hrs, subtract 10%
                 //5% per hour
-                if (LastIntervalActivities.Count == 0)
+                if (PastActivities == null)
                 {
                     hungerPercentage -= (HungerDecreasePerHour * 2);
                 }
                 else
                 {
                     //check the type of activity and subtract percentage accordingly
-                    foreach (Activity Activity in LastIntervalActivities)
+                    foreach (Activity Activity in PastActivities)
                     { 
                         //if only one hour has passed, subtract 5%
                         if ((Activity.Timestamp.Hour + 1).Equals(DateTime.Now))
                         {
                             hungerPercentage -= HungerDecreasePerHour;
                         }
-                        //if a traing activity has occured, subtract 7%
+                        //if a training activity has occured, subtract 7%
                         else if (Activity.Type.Equals(ActivityType.Default))
                         {
                             hungerPercentage -= DefaultDecrease;
@@ -303,14 +274,14 @@ namespace PetGame.Services
                 //check the number of hours since the last activity
                 int HoursSinceLastActivity = 0;
 
-                if (LastIntervalActivities.Count == 0)
+                if (PastActivities.Count == 0)
                 {
                     HoursSinceLastActivity = HoursToCheck;
                 }
                 else
                 {
                     //get the last activity
-                    Activity LastActivity = LastIntervalActivities[LastIntervalActivities.Count - 1];
+                    Activity LastActivity = PastActivities[PastActivities.Count - 1];
 
                     //check the number of hours since the last activity
                     HoursSinceLastActivity = DateTime.Now.Hour - LastActivity.Timestamp.Hour;
