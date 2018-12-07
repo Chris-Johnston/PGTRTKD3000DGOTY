@@ -6,7 +6,7 @@
 
 ALTER TABLE Pet ADD
 	-- by default, all existing pets will have the default image
-	PetImageId INT DEFAULT(0)
+	PetImageId INT NOT NULL DEFAULT(0)
 	CONSTRAINT PetImageId_IsNotNegative
 	CHECK (PetImageId >= 0);
 
