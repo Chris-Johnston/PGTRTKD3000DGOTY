@@ -246,23 +246,24 @@ namespace PetGame.Services
                 {
                     //check the type of activity and subtract percentage accordingly
                     foreach (Activity Activity in PastActivities)
-                    { 
-                        //if only one hour has passed, subtract 5%
-                        if ((Activity.Timestamp.Hour + 1).Equals(DateTime.Now))
+                    {
+                        //if a Feeding activity has occured, subtract 7%
+                        if (Activity.Type.Equals(ActivityType.Feeding))
                         {
-                            hungerPercentage -= HungerDecreasePerHour;
+
                         }
-                        //if a training activity has occured, subtract 7%
-                        else if (Activity.Type.Equals(ActivityType.Default))
-                        {
-                            hungerPercentage -= DefaultDecrease;
-                        }
-                        //if a race has occured, subtract 15%
+                        //if a Training event has occured, subtract 15%
                         else if (Activity.Type.Equals(ActivityType.Training))
                         {
-                            hungerPercentage -= TrainingDecrease;
+
                         }
-                        //TODO: Add condition for Race. Blocked by update of enum
+                        //if a Race event has occurred
+                        else if (Activity.Type.Equals(ActivityType.Race))
+                        {
+
+                        }
+                        
+                        
                     }
                 }//end
 
