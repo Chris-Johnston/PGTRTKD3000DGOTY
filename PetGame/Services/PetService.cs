@@ -18,6 +18,8 @@ namespace PetGame.Services
         const double TrainingDecrease = 0.15;
         const double RaceDecrease = 0.20;
         const double HappinessDecreasePerHour = 0.07;
+        const int NumActivities = 10;
+        const int NumDaysToCheck = 1;
 
         private readonly SqlManager sqlManager;
         private readonly ActivityService activityService;
@@ -230,99 +232,93 @@ namespace PetGame.Services
             //happiness starts at 100%
             double happinessPercentage = 1.0;
 
-            //
-            using (var conn = sqlManager.EstablishDataConnection)
-            {
-                var PastActivities = activityService.GetActivities(PetId,10, DateTime.Now);
+            DateTime ToCheck = DateTime.Now.Subtract(TimeSpan.FromDays(NumDaysToCheck));
+            int HoursToCheck = NumDaysToCheck * 24;
 
-                //calculate hunger
-                //if there are no activities in the last 2 hrs, subtract 10%
-                //5% per hour
-                if (PastActivities == null)
+            List<Activity> PastActivities = (List<Activity>)activityService.GetActivities(PetId, NumActivities, ToCheck);
+
+            //calculate hunger
+            //if there are no activities in the last 2 hrs, subtract 10%
+            //5% per hour
+            if (PastActivities == null)
+            {
+                hungerPercentage -= (HungerDecreasePerHour * 2);
+            }
+            else
+            {
+                //check the type of activity and subtract percentage accordingly
+                foreach (Activity Activity in PastActivities)
                 {
-                    hungerPercentage -= (HungerDecreasePerHour * 2);
-                }
-                else
-                {
-                    //check the type of activity and subtract percentage accordingly
-                    foreach (Activity Activity in PastActivities)
+                    //if a Feeding activity has occured, increase hunger
+                    if (Activity.Type.Equals(ActivityType.Feeding))
                     {
-                        //if a Feeding activity has occured, increase hunger
-                        if (Activity.Type.Equals(ActivityType.Feeding))
+                        if (hungerPercentage < 1.0 &&
+                            ((hungerPercentage += HungerIncrease) <= 1.0))
                         {
-                            if (hungerPercentage < 1.0 && 
-                                ((hungerPercentage += HungerIncrease) <= 1.0))
-                            {
-                                hungerPercentage += HungerIncrease;
-                            }
-                            else
-                            {
-                                hungerPercentage = 1.0;
-                            }
+                            hungerPercentage += HungerIncrease;
                         }
-                        //if a Training event has occured, subtract
-                        else if (Activity.Type.Equals(ActivityType.Training))
+                        else
                         {
-                            if (hungerPercentage > 0 &&
-                                ((hungerPercentage -= TrainingDecrease) > 0))
-                            {
-                                hungerPercentage -= TrainingDecrease;
-                            }
-                            else
-                            {
-                                hungerPercentage = 0;
-                            }
-                        }
-                        //if a Race event has occurred
-                        else if (Activity.Type.Equals(ActivityType.Race))
-                        {
-                            if (hungerPercentage > 0 &&
-                                ((hungerPercentage -= RaceDecrease) > 0))
-                            {
-                                hungerPercentage -= RaceDecrease;
-                            }
-                            else
-                            {
-                                hungerPercentage = 0;
-                            }
+                            hungerPercentage = 1.0;
                         }
                     }
-                }//end
-
-                if (hungerPercentage < 0.0)
-                {
-                    hungerPercentage = 0.0;
+                    //if a Training event has occured, subtract
+                    else if (Activity.Type.Equals(ActivityType.Training))
+                    {
+                        if (hungerPercentage > 0 &&
+                            ((hungerPercentage -= TrainingDecrease) > 0))
+                        {
+                            hungerPercentage -= TrainingDecrease;
+                        }
+                        else
+                        {
+                            hungerPercentage = 0;
+                        }
+                    }
+                    //if a Race event has occurred
+                    else if (Activity.Type.Equals(ActivityType.Race))
+                    {
+                        if (hungerPercentage > 0 &&
+                            ((hungerPercentage -= RaceDecrease) > 0))
+                        {
+                            hungerPercentage -= RaceDecrease;
+                        }
+                        else
+                        {
+                            hungerPercentage = 0;
+                        }
+                    }
                 }
+            }//end
+
+            //check the number of hours since the last activity
+            int HoursSinceLastActivity = 0;
+
+            if (PastActivities.Count == 0)
+            {
+                HoursSinceLastActivity = HoursToCheck;
+            }
+            else
+            {
+                //get the last activity
+                Activity LastActivity = PastActivities[PastActivities.Count - 1];
 
                 //check the number of hours since the last activity
-                int HoursSinceLastActivity = 0;
-
-                if (PastActivities == null)
-                {
-                    HoursSinceLastActivity = HoursToCheck;
-                }
-                else
-                {
-                    //get the last activity
-                    Activity LastActivity = PastActivities[PastActivities.Count - 1];
-
-                    //check the number of hours since the last activity
-                    HoursSinceLastActivity = DateTime.Now.Hour - LastActivity.Timestamp.Hour;
-                }
-
-                //multiply HappinessDecrease by the number of hours and the hunger percentage to get the
-                //happiness percentage
-                happinessPercentage = (HoursSinceLastActivity * HappinessDecreasePerHour);
-
-                if (happinessPercentage < 0.0)
-                {
-                    happinessPercentage = 0.0;
-                }
-
-                //compile the data into a new PetStatus object
-                //return the new object
-                return new PetStatus() { Pet = toReturn, Hunger = hungerPercentage, Happiness = happinessPercentage };
+                HoursSinceLastActivity = DateTime.Now.Hour - LastActivity.Timestamp.Hour;
             }
+
+            //multiply HappinessDecrease by the number of hours and the hunger percentage to get the
+            //happiness percentage
+            happinessPercentage = (HoursSinceLastActivity * HappinessDecreasePerHour);
+
+            if (happinessPercentage < 0.0)
+            {
+                happinessPercentage = 0.0;
+            }
+
+            //compile the data into a new PetStatus object
+            //return the new object
+            return new PetStatus() { Pet = toReturn, Hunger = hungerPercentage, Happiness = happinessPercentage };
         }//end of function
 
         public IEnumerable<PetStatus> GetPetStatusList(ulong UserId)
