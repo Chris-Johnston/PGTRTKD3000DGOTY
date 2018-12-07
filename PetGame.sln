@@ -30,7 +30,8 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Migrations", "Migrations", "{CBB52B42-9239-41FD-BC9C-7E50DC36718A}"
 	ProjectSection(SolutionItems) = preProject
 		SQL\Migrations\01_Alter_Table_User_PhoneNumber.sql = SQL\Migrations\01_Alter_Table_User_PhoneNumber.sql
-		SQL\Migrations\03_Alter_Table_Pet_Image.sql = SQL\Migrations\03_Alter_Table_Pet_Image.sql
+		SQL\Migrations\02_DropCreate_Table_Activity_NewActivityType.sql = SQL\Migrations\02_DropCreate_Table_Activity_NewActivityType.sql
+    SQL\Migrations\03_Alter_Table_Pet_Image.sql = SQL\Migrations\03_Alter_Table_Pet_Image.sql
 	EndProjectSection
 EndProject
 Global
