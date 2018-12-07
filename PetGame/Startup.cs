@@ -12,6 +12,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using PetGame.Core;
 using Microsoft.AspNetCore.Diagnostics;
+using PetGame.Services;
 
 namespace PetGame
 {
@@ -25,6 +26,7 @@ namespace PetGame
             // connection string must be set in the environment variables to connect to a MSSQL db instance
             var connectionString = Environment.GetEnvironmentVariable("PETGAME_DB_CONNECTION_STRING");
             services.AddSingleton<SqlManager>(new SqlManager(connectionString));
+            services.AddSingleton(new TwilioService());
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie(options =>
                 {
