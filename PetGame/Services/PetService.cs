@@ -13,11 +13,11 @@ namespace PetGame.Services
     public class PetService
     {
         const double HungerDecreasePerHour = 0.05;
-        const double DefaultDecrease = 0.07;
-        const double TrainingDecrease = 0.10;
-        const double RaceDecrease = 0.15;
-        const double HappinessDecreasePerHour = 0.06;
-        const int HoursToCheck = 12;
+        const double HungerIncrease = 0.10;
+        const double FeedingIncrease = 0.10;
+        const double TrainingDecrease = 0.15;
+        const double RaceDecrease = 0.20;
+        const double HappinessDecreasePerHour = 0.07;
 
         private readonly SqlManager sqlManager;
         private readonly ActivityService activityService;
@@ -233,7 +233,7 @@ namespace PetGame.Services
             //
             using (var conn = sqlManager.EstablishDataConnection)
             {
-                var PastActivities = activityService.GetActivities(PetId);
+                var PastActivities = activityService.GetActivities(PetId,10, DateTime.Now);
 
                 //calculate hunger
                 //if there are no activities in the last 2 hrs, subtract 10%
@@ -247,23 +247,45 @@ namespace PetGame.Services
                     //check the type of activity and subtract percentage accordingly
                     foreach (Activity Activity in PastActivities)
                     {
-                        //if a Feeding activity has occured, subtract 7%
+                        //if a Feeding activity has occured, increase hunger
                         if (Activity.Type.Equals(ActivityType.Feeding))
                         {
-
+                            if (hungerPercentage < 1.0 && 
+                                ((hungerPercentage += HungerIncrease) <= 1.0))
+                            {
+                                hungerPercentage += HungerIncrease;
+                            }
+                            else
+                            {
+                                hungerPercentage = 1.0;
+                            }
                         }
-                        //if a Training event has occured, subtract 15%
+                        //if a Training event has occured, subtract
                         else if (Activity.Type.Equals(ActivityType.Training))
                         {
-
+                            if (hungerPercentage > 0 &&
+                                ((hungerPercentage -= TrainingDecrease) > 0))
+                            {
+                                hungerPercentage -= TrainingDecrease;
+                            }
+                            else
+                            {
+                                hungerPercentage = 0;
+                            }
                         }
                         //if a Race event has occurred
                         else if (Activity.Type.Equals(ActivityType.Race))
                         {
-
+                            if (hungerPercentage > 0 &&
+                                ((hungerPercentage -= RaceDecrease) > 0))
+                            {
+                                hungerPercentage -= RaceDecrease;
+                            }
+                            else
+                            {
+                                hungerPercentage = 0;
+                            }
                         }
-                        
-                        
                     }
                 }//end
 
@@ -275,7 +297,7 @@ namespace PetGame.Services
                 //check the number of hours since the last activity
                 int HoursSinceLastActivity = 0;
 
-                if (PastActivities.Count == 0)
+                if (PastActivities == null)
                 {
                     HoursSinceLastActivity = HoursToCheck;
                 }
