@@ -24,8 +24,6 @@ namespace PetGame.Pages
         }
 
         public User CurrentUser { get; private set; } = null;
-        public Pet CurrentPet { get; private set; } = null;
-
         public PetStatus CurrentPetStatus { get; private set; } = null;
 
         [HttpGet("{id}")]
@@ -35,16 +33,12 @@ namespace PetGame.Pages
             // TODO: need to check that the current user owns this pet, and show an error page accordingly
             if (CurrentUser != null)
             {
-                CurrentPet = pet.GetPetById(id);
-                if (CurrentPet == null)
+                CurrentPetStatus = pet.GetPetStatusById(id);
+                if (CurrentPetStatus == null)
                 {
                     // pet not found, or wrong owner
                     Response.StatusCode = 404;
                     return;
-                }
-                else
-                {
-                    CurrentPetStatus = pet.GetPetStatusById(id);
                 }
             }
             else

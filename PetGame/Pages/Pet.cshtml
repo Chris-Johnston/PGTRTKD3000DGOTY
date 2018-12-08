@@ -17,7 +17,7 @@
         You have to be signed in to do that. <a href="~/Login">You can sign in here.</a>
     </div>
 }
-else if (Model.CurrentPet == null)
+else if (Model.CurrentPetStatus == null)
 {
     // pet not found
     <br />
@@ -31,21 +31,21 @@ else if (Model.CurrentPet == null)
 else // we good
 {
     <h1 class="display-2">
-        @Model.CurrentPet.Name
+        @Model.CurrentPetStatus.Pet.Name
     </h1>
     <h2 class="text-muted">
         Owned by @Model.CurrentUser.Username
     </h2>
 
     <div class="status-pet-wrapper justify-content-center">
-        @if (Model.CurrentPet.IsDead)
+        @if (Model.CurrentPetStatus.Pet.IsDead)
         {
-            <img class="status-image" src="~/img/pets/dead.png" alt="Picture of @Model.CurrentPet.Name (dead)" />
+            <img class="status-image" src="~/img/pets/dead.png" alt="Picture of @Model.CurrentPetStatus.Pet.Name (dead)" />
             <h2 class="text-muted">Rest In Peace</h2>
         }
         else
         {
-            <img class="status-image" src="/api/Image/@Model.CurrentPet.PetImageId" alt="Picture of @Model.CurrentPet.Name" />
+            <img class="status-image" src="/api/Image/@Model.CurrentPetStatus.Pet.PetImageId" alt="Picture of @Model.CurrentPetStatus.Pet.Name" />
             <div class="status-box">
                 <span id="pet-hunger" class="status-hunger text-warning">
                     @Model.CurrentPetStatus.Hunger
@@ -54,15 +54,15 @@ else // we good
                     @Model.CurrentPetStatus.Happiness
                 </span>
                 <span class="status-strength">
-                    Strength: @Model.CurrentPet.Strength
+                    Strength: @Model.CurrentPetStatus.Pet.Strength
                 </span>
                 <span class="status-endurance">
-                    Endurance: @Model.CurrentPet.Endurance
+                    Endurance: @Model.CurrentPetStatus.Pet.Endurance
                 </span>
             </div>
             <div class="pet-actions">
                 <div class="alert alert-warning actions-timeout">
-                    @Model.CurrentPet.Name cannot do anything until @Model.CurrentPetStatus.TimeOfNextAction
+                    @Model.CurrentPetStatus.Pet.Name cannot do anything until @Model.CurrentPetStatus.TimeOfNextAction
                 </div>
                 <div class="btn-toolbar" role="toolbar">
                     <div class="btn-group mr-2" role="group">
