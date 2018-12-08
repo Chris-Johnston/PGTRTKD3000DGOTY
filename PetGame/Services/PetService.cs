@@ -30,6 +30,8 @@ namespace PetGame.Services
         const double MinimumPercentage = 0.0;
         //the max percentage for hunger and happiness
         const double MaximumPercentage = 1.0;
+        //the number of minutes between each action
+        const int CooldownLength = 5;
 
         private readonly SqlManager sqlManager;
         private readonly ActivityService activityService;
@@ -257,18 +259,18 @@ namespace PetGame.Services
             //calculate hunger
             //if there are no activities, decrease hunger by number of hours
             //and ensure that hunger cannot be <0 or >1
-            hungerPercentage = ConstrainPercentages(CalculateHunger(PastActivities, hungerPercentage, HoursToCheck));
+            hungerPercentage = CalculateHunger(PastActivities, hungerPercentage, HoursToCheck);
 
             //check the number of hours since the last activity
             int HoursSinceLastActivity = 0;
             HoursSinceLastActivity = CalculateHoursSinceLastActivity(PastActivities, HoursSinceLastActivity, HoursToCheck);
 
-            int MinutesToNextAction = 5;
+            int MinutesToNextAction = CooldownLength;
             MinutesToNextAction = CalculateMinutesToNextAction(PastActivities, MinutesToNextAction, HoursToCheck);
 
             //multiply HappinessDecrease by the number of hours to get the
             //happiness percentage and ensure that happiness cannot be <0 or >1
-            happinessPercentage = ConstrainPercentages(HoursSinceLastActivity * (-1 * HappinessDecreasePerHour));
+            happinessPercentage = ConstrainPercentage(HoursSinceLastActivity * (-1 * HappinessDecreasePerHour));
 
             //compile the data into a new PetStatus object
             //return the new object
@@ -314,8 +316,8 @@ namespace PetGame.Services
                 MinutesSinceLastActivity = (int)span.TotalMinutes;
 
                 //if it's been more than 5 minutes, the user can perform another action
-                //otherwise, leave the default 5 min value in place
-                if (MinutesSinceLastActivity > 5)
+                //otherwise, leave the default value in place
+                if (MinutesSinceLastActivity > CooldownLength)
                 {
                     MinutesToNextAction = 0;
                 }
@@ -327,6 +329,7 @@ namespace PetGame.Services
         {
             List<Activity> Activities = (List<Activity>)PastActivities;
 
+            //there are no activities in the time span, so decrease for each hour
             if (Activities.Count == 0)
             {
                 hungerPercentage -= (HungerDecreasePerHour * HoursToCheck);
@@ -339,76 +342,26 @@ namespace PetGame.Services
                     //if a Feeding activity has occured, increase hunger
                     if (Activity.Type.Equals(ActivityType.Feeding))
                     {
-                        hungerPercentage = ModifyPercentage(hungerPercentage, FeedingIncrease, PercentageOperation.Add);
+                        hungerPercentage = ConstrainPercentage(hungerPercentage + FeedingIncrease);
                     }
                     //if a Training event has occured, subtract
                     else if (Activity.Type.Equals(ActivityType.Training))
                     {
-                        hungerPercentage = ModifyPercentage(hungerPercentage, TrainingDecrease, PercentageOperation.Subtract);
+                        hungerPercentage = ConstrainPercentage(hungerPercentage - TrainingDecrease);
                     }
                     //if a Race event has occurred
                     else if (Activity.Type.Equals(ActivityType.Race))
                     {
-                        hungerPercentage = ModifyPercentage(hungerPercentage, RaceDecrease, PercentageOperation.Subtract);
+                        hungerPercentage = ConstrainPercentage(hungerPercentage - RaceDecrease);
                     }
                     //else, decrease hunger
                     else
                     {
-                        hungerPercentage = ModifyPercentage(hungerPercentage, HungerDecreasePerHour, PercentageOperation.Subtract);
+                        hungerPercentage = ConstrainPercentage(hungerPercentage - HungerDecreasePerHour);
                     }
                 }
             }
             return hungerPercentage;
-        }
-
-        /// <summary>
-        /// Either adds to or subtracts from the passed in percentage by the supplied changeFactor,
-        /// based on the specified operation
-        /// </summary>
-        /// <param name="percentage">The percentage to modify</param>
-        /// <param name="changeFactor">The about to add or subtract</param>
-        /// <param name="operation">Which operation to perform (add or subtract)</param>
-        /// <returns>The new percentage as a double</returns>
-        private double ModifyPercentage(double percentage, double changeFactor, PercentageOperation operation)
-        {
-            //a stands for add
-            if (operation.Equals(PercentageOperation.Add))
-            {
-                //percentage is currently less than the max, and after
-                //the operation, will still be less than the max
-                if (percentage < MaximumPercentage && ((percentage += changeFactor) <= MaximumPercentage))
-                {
-                    percentage += changeFactor;
-                    return percentage;
-                }
-                //return the max if the operation would exceed it
-                else
-                {
-                    return MaximumPercentage;
-                }
-            }
-            //s stands for subtract
-            else if (operation.Equals(PercentageOperation.Subtract))
-            {
-                //percentage is currently greater than the min, and after
-                //the operation, will still be greater than the min
-                if (percentage > 0 && ((percentage -= changeFactor) > MinimumPercentage))
-                {
-                    percentage -= changeFactor;
-                    return percentage;
-                }
-                //return the min if the operation would result
-                //in a lesser value
-                else
-                {
-                    return MinimumPercentage;
-                }
-            }
-            //if neither case occurs, (i.e on invalid input), do nothing
-            else
-            {
-                return percentage;
-            }
         }
 
         /// <summary>
@@ -417,7 +370,7 @@ namespace PetGame.Services
         /// </summary>
         /// <param name="percentage">The percentage value to check</param>
         /// <returns>The percentage as a double</returns>
-        private double ConstrainPercentages(double percentage)
+        private double ConstrainPercentage(double percentage)
         {
             //if the percentage is less than min, return min
             if (percentage < MinimumPercentage)
