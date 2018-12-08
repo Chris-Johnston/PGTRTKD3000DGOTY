@@ -235,7 +235,7 @@ namespace PetGame.Services
             DateTime ToCheck = DateTime.Now.Subtract(TimeSpan.FromDays(NumDaysToCheck));
             int HoursToCheck = NumDaysToCheck * 24;
 
-            List<Activity> PastActivities = (List<Activity>)activityService.GetActivities(PetId, NumActivities, ToCheck);
+            List<Activity> PastActivities = (List<Activity>)activityService.GetActivities(PetId, NumActivities, ToCheck, null);
 
             //calculate hunger
             //if there are no activities in the last 2 hrs, subtract 10%
@@ -293,7 +293,9 @@ namespace PetGame.Services
 
             //check the number of hours since the last activity
             int HoursSinceLastActivity = 0;
+            int MinutesTillNextAction = 5;
 
+            //check to see if there were any activities in the specified interval
             if (PastActivities.Count == 0)
             {
                 HoursSinceLastActivity = HoursToCheck;
@@ -305,20 +307,37 @@ namespace PetGame.Services
 
                 //check the number of hours since the last activity
                 HoursSinceLastActivity = DateTime.Now.Hour - LastActivity.Timestamp.Hour;
+
+                //check the number of minute since the last activity
+                int MinutesSinceLastActivity = 0;
+                MinutesSinceLastActivity = DateTime.Now.Minute - LastActivity.Timestamp.Minute;
+
+                //if it's been more than 5 minutes, the user can perform another action
+                //otherwise, leave the default 5 min value in place
+                if (MinutesSinceLastActivity > 5)
+                {
+                    MinutesTillNextAction = 0;
+                }
             }
 
-            //multiply HappinessDecrease by the number of hours and the hunger percentage to get the
+            //multiply HappinessDecrease by the number of hours to get the
             //happiness percentage
-            happinessPercentage = (HoursSinceLastActivity * HappinessDecreasePerHour);
+            happinessPercentage = (HoursSinceLastActivity * (-1 * HappinessDecreasePerHour));
 
+            //ensure that happiness cannot be <0 or >1
             if (happinessPercentage < 0.0)
             {
                 happinessPercentage = 0.0;
             }
+            else if (happinessPercentage > 1.0)
+            {
+                happinessPercentage = 1.0;
+            }
 
             //compile the data into a new PetStatus object
             //return the new object
-            return new PetStatus() { Pet = toReturn, Hunger = hungerPercentage, Happiness = happinessPercentage };
+            return new PetStatus() { Pet = toReturn, Hunger = hungerPercentage, Happiness = happinessPercentage,
+                TimeOfNextAction = DateTime.Now.AddMinutes(MinutesTillNextAction)};
         }//end of function
 
         public IEnumerable<PetStatus> GetPetStatusList(ulong UserId)

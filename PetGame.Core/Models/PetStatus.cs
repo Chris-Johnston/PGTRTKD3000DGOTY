@@ -27,26 +27,12 @@ namespace PetGame.Models
         /// </summary>
         [JsonProperty]
         public double Hunger { get; set; }
-        
+
         /// <summary>
         /// Represents the time when the pet can be fed again
         /// </summary>
         [JsonProperty]
         [JsonConverter(typeof(IsoDateTimeConverter))]
-        public DateTime TimeOfNextFeeding { get; set; }
-
-        /// <summary>
-        /// Represents the time when the pet can be trained again
-        /// </summary>
-        [JsonProperty]
-        [JsonConverter(typeof(IsoDateTimeConverter))]
-        public DateTime TimeOfNextTraining { get; set; }
-
-        /// <summary>
-        /// Represents the time when the pet can be raced again
-        /// </summary>
-        [JsonProperty]
-        [JsonConverter(typeof(IsoDateTimeConverter))]
-        public DateTime TimeOfNextRace { get; set; }
+        public DateTime TimeOfNextAction { get; set; } = DateTime.Now.AddMinutes(5);
     }
 }
