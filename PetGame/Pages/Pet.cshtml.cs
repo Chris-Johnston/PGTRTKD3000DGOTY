@@ -44,7 +44,7 @@ namespace PetGame.Pages
             else
             {
                 // http unauthorized
-                Response.StatusCode = 404;
+                Response.StatusCode = 401;
                 return;
             }
         }
