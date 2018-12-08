@@ -67,7 +67,7 @@ namespace PetGame
             //if the user is not logged in, inform them
             if (u == null)
             {
-                return Ok("You are not logged in.");
+                return Unauthorized();
             }
             //set the currently logged in user's id as id
             else
