@@ -414,7 +414,6 @@ namespace PetGame.Services
             return percentage;
         }
 
-
         /// <summary>
         /// Gets a List of the statuses of all a user's pets
         /// </summary>
