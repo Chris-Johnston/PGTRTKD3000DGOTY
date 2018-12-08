@@ -40,43 +40,44 @@ else // we good
     <div class="status-pet-wrapper justify-content-center">
         @if (Model.CurrentPet.IsDead)
         {
-            <img class="status-image" src="~/img/pets/dead.jpg" alt="Picture of @Model.CurrentPet.Name (dead)" />
+            <img class="status-image" src="~/img/pets/dead.png" alt="Picture of @Model.CurrentPet.Name (dead)" />
+            <h2 class="text-muted">Rest In Peace</h2>
         }
         else
         {
             <img class="status-image" src="/api/Image/@Model.CurrentPet.PetImageId" alt="Picture of @Model.CurrentPet.Name" />
-        }
-        <div class="pet-statuses">
-            <div class="status-hunger">
-                Hunger: 56%
+            <div class="pet-statuses">
+                <div class="status-hunger">
+                    Hunger: 56%
+                </div>
+                <div class="status-happiness">
+                    Happy: 0% :(
+                </div>
+                <div class="status-strength">
+                    Strength: @Model.CurrentPet.Strength
+                </div>
+                <div class="status-endurance">
+                    Endurance: @Model.CurrentPet.Endurance
+                </div>
             </div>
-            <div class="status-happiness">
-                Happy: 0% :(
-            </div>
-            <div class="status-strength">
-                Strength: @Model.CurrentPet.Strength
-            </div>
-            <div class="status-endurance">
-                Endurance: @Model.CurrentPet.Endurance
-            </div>
-        </div>
 
-        <div class="pet-actions">
-            <div class="alert alert-warning actions-timeout">
-                @Model.CurrentPet.Name cannot do anything for the next 0:05:00
+            <div class="pet-actions">
+                <div class="alert alert-warning actions-timeout">
+                    @Model.CurrentPet.Name cannot do anything for the next 0:05:00
+                </div>
+                <div class="btn-toolbar" role="toolbar">
+                    <div class="btn-group mr-2" role="group">
+                        <button class="btn-feed btn btn-outline-primary btn-lg" disabled>Feed</button>
+                    </div>
+                    <div class="btn-group mr-2" role="group">
+                        <button class="btn-train btn btn-outline-primary btn-lg" disabled>Train</button>
+                    </div>
+                    <div class="btn-group" role="group">
+                        <button class="btn-race btn btn-outline-primary btn-lg" disabled>Race</button>
+                    </div>
+                </div>
             </div>
-            <div class="btn-toolbar" role="toolbar">
-                <div class="btn-group mr-2" role="group">
-                    <button class="btn-feed btn btn-outline-primary btn-lg" disabled>Feed</button>
-                </div>
-                <div class="btn-group mr-2" role="group">
-                    <button class="btn-train btn btn-outline-primary btn-lg" disabled>Train</button>
-                </div>
-                <div class="btn-group" role="group">
-                    <button class="btn-race btn btn-outline-primary btn-lg" disabled>Race</button>
-                </div>
-            </div>
-        </div>
+        }
     </div> 
 
 }
