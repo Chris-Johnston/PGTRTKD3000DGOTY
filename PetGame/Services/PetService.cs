@@ -408,7 +408,7 @@ namespace PetGame.Services
                 var cmd = conn.CreateCommand();
 
                 //get all the PetId's for Pets that belong to the specified User
-                cmd.CommandText = @"SELECT Pet.PetId FROM PET WHERE Pet.UserId = @UserId;";
+                cmd.CommandText = @"SELECT Pet.PetId FROM Pet WHERE Pet.UserId = @UserId;";
 
                 cmd.Parameters.AddWithValue("@UserId", $"{UserId}");
 
@@ -424,7 +424,7 @@ namespace PetGame.Services
                 //if the list of Ids is empty, the user has no pets. return null
                 if (PetIdList.Count == 0)
                 {
-                    return null;
+                    return PetStatusList;
                 }
 
                 //get thw Status of each Pet by it's Id and add it to the list
@@ -434,7 +434,7 @@ namespace PetGame.Services
                 }
             }
             //return the list
-            return (PetStatusList);
+            return PetStatusList;
         }
     }
 }
