@@ -103,7 +103,15 @@ namespace PetGame.Services
             // init the client
             TwilioClient.Init(AccountSid, AuthToken);
             // create the message and send it
-            MessageResource.Create(to, from: FromPhone, body: message);
+            try
+            {
+                MessageResource.Create(to, from: FromPhone, body: message);
+            }
+            catch (Twilio.Exceptions.ApiException e)
+            {
+                // can be thrown if the phone number is not valid
+                // fail silently
+            }
         }
     }
 }

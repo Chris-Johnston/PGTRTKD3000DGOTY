@@ -376,7 +376,14 @@ namespace PetGame
                 // and user defined
                 if (user.PhoneNumber != null)
                 {
-                    sms.SendMessage(user.PhoneNumber, $"Thanks for registering, {user.Username}. Welcome to PGTRTKD3000DGOTY.");
+                    try
+                    {
+                        sms.SendMessage(user.PhoneNumber, $"Thanks for registering, {user.Username}. Welcome to PGTRTKD3000DGOTY.");
+                    }
+                    catch (Exception)
+                    {
+                        // handle all exceptions, we don't care if this errors out
+                    }
                 }
             }
 
