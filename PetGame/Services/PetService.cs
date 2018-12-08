@@ -332,7 +332,7 @@ namespace PetGame.Services
             //there are no activities in the time span, so decrease for each hour
             if (Activities.Count == 0)
             {
-                hungerPercentage -= (HungerDecreasePerHour * HoursToCheck);
+                hungerPercentage = ConstrainPercentage(hungerPercentage - (HungerDecreasePerHour * HoursToCheck));
             }
             else
             {
