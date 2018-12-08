@@ -12,14 +12,24 @@ namespace PetGame.Services
     /// </summary>
     public class PetService
     {
+        //the amount to subtract from the hunger value every hour
         const double HungerDecreasePerHour = 0.05;
-        const double HungerIncrease = 0.10;
+        //the amount to add to the hunger value on each feeding action
         const double FeedingIncrease = 0.10;
+        //the amount to subtract from the hunger value on each training event
         const double TrainingDecrease = 0.15;
+        //the amount to subtract from the hunger value on each race event
         const double RaceDecrease = 0.20;
+        //the amount to subtract from the happiness value every hour
         const double HappinessDecreasePerHour = 0.07;
+        //the number of activities to check
         const int NumActivities = 10;
+        //the number of days prior to check
         const int NumDaysToCheck = 1;
+        //the min percentage for hunger and happiness
+        const double MinimumPercentage = 0.0;
+        //the max percentage for hunger and happiness
+        const double MaximumPercentage = 1.0;
 
         private readonly SqlManager sqlManager;
         private readonly ActivityService activityService;
@@ -234,15 +244,15 @@ namespace PetGame.Services
             }
 
             //hunger starts at 100%
-            double hungerPercentage = 1.0;
+            double hungerPercentage = MaximumPercentage;
 
             //happiness starts at 100%
-            double happinessPercentage = 1.0;
+            double happinessPercentage = MaximumPercentage;
 
             DateTime ToCheck = DateTime.Now.Subtract(TimeSpan.FromDays(NumDaysToCheck));
             int HoursToCheck = NumDaysToCheck * 24;
 
-            List<Activity> PastActivities = (List<Activity>)activityService.GetActivities(PetId, NumActivities, ToCheck, null);
+            IEnumerable<Activity> PastActivities = activityService.GetActivities(PetId, NumActivities, ToCheck, null);
 
             //calculate hunger
             //if there are no activities, decrease hunger by number of hours
@@ -253,17 +263,17 @@ namespace PetGame.Services
             HoursSinceLastActivity = CalculateHoursSinceLastActivity(PastActivities, HoursSinceLastActivity, HoursToCheck);
 
             int MinutesTillNextAction = 5;
-            MinutesTillNextAction = CalculateMinutesTillNextAction(PastActivities, MinutesTillNextAction);
+            MinutesTillNextAction = CalculateMinutesTillNextAction(PastActivities, MinutesTillNextAction, HoursToCheck);
 
             //multiply HappinessDecrease by the number of hours to get the
             //happiness percentage
             happinessPercentage = (HoursSinceLastActivity * (-1 * HappinessDecreasePerHour));
 
             //ensure that happiness cannot be <0 or >1
-            happinessPercentage = CheckPercentages(happinessPercentage);
+            happinessPercentage = ConstrainPercentages(happinessPercentage);
 
             //ensure that hunger cannot be <0 or >1
-            hungerPercentage = CheckPercentages(hungerPercentage);
+            hungerPercentage = ConstrainPercentages(hungerPercentage);
 
             //compile the data into a new PetStatus object
             //return the new object
@@ -271,17 +281,18 @@ namespace PetGame.Services
                 TimeOfNextAction = DateTime.Now.AddMinutes(MinutesTillNextAction)};
         }//end of function
 
-        private int CalculateHoursSinceLastActivity(List<Activity> PastActivities, int HoursSinceLastActivity, int HoursToCheck)
+        private int CalculateHoursSinceLastActivity(IEnumerable<Activity> PastActivities, int HoursSinceLastActivity, int HoursToCheck)
         {
+            List<Activity> Activities = (List<Activity>)PastActivities;
             //check to see if there were any activities in the specified interval
-            if (PastActivities.Count == 0)
+            if (Activities.Count == 0)
             {
                 HoursSinceLastActivity = HoursToCheck;
             }
             else
             {
                 //get the last activity
-                Activity LastActivity = PastActivities[PastActivities.Count - 1];
+                Activity LastActivity = Activities[0];
 
                 //check the number of hours since the last activity
                 HoursSinceLastActivity = DateTime.Now.Hour - LastActivity.Timestamp.Hour;
@@ -289,26 +300,37 @@ namespace PetGame.Services
             return HoursSinceLastActivity;
         }
 
-        private int CalculateMinutesTillNextAction(List<Activity> PastActivities, int MinutesTillNextAction)
+        private int CalculateMinutesTillNextAction(IEnumerable<Activity> PastActivities, int MinutesTillNextAction, int HoursToCheck)
         {
-            Activity LastActivity = PastActivities[PastActivities.Count - 1];
+            List<Activity> Activities = (List<Activity>)PastActivities;
 
-            //check the number of minute since the last activity
-            int MinutesSinceLastActivity = 0;
-            MinutesSinceLastActivity = DateTime.Now.Minute - LastActivity.Timestamp.Minute;
-
-            //if it's been more than 5 minutes, the user can perform another action
-            //otherwise, leave the default 5 min value in place
-            if (MinutesSinceLastActivity > 5)
+            if (Activities.Count == 0)
             {
-                MinutesTillNextAction = 0;
+                MinutesTillNextAction = HoursToCheck * 60;
+            }
+            else
+            {
+                Activity LastActivity = Activities[0];
+
+                //check the number of minute since the last activity
+                int MinutesSinceLastActivity = 0;
+                MinutesSinceLastActivity = DateTime.Now.Minute - LastActivity.Timestamp.Minute;
+
+                //if it's been more than 5 minutes, the user can perform another action
+                //otherwise, leave the default 5 min value in place
+                if (MinutesSinceLastActivity > 5)
+                {
+                    MinutesTillNextAction = 0;
+                }
             }
             return MinutesTillNextAction;
         }
 
-        private double CalculateHunger(List<Activity> PastActivities, double hungerPercentage, int HoursToCheck)
+        private double CalculateHunger(IEnumerable<Activity> PastActivities, double hungerPercentage, int HoursToCheck)
         {
-            if (PastActivities.Count == 0)
+            List<Activity> Activities = (List<Activity>)PastActivities;
+
+            if (Activities.Count == 0)
             {
                 hungerPercentage -= (HungerDecreasePerHour * HoursToCheck);
             }
@@ -320,69 +342,73 @@ namespace PetGame.Services
                     //if a Feeding activity has occured, increase hunger
                     if (Activity.Type.Equals(ActivityType.Feeding))
                     {
-                        if (hungerPercentage < 1.0 &&
-                            ((hungerPercentage += HungerIncrease) <= 1.0))
-                        {
-                            hungerPercentage += HungerIncrease;
-                        }
-                        else
-                        {
-                            hungerPercentage = 1.0;
-                        }
+                        hungerPercentage = ModifyPercentage(hungerPercentage, FeedingIncrease, 'a');
                     }
                     //if a Training event has occured, subtract
                     else if (Activity.Type.Equals(ActivityType.Training))
                     {
-                        if (hungerPercentage > 0 &&
-                            ((hungerPercentage -= TrainingDecrease) > 0))
-                        {
-                            hungerPercentage -= TrainingDecrease;
-                        }
-                        else
-                        {
-                            hungerPercentage = 0;
-                        }
+                        hungerPercentage = ModifyPercentage(hungerPercentage, TrainingDecrease, 's');
                     }
                     //if a Race event has occurred
                     else if (Activity.Type.Equals(ActivityType.Race))
                     {
-                        if (hungerPercentage > 0 &&
-                            ((hungerPercentage -= RaceDecrease) > 0))
-                        {
-                            hungerPercentage -= RaceDecrease;
-                        }
-                        else
-                        {
-                            hungerPercentage = 0;
-                        }
+                        hungerPercentage = ModifyPercentage(hungerPercentage, RaceDecrease, 's');
                     }
                     //else, decrease hunger
                     else
                     {
-                        if (hungerPercentage > 0 &&
-                            ((hungerPercentage -= HungerDecreasePerHour) > 0))
-                        {
-                            hungerPercentage -= HungerDecreasePerHour;
-                        }
-                        else
-                        {
-                            hungerPercentage = 0;
-                        }
+                        hungerPercentage = ModifyPercentage(hungerPercentage, HungerDecreasePerHour, 's');
                     }
                 }
             }
             return hungerPercentage;
         }
 
-        private double CheckPercentages(double percentage)
+        private double ModifyPercentage(double percentage, double changeFactor, char operation)
         {
-            if (percentage < 0.0)
+            //a stands for add
+            if (operation == 'a')
             {
-                percentage = 0.0;
+                if (percentage < MaximumPercentage &&
+                            ((percentage += changeFactor) <= MaximumPercentage))
+                {
+                    percentage += changeFactor;
+                }
+                else
+                {
+                    percentage = MaximumPercentage;
+                }
+                return percentage;
             }
-            else if (percentage > 1.0)
+            //s stands for subtract
+            else if (operation == 's')
             {
-                percentage = 1.0;
+                if (percentage > 0 &&
+                            ((percentage -= changeFactor) > 0))
+                {
+                    percentage -= changeFactor;
+                }
+                else
+                {
+                    percentage = MinimumPercentage;
+                }
+                return percentage;
+            }
+            else
+            {
+                return percentage;
+            }
+        }
+
+        private double ConstrainPercentages(double percentage)
+        {
+            if (percentage < MinimumPercentage)
+            {
+                percentage = MinimumPercentage;
+            }
+            else if (percentage > MaximumPercentage)
+            {
+                percentage = MaximumPercentage;
             }
 
             return percentage;
