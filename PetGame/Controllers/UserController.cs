@@ -52,15 +52,38 @@ namespace PetGame
         //    return Ok();
         //}
 
-        [HttpGet("{id}/status")]
-        public IActionResult Get(ulong id)
+        /// <summary>
+        /// Retrieves the UserId of the currently logged in user and
+        /// gets a list containing the status of all of the user's pets
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("status")]
+        public IActionResult Get()
         {
+            //get currently logged in user
+            var u = login.GetUserFromContext(HttpContext.User);
+            ulong id = 0;
+
+            //if the user is not logged in, inform them
+            if (u == null)
+            {
+                return Ok("You are not logged in.");
+            }
+            //set the currently logged in user's id as id
+            else
+            {
+                id = u.UserId;
+            }
+
+            //get the list of status of the User's pets
             var UserPets = petService.GetPetStatusList(id);
 
+            //if the user has no pets, return 404
             if (UserPets == null)
             {
                 return NotFound();
             }
+            //else, return the user's pets in JSON form
             else
             {
                 return Json(UserPets);
