@@ -25,7 +25,7 @@ namespace PetGame.Pages
                     {
                         PetId = 1,
                         Birthday = DateTime.Now,
-                        IsDead = false,
+                        IsDead = true,
                         Name = "The 1st Pet",
                         Endurance = 100,
                         Strength = 100,

@@ -14,17 +14,25 @@
         <!-- https://stackoverflow.com/a/4337706 -->
         @foreach (var x in Model.SamplePets.Select((value, index) => new { value, index }))
         {
-            <a class="div-link pet-box pet-@x.index" href="/pet/@x.value.PetId">
-                <div class="pet-name">@x.value.Name</div>
+        <a class="div-link pet-box pet-@x.index" href="/pet/@x.value.PetId">
+            <div class="pet-name">@x.value.Name</div>
+            @if (x.value.IsDead)
+            {
+                <img class="pet-image" src="~/img/pets/dead.png" alt="Picture of @x.value.Name (dead)" />
+            }
+            else
+            {
                 <img class="pet-image" src="/api/Image/@x.value.PetImageId" alt="Picture of @x.value.Name" />
-                <div class="pet-label">Status:</div>
-                <div class="pet-label hunger">
-                    50%
-                </div>
-                <div class="pet-label happy">
-                    75%
-                </div>
-            </a>
+            }
+
+            <div class="pet-label">Status:</div>
+            <div class="pet-label hunger">
+                50%
+            </div>
+            <div class="pet-label happy">
+                75%
+            </div>
+        </a>
         }
         @if (Model.SamplePets.Count < 3)
         {

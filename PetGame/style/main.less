@@ -1,5 +1,37 @@
-﻿.body-container {
+.body-container {
     margin-bottom: 60px;
+}
+
+.status-image
+{
+    display: block;
+    max-height: 70%;
+    max-width: 90%;
+    margin: auto;
+    min-width: 40%;
+}
+
+.status-hunger::before
+{
+    content: "Hunger: ";
+}
+.status-hunger::after {
+    content: "%";
+}
+
+.status-happiness::before {
+    content: "Happiness: ";
+}
+
+.status-happiness::after {
+    content: "%";
+}
+
+.status-box
+{
+    margin: 10px auto;
+    max-width: 60%;
+    text-align: center;
 }
 
 .landing-logo {
