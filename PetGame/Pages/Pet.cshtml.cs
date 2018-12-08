@@ -47,7 +47,6 @@ namespace PetGame.Pages
                 Response.StatusCode = 404;
                 return;
             }
-            
         }
     }
 }
