@@ -61,7 +61,7 @@ namespace PetGame.Services
                 {
                     cmd.Parameters.AddWithValue("@Type", DBNull.Value);
                 }
-
+              
                 // read the results
                 using (var reader = cmd.ExecuteReader())
                 {

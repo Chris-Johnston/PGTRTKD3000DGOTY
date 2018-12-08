@@ -44,6 +44,13 @@ namespace PetGame
                 return Ok($"Hello {u.Username} {u.UserId}");
             }
         }
+        // HACK: Only for testing. DO NOT EXPOSE THIS PUBLICLY
+        //[HttpGet("sms")]
+        //public IActionResult GetSMS([FromServices] TwilioService sms)
+        //{
+        //    sms.SendMessage(null, "Well, hello there.");
+        //    return Ok();
+        //}
 
         [HttpGet("{id}/status")]
         public IActionResult Get(ulong id)
@@ -52,7 +59,15 @@ namespace PetGame
 
             if (UserPets == null)
             {
-                return NotFound();
+                var pet = new Pet(model.PetName, u.UserId) { PetImageId = model.PetImageId};
+                pet = petService.InsertPet(pet);
+                if (pet == null)
+                {
+                    return BadRequest();
+                }
+                // TODO: redirect the user to the pet status page for their new pet
+                // HACK: Throw the new pet id into the query string just so we know that an id was added
+                return Redirect($"/?PetId={pet.PetId}");
             }
             else
             {

@@ -2,11 +2,18 @@
     margin-bottom: 60px;
 }
 
+.pet-image
+{
+    max-width: 90%;
+    margin: auto;
+    display: block;
+}
+
 .pets-container {
     /* for testing */
     border: 1px solid black;
     display: grid;
-    grid-template-columns: auto, auto, auto, [end];
+    grid-template-columns: repeat(3, 1fr);
     grid-template-rows: auto;
     width: 100%;
 }
@@ -27,7 +34,7 @@
     grid-row-start: 1;
     grid-row-end: 1;
     grid-column-start: 3;
-    grid-column-end: [end];
+    grid-column-end: 4;
 }
 
 .pet-box {
@@ -59,11 +66,6 @@
     position: center;
     font-size: 24pt;
     font-weight: bold;
-}
-
-.pet-box > img
-{
-    width: 100%;
 }
 
 .pet-label

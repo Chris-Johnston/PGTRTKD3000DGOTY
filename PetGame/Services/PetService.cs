@@ -45,7 +45,7 @@ namespace PetGame.Services
             {
                 var cmd = conn.CreateCommand();
                 cmd.CommandText =
-                    @"SELECT PetId, Name, Birthday, Strength, Endurance, IsDead, UserId FROM Pet WHERE PetId = @PetId;";
+                    @"SELECT PetId, Name, Birthday, Strength, Endurance, IsDead, UserId, PetImageId FROM Pet WHERE PetId = @PetId;";
                 cmd.Parameters.AddWithValue("@PetId", $"{petid}");
 
                 using (var reader = cmd.ExecuteReader())
@@ -60,7 +60,8 @@ namespace PetGame.Services
                             Strength = reader.GetInt32(3),
                             Endurance = reader.GetInt32(4),
                             IsDead = reader.GetBoolean(5),
-                            UserId = (ulong)reader.GetInt64(6)
+                            UserId = (ulong)reader.GetInt64(6),
+                            PetImageId = reader.GetInt32(7)
                         };
                     }
                 }
@@ -98,15 +99,16 @@ namespace PetGame.Services
                 // create the insert command
                 var cmd = conn.CreateCommand();
                 cmd.CommandText =
-                    @"INSERT INTO Pet (Name, Birthday, Strength, Endurance, IsDead, UserId)
+                    @"INSERT INTO Pet (Name, Birthday, Strength, Endurance, IsDead, UserId, PetImageId)
                       OUTPUT INSERTED.PetId
-                      VALUES (@Name, @Birthday, @Strength, @Endurance, @IsDead, @UserId);";
+                      VALUES (@Name, @Birthday, @Strength, @Endurance, @IsDead, @UserId, @PetImageId);";
                 cmd.Parameters.AddWithValue("@Name", pet.Name);
                 cmd.Parameters.AddWithValue("@Birthday", pet.Birthday);
                 cmd.Parameters.AddWithValue("@Strength", pet.Strength);
                 cmd.Parameters.AddWithValue("@Endurance", pet.Endurance);
                 cmd.Parameters.AddWithValue("@IsDead", pet.IsDead);
                 cmd.Parameters.AddWithValue("@UserId", $"{pet.UserId}");
+                cmd.Parameters.AddWithValue("@PetImageId", $"{pet.PetImageId}");
 
                 // read the ID that was inserted
                 using (var reader = cmd.ExecuteReader())
@@ -143,7 +145,7 @@ namespace PetGame.Services
             {
                 var cmd = conn.CreateCommand();
                 cmd.CommandText =
-                    @"UPDATE Pet SET Name = @Name, Birthday = @Birthday, Strength = @Strength, Endurance = @Endurance, IsDead = @IsDead, UserId = @UserId
+                    @"UPDATE Pet SET Name = @Name, Birthday = @Birthday, Strength = @Strength, Endurance = @Endurance, IsDead = @IsDead, UserId = @UserId, PetImageId = @PetImageId
                      WHERE PetId = @PetId;";
                 cmd.Parameters.AddWithValue("@Name", pet.Name);
                 cmd.Parameters.AddWithValue("@Birthday", pet.Birthday);
@@ -153,6 +155,7 @@ namespace PetGame.Services
                 cmd.Parameters.AddWithValue("@UserId", $"{pet.UserId}");
                 // use the separate ID provided, not the id from Pet
                 cmd.Parameters.AddWithValue("@PetId", $"{id}");
+                cmd.Parameters.AddWithValue("@PetImageId", pet.PetImageId);
 
                 var results = cmd.ExecuteNonQuery();
 
@@ -171,7 +174,8 @@ namespace PetGame.Services
                         Strength = pet.Strength,
                         Endurance = pet.Endurance,
                         IsDead = pet.IsDead,
-                        UserId = pet.UserId
+                        UserId = pet.UserId,
+                        PetImageId = pet.PetImageId
                     };
                 }
             }
