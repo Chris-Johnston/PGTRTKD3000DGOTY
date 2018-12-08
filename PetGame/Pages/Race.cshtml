@@ -21,7 +21,8 @@
     }
 </style>
 <body onload="startGame()">
-    <script>var myGamePiece;
+    <script>
+var myGamePiece;
 
 function startGame() {
     myGamePiece = new component(20, 20, "red", 10, 120);
@@ -55,15 +56,23 @@ function component(width, height, color, x, y) {
         ctx.fillRect(this.x, this.y, this.width, this.height);
 
         // checks if gamePiece crosses finish line
-        if(this.x >= myGameArea.canvas.width) {
+        if (this.x >= myGameArea.canvas.width) {
             ctx.fillStyle = "#1828D3";
             ctx.fillRect(this.x, this.y, this.width, this.height);
             clearInterval(myGameArea.interval);
             stopCount();
-            document.write("You finished the race in " + seconds + " seconds!");
+            score = Math.trunc(1000/seconds);
 
-            //clearInterval()
-            //alert("You Finished the Race");
+            // assign score value from seconds
+            if (seconds <= 0){
+                score = 1000;
+            }
+            else {
+                score = Math.trunc(1000 / seconds);
+            }
+
+            //document.write("You finished the race in " + seconds + " seconds! <br> Score: " + score);
+            alert("You finished the race in " + seconds + " seconds! \n Score: " + score);
         }
     }
     this.newPos = function() {
