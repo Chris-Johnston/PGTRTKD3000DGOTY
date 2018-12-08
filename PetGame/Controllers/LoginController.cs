@@ -22,9 +22,9 @@ namespace PetGame
     public class LoginController : Controller
     {
         private readonly SqlManager sqlManager;
-        private readonly TwilioService twilio;
+        private readonly NotificationService twilio;
 
-        public LoginController(SqlManager sqlManager, TwilioService twilio) : base()
+        public LoginController(SqlManager sqlManager, NotificationService twilio) : base()
         {
             this.sqlManager = sqlManager;
             this.twilio = twilio;

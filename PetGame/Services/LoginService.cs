@@ -332,7 +332,7 @@ namespace PetGame
         /// Registers a new user with the supplied credentials, and returns it's usertoken.
         /// </summary>
         /// <returns></returns>
-        public UserToken RegisterNewUser(ControllerBase controllerContext, TwilioService sms = null)
+        public UserToken RegisterNewUser(ControllerBase controllerContext, NotificationService sms = null)
         {
             // create LoginModel from the request
             UserLoginModel data = new UserLoginModel();
@@ -385,6 +385,9 @@ namespace PetGame
                         // handle all exceptions, we don't care if this errors out
                     }
                 }
+
+                // send the discord webhook 
+                sms.SendDiscordWebhookNotification($"New user registered: `{user.Username}`");
             }
 
             // return the user token for this user

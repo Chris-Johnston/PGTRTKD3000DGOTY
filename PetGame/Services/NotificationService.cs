@@ -1,6 +1,9 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
 using Twilio;
 using Twilio.Rest.Api.V2010.Account;
@@ -11,9 +14,9 @@ namespace PetGame.Services
     // see: https://www.twilio.com/docs/sms/quickstart/csharp-dotnet-core
 
     /// <summary>
-    ///     Service that abstracts the usage of the Twilio API library.
+    ///     Service that notifies users.
     /// </summary>
-    public class TwilioService
+    public class NotificationService
     {
         // private configuration defined by environment variables
         private readonly string AccountSid;
@@ -29,7 +32,10 @@ namespace PetGame.Services
 
         // toggles the state of this service
         // default disabled
-        private readonly bool Enable;
+        private readonly bool TwilioEnable;
+        private readonly bool DiscordEnable;
+
+        private readonly string DiscordWebhook;
 
         const string ENV_VAR_ACCOUNTSID = "PETGAME_TWILIO_ACCOUNTSID";
         const string ENV_VAR_AUTHTOKEN = "PETGAME_TWILIO_AUTHTOKEN";
@@ -43,34 +49,47 @@ namespace PetGame.Services
         const string ENV_VAR_ENABLE = "PETGAME_TWILIO_ENABLE";
         // forces twilio to only use the debug phone number, set to "True" to be enabled
         const string ENV_VAR_DEBUGONLY = "PETGAME_TWILIO_DEBUGONLY";
+        // if "True", this service should use discord webhooks
+        const string ENV_VAR_USEWEBHOOK = "PETGAME_DISCORD_USEWEBHOOK";
+        // the url to the discord webhook
+        const string ENV_VAR_WEBHOOK = "PETGAME_DISCORD_WEBHOOK";
 
-        public TwilioService()
+        public NotificationService()
         {
             // check if service is enabled
             var enableStr = Environment.GetEnvironmentVariable(ENV_VAR_ENABLE);
-            Enable = !string.IsNullOrWhiteSpace(enableStr) && (enableStr == "True");
+            TwilioEnable = !string.IsNullOrWhiteSpace(enableStr) && (enableStr == "True");
+
+            var discordEnable = Environment.GetEnvironmentVariable(ENV_VAR_USEWEBHOOK);
+            DiscordEnable = !string.IsNullOrWhiteSpace(discordEnable) && (discordEnable == "True");
 
             // if not enabled, don't bother doing anything else
-            if (!Enable)
-                return;
-
-            OnlyDebugNum = Environment.GetEnvironmentVariable(ENV_VAR_DEBUGONLY) == "True";
-            // get configuration variables from environment
-            AccountSid = Environment.GetEnvironmentVariable(ENV_VAR_ACCOUNTSID);
-            AuthToken = Environment.GetEnvironmentVariable(ENV_VAR_AUTHTOKEN);
-            PhoneNum = Environment.GetEnvironmentVariable(ENV_VAR_PHONENUM);
-            DebugNum = Environment.GetEnvironmentVariable(ENV_VAR_DEBUGNUM);
-            
-            // validate these
-            if (string.IsNullOrWhiteSpace(AccountSid) || string.IsNullOrWhiteSpace(AuthToken) || string.IsNullOrWhiteSpace(PhoneNum) || string.IsNullOrWhiteSpace(DebugNum))
+            if (TwilioEnable)
             {
-                throw new InvalidOperationException("One or more of the Twilio environment variables were not set correctly.");
+                OnlyDebugNum = Environment.GetEnvironmentVariable(ENV_VAR_DEBUGONLY) == "True";
+                // get configuration variables from environment
+                AccountSid = Environment.GetEnvironmentVariable(ENV_VAR_ACCOUNTSID);
+                AuthToken = Environment.GetEnvironmentVariable(ENV_VAR_AUTHTOKEN);
+                PhoneNum = Environment.GetEnvironmentVariable(ENV_VAR_PHONENUM);
+                DebugNum = Environment.GetEnvironmentVariable(ENV_VAR_DEBUGNUM);
+
+                // validate these
+                if (string.IsNullOrWhiteSpace(AccountSid) || string.IsNullOrWhiteSpace(AuthToken) || string.IsNullOrWhiteSpace(PhoneNum) || string.IsNullOrWhiteSpace(DebugNum))
+                {
+                    throw new InvalidOperationException("One or more of the Twilio environment variables were not set correctly.");
+                }
+
+                // convert strings to PhoneNumbers
+                // if invalid, let it throw
+                FromPhone = new PhoneNumber(PhoneNum);
+                ToDebug = new PhoneNumber(DebugNum);
             }
 
-            // convert strings to PhoneNumbers
-            // if invalid, let it throw
-            FromPhone = new PhoneNumber(PhoneNum);
-            ToDebug = new PhoneNumber(DebugNum);
+            if (DiscordEnable)
+            {
+                // don't validate this
+                DiscordWebhook = Environment.GetEnvironmentVariable(ENV_VAR_WEBHOOK);
+            }
         }
 
         /// <summary>
@@ -83,7 +102,7 @@ namespace PetGame.Services
         public void SendMessage(string phoneNumber, string message)
         {
             // ensure enabled
-            if (!Enable)
+            if (!TwilioEnable)
                 return;
             // use the debug number if enforced
             PhoneNumber to;
@@ -111,6 +130,29 @@ namespace PetGame.Services
             {
                 // can be thrown if the phone number is not valid
                 // fail silently
+            }
+        }
+
+        /// <summary>
+        ///     Sends a message using discord webhooks
+        /// </summary>
+        /// <param name="message"></param>
+        public void SendDiscordWebhookNotification(string message)
+        {
+            // perform some basic sanitization, to prevent users injecting @everyone's
+            // so pad @'s with zero width space
+            const char zwsp = '​';
+            var msg = message.Replace("@", $"@{zwsp}");
+
+            using (var client = new HttpClient())
+            {
+                // https://discordapp.com/developers/docs/resources/webhook#execute-webhook
+                // inline anon type that matches the params of the discord webhook execute endpoint
+                var content = new { content = msg, username = "PGTRTKD3000DGOTY", avatar_url = "https://raw.githubusercontent.com/Chris-Johnston/PGTRTKD3000DGOTY/master/PetRaceTurbo30xx.png" };
+                var httpContent = new StringContent(JsonConvert.SerializeObject(content), Encoding.UTF8, "application/json");
+                var uri = new Uri(DiscordWebhook);
+                // post, ignore the result
+                var result = client.PostAsync(uri, httpContent).Result;
             }
         }
     }
