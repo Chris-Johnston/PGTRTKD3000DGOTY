@@ -1,0 +1,86 @@
+﻿@page "{id}"
+@using PetGame.Pages
+@model PetStatusModel
+@{
+    Layout = "~/Pages/_Layout.cshtml";
+    ViewBag.Title = "Pet Status";
+}
+
+@if (Model.CurrentUser == null)
+{
+    // not signed in
+    <br />
+    <div class="alert alert-danger">
+        <h1>
+            Uh-oh!
+        </h1>
+        You have to be signed in to do that. <a href="~/Login">You can sign in here.</a>
+    </div>
+}
+else if (Model.CurrentPet == null)
+{
+    // pet not found
+    <br />
+    <div class="alert alert-danger">
+        <h1>
+            Uh-oh!
+        </h1>
+        Couldn't find that pet. Are you sure it exists, and that it belongs to you?
+    </div>
+}
+else // we good
+{
+    <h1 class="display-2">
+        @Model.CurrentPet.Name
+    </h1>
+    <h2 class="text-muted">
+        Owned by @Model.CurrentUser.Username
+    </h2>
+
+    <div class="status-pet-wrapper justify-content-center">
+        @if (Model.CurrentPet.IsDead)
+        {
+            <img class="status-image" src="~/img/pets/dead.jpg" alt="Picture of @Model.CurrentPet.Name (dead)" />
+        }
+        else
+        {
+            <img class="status-image" src="/api/Image/@Model.CurrentPet.PetImageId" alt="Picture of @Model.CurrentPet.Name" />
+        }
+
+        <div class="pet-statuses">
+            <div class="status-hunger">
+                Hunger: 56%
+            </div>
+            <div class="status-happiness">
+                Happy: 0% :(
+            </div>
+            <div class="status-strength">
+                Strength: @Model.CurrentPet.Strength
+            </div>
+            <div class="status-endurance">
+                Endurance: @Model.CurrentPet.Endurance
+            </div>
+        </div>
+
+        <div class="pet-actions">
+            <div class="alert alert-warning actions-timeout">
+                @Model.CurrentPet.Name cannot do anything for the next 0:05:00
+            </div>
+            <div class="btn-toolbar" role="toolbar">
+                <div class="btn-group mr-2" role="group">
+                    <button class="btn-feed btn btn-outline-primary btn-lg" disabled>Feed</button>
+                </div>
+                <div class="btn-group mr-2" role="group">
+                    <button class="btn-train btn btn-outline-primary btn-lg" disabled>Train</button>
+                </div>
+                <div class="btn-group" role="group">
+                    <button class="btn-race btn btn-outline-primary btn-lg" disabled>Race</button>
+                </div>
+            </div>
+        </div>
+    </div> 
+
+    
+
+    
+}
