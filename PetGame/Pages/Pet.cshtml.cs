@@ -22,9 +22,11 @@ namespace PetGame.Pages
             login = new LoginService(this.sql);
             pet = new PetService(this.sql);
         }
-        
+
         public User CurrentUser { get; private set; } = null;
         public Pet CurrentPet { get; private set; } = null;
+
+        public PetStatus CurrentPetStatus { get; private set; } = null;
 
         [HttpGet("{id}")]
         public void OnGet(ulong id)
@@ -39,6 +41,10 @@ namespace PetGame.Pages
                     // pet not found, or wrong owner
                     Response.StatusCode = 404;
                     return;
+                }
+                else
+                {
+                    CurrentPetStatus = pet.GetPetStatusById(id);
                 }
             }
             else

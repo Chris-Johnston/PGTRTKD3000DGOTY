@@ -48,10 +48,10 @@ else // we good
             <img class="status-image" src="/api/Image/@Model.CurrentPet.PetImageId" alt="Picture of @Model.CurrentPet.Name" />
             <div class="status-box">
                 <span id="pet-hunger" class="status-hunger text-warning">
-                    56
+                    @Model.CurrentPetStatus.Hunger
                 </span>
                 <span id="pet-happiness" class="status-happiness text-danger">
-                    1
+                    @Model.CurrentPetStatus.Happiness
                 </span>
                 <span class="status-strength">
                     Strength: @Model.CurrentPet.Strength
@@ -62,7 +62,7 @@ else // we good
             </div>
             <div class="pet-actions">
                 <div class="alert alert-warning actions-timeout">
-                    @Model.CurrentPet.Name cannot do anything for the next 0:05:00
+                    @Model.CurrentPet.Name cannot do anything until @Model.CurrentPetStatus.TimeOfNextAction
                 </div>
                 <div class="btn-toolbar" role="toolbar">
                     <div class="btn-group mr-2" role="group">
