@@ -84,7 +84,6 @@ function updateGameArea() {
     myGameArea.clear();
     myGamePiece.newPos();
     myGamePiece.update();
-
 }
 
 var seconds = 0;
@@ -117,7 +116,9 @@ function moveRight() {
 
 }</script>
     <div style="text-align:left;width:480px;">
-        <button onclick="moveRight();startCount()">Press Me</button>
+        <button onclick="moveRight();startCount()">Spam to Race</button>
         <input type="text" id="txt">
+        <br> <br> <br>
+        <button onclick="window.location.reload()">Reset Race</button>
     </div>
 </body>
