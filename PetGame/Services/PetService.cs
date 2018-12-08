@@ -376,8 +376,7 @@ namespace PetGame.Services
             {
                 //percentage is currently less than the max, and after
                 //the operation, will still be less than the max
-                if (percentage < MaximumPercentage &&
-                            ((percentage += changeFactor) <= MaximumPercentage))
+                if (percentage < MaximumPercentage && ((percentage += changeFactor) <= MaximumPercentage))
                 {
                     percentage += changeFactor;
                     return percentage;
@@ -393,8 +392,7 @@ namespace PetGame.Services
             {
                 //percentage is currently greater than the min, and after
                 //the operation, will still be greater than the min
-                if (percentage > 0 &&
-                            ((percentage -= changeFactor) > 0))
+                if (percentage > 0 && ((percentage -= changeFactor) > MinimumPercentage))
                 {
                     percentage -= changeFactor;
                     return percentage;
