@@ -21,7 +21,8 @@
     }
 </style>
 <body onload="startGame()">
-    <script>var myGamePiece;
+    <script>
+var myGamePiece;
 
 function startGame() {
     myGamePiece = new component(20, 20, "red", 10, 120);
@@ -107,7 +108,32 @@ function stopCount() {
     timer_is_on = 0;
 }
 
+// cooldown for button after each press, based off of pet endurance
+function cooldown() {
+    var btn = document.getElementById("race");
+    var endurance = 10;
 
+    // rate that race button can be pressed 0-1000ms
+    var bestRate = 0;      
+    var worstRate = 1000;  
+    var enduranceRate = worstRate;
+
+    // assumes positive values between 0-100
+    if (endurance >= 100) {
+        enduranceRate = bestRate;
+    } else if (endurance <= 0) {
+        enduranceRate = worstRate;
+    } else {
+        // ranges values from 1000-0ms of button press wait time
+        enduranceRate = 1000 - (endurance * 10);
+    }
+
+    // disable button for enduranceRate length
+    btn.disabled = true;
+    setTimeout(function() {
+        btn.disabled = false;
+    },enduranceRate);
+}
 function moveRight() {
     var strength = 100;
     var distance = 600 * (strength/1000);
@@ -115,7 +141,7 @@ function moveRight() {
 
 }</script>
     <div style="text-align:left;width:480px;">
-        <button onclick="moveRight();startCount()">Race</button>
+        <button id="race" onclick="moveRight();startCount();cooldown()">Race</button>
         <input type="text" id="txt">
         <br> <br> <br>
         <button onclick="window.location.reload()">Reset Race</button>
