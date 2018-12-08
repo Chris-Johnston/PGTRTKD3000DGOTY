@@ -219,7 +219,7 @@ namespace PetGame
             {
                 var cmd = sql.CreateCommand();
                 cmd.CommandText =
-@"SELECT TOP 1 UserId, Username, PasswordHash, HMACKey FROM [User] WHERE Username = @Username;";
+@"SELECT TOP 1 UserId, Username, PasswordHash, HMACKey, PhoneNumber FROM [User] WHERE Username = @Username;";
                 cmd.Parameters.AddWithValue("@Username", username);
                 using (var reader = cmd.ExecuteReader())
                 {
@@ -230,6 +230,7 @@ namespace PetGame
                         ret.Username = reader.GetString(1);
                         ret.PasswordHash = reader.GetSqlBytes(2).Value;
                         ret.HMACKey = reader.GetSqlBytes(3).Value;
+                        ret.PhoneNumber = reader.IsDBNull(4) ? null : reader.GetString(4);
                     }
 
                     reader.Close();
@@ -291,12 +292,13 @@ namespace PetGame
         /// <summary>
         /// Creates and inserts a new user with the given username and password into the database.
         /// </summary>
-        private User InsertNewUser(string username, string plaintextPassword)
+        private User InsertNewUser(string username, string plaintextPassword, string phoneNumber = null)
         {
             // TODO apply validation to username and password
             User u = new User()
             {
-                Username = username
+                Username = username,
+                PhoneNumber = phoneNumber
             };
 
             CryptographyUtil.SetUserPassword(u, plaintextPassword);
@@ -305,10 +307,11 @@ namespace PetGame
             using (var s = sqlManager.EstablishDataConnection)
             {
                 var cmd = s.CreateCommand();
-                cmd.CommandText = "INSERT INTO [User] (Username, PasswordHash, HMACKey) OUTPUT INSERTED.UserID VALUES (@Username, @PasswordHash, @HMACKey);";
+                cmd.CommandText = "INSERT INTO [User] (Username, PasswordHash, HMACKey, PhoneNumber) OUTPUT INSERTED.UserID VALUES (@Username, @PasswordHash, @HMACKey, @PhoneNumber);";
                 cmd.Parameters.AddWithValue("@Username", u.Username);
                 cmd.Parameters.AddWithValue("@PasswordHash", u.PasswordHash);
                 cmd.Parameters.AddWithValue("@HMACKey", u.HMACKey);
+                cmd.Parameters.AddWithValue("@PhoneNumber", (object)u.PhoneNumber ?? DBNull.Value);
 
                 using (var reader = cmd.ExecuteReader())
                 {
@@ -338,6 +341,7 @@ namespace PetGame
             {
                 data.username = controllerContext.Request.Form["username"];
                 data.password = controllerContext.Request.Form["password"];
+                data.PhoneNumber = controllerContext.Request.Form["PhoneNumber"];
             }
             else
             {
@@ -363,7 +367,7 @@ namespace PetGame
                 throw new ArgumentException("Neither the Username or Password may be null or whitespace.");
 
             // register a new user
-            var user = InsertNewUser(data.username, data.password);
+            var user = InsertNewUser(data.username, data.password, data.PhoneNumber);
 
             // return the user token for this user
             return MakeUserToken(controllerContext, user);

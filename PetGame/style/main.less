@@ -1,4 +1,101 @@
 ﻿.body-container {
-    /* don't let the sticky footer overlap */
     margin-bottom: 60px;
+}
+
+.pet-image
+{
+    max-width: 90%;
+    margin: auto;
+    display: block;
+}
+
+.leaderboard-image {
+    display: block;
+    margin: auto;
+    max-height: 100%;
+    max-width: 100%;
+}
+
+.pets-container {
+    /* for testing */
+    border: 1px solid black;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: auto;
+    width: 100%;
+}
+
+.pet-0 {
+    grid-row-start: 1;
+    grid-row-end: 1;
+    grid-column-start: 1;
+    grid-column-end: 2;
+}
+.pet-1 {
+    grid-row-start: 1;
+    grid-row-end: 1;
+    grid-column-start: 2;
+    grid-column-end: 3;
+}
+.pet-2 {
+    grid-row-start: 1;
+    grid-row-end: 1;
+    grid-column-start: 3;
+    grid-column-end: 4;
+}
+
+.pet-box {
+    border-radius: 5px;
+    display: block;
+    margin: 5pt;
+    border: 1px solid black;
+    padding: 5pt;
+    background-color: lightgray;
+
+    transition-property: box-shadow, background-color;
+    transition-duration: 0.2s;
+    transition-timing-function: ease-in-out;
+}
+
+.pet-box:hover {
+    cursor: pointer;
+
+    .pet-name {
+        text-decoration: underline;
+    }
+
+    background-color: lightblue;
+    box-shadow: 5px 5px 10px rgba(0, 116, 154, 0.3);
+}
+
+.pet-name
+{
+    position: center;
+    font-size: 24pt;
+    font-weight: bold;
+}
+
+.pet-label
+{
+    font-size: 14pt;
+}
+
+.pet-label.hunger::before
+{
+    content: "Hunger: ";
+}
+
+.pet-label.happy::before {
+    content: "Happy: ";
+}
+
+.new-pet {
+    border: 1px dashed #808080;
+}
+
+.add-pet-icon
+{
+    display: block;
+    max-height: 300px;
+    margin: 0 auto;
 }
