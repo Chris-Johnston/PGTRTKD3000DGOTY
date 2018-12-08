@@ -245,7 +245,69 @@ namespace PetGame.Services
             List<Activity> PastActivities = (List<Activity>)activityService.GetActivities(PetId, NumActivities, ToCheck, null);
 
             //calculate hunger
-            //if there are no activities, dcrease hunger by number of hours
+            //if there are no activities, decrease hunger by number of hours
+            hungerPercentage = CalculateHunger(PastActivities, hungerPercentage, HoursToCheck);
+
+            //check the number of hours since the last activity
+            int HoursSinceLastActivity = 0;
+            HoursSinceLastActivity = CalculateHoursSinceLastActivity(PastActivities, HoursSinceLastActivity, HoursToCheck);
+
+            int MinutesTillNextAction = 5;
+            MinutesTillNextAction = CalculateMinutesTillNextAction(PastActivities, MinutesTillNextAction);
+
+            //multiply HappinessDecrease by the number of hours to get the
+            //happiness percentage
+            happinessPercentage = (HoursSinceLastActivity * (-1 * HappinessDecreasePerHour));
+
+            //ensure that happiness cannot be <0 or >1
+            happinessPercentage = CheckPercentages(happinessPercentage);
+
+            //ensure that hunger cannot be <0 or >1
+            hungerPercentage = CheckPercentages(hungerPercentage);
+
+            //compile the data into a new PetStatus object
+            //return the new object
+            return new PetStatus() { Pet = toReturn, Hunger = hungerPercentage, Happiness = happinessPercentage,
+                TimeOfNextAction = DateTime.Now.AddMinutes(MinutesTillNextAction)};
+        }//end of function
+
+        private int CalculateHoursSinceLastActivity(List<Activity> PastActivities, int HoursSinceLastActivity, int HoursToCheck)
+        {
+            //check to see if there were any activities in the specified interval
+            if (PastActivities.Count == 0)
+            {
+                HoursSinceLastActivity = HoursToCheck;
+            }
+            else
+            {
+                //get the last activity
+                Activity LastActivity = PastActivities[PastActivities.Count - 1];
+
+                //check the number of hours since the last activity
+                HoursSinceLastActivity = DateTime.Now.Hour - LastActivity.Timestamp.Hour;
+            }
+            return HoursSinceLastActivity;
+        }
+
+        private int CalculateMinutesTillNextAction(List<Activity> PastActivities, int MinutesTillNextAction)
+        {
+            Activity LastActivity = PastActivities[PastActivities.Count - 1];
+
+            //check the number of minute since the last activity
+            int MinutesSinceLastActivity = 0;
+            MinutesSinceLastActivity = DateTime.Now.Minute - LastActivity.Timestamp.Minute;
+
+            //if it's been more than 5 minutes, the user can perform another action
+            //otherwise, leave the default 5 min value in place
+            if (MinutesSinceLastActivity > 5)
+            {
+                MinutesTillNextAction = 0;
+            }
+            return MinutesTillNextAction;
+        }
+
+        private double CalculateHunger(List<Activity> PastActivities, double hungerPercentage, int HoursToCheck)
+        {
             if (PastActivities.Count == 0)
             {
                 hungerPercentage -= (HungerDecreasePerHour * HoursToCheck);
@@ -308,76 +370,43 @@ namespace PetGame.Services
                         }
                     }
                 }
-            }//end
-
-            //check the number of hours since the last activity
-            int HoursSinceLastActivity = 0;
-            int MinutesTillNextAction = 5;
-
-            //check to see if there were any activities in the specified interval
-            if (PastActivities.Count == 0)
-            {
-                HoursSinceLastActivity = HoursToCheck;
             }
-            else
+            return hungerPercentage;
+        }
+
+        private double CheckPercentages(double percentage)
+        {
+            if (percentage < 0.0)
             {
-                //get the last activity
-                Activity LastActivity = PastActivities[PastActivities.Count - 1];
-
-                //check the number of hours since the last activity
-                HoursSinceLastActivity = DateTime.Now.Hour - LastActivity.Timestamp.Hour;
-
-                //check the number of minute since the last activity
-                int MinutesSinceLastActivity = 0;
-                MinutesSinceLastActivity = DateTime.Now.Minute - LastActivity.Timestamp.Minute;
-
-                //if it's been more than 5 minutes, the user can perform another action
-                //otherwise, leave the default 5 min value in place
-                if (MinutesSinceLastActivity > 5)
-                {
-                    MinutesTillNextAction = 0;
-                }
+                percentage = 0.0;
+            }
+            else if (percentage > 1.0)
+            {
+                percentage = 1.0;
             }
 
-            //multiply HappinessDecrease by the number of hours to get the
-            //happiness percentage
-            happinessPercentage = (HoursSinceLastActivity * (-1 * HappinessDecreasePerHour));
+            return percentage;
+        }
 
-            //ensure that happiness cannot be <0 or >1
-            if (happinessPercentage < 0.0)
-            {
-                happinessPercentage = 0.0;
-            }
-            else if (happinessPercentage > 1.0)
-            {
-                happinessPercentage = 1.0;
-            }
 
-            //ensure that hunger cannot be <0 or >1
-            if (hungerPercentage < 0.0)
-            {
-                hungerPercentage = 0.0;
-            }
-            else if (hungerPercentage > 1.0)
-            {
-                hungerPercentage = 1.0;
-            }
-
-            //compile the data into a new PetStatus object
-            //return the new object
-            return new PetStatus() { Pet = toReturn, Hunger = hungerPercentage, Happiness = happinessPercentage,
-                TimeOfNextAction = DateTime.Now.AddMinutes(MinutesTillNextAction)};
-        }//end of function
-
+        /// <summary>
+        /// Gets a List of the statuses of all a user's pets
+        /// </summary>
+        /// <param name="UserId">User's Id</param>
+        /// <returns>List of PetStatus, with one entry per pet</returns>
         public IEnumerable<PetStatus> GetPetStatusList(ulong UserId)
         {
+            //list of PetId's to retrieve
             List<ulong> PetIdList = new List<ulong>();
+
+            //List of Pet Status to return
             List<PetStatus> PetStatusList = new List<PetStatus>();
 
             using (var conn = sqlManager.EstablishDataConnection)
             {
                 var cmd = conn.CreateCommand();
 
+                //get all the PetId's for Pets that belong to the specified User
                 cmd.CommandText = @"SELECT Pet.PetId FROM PET WHERE Pet.UserId = @UserId;";
 
                 cmd.Parameters.AddWithValue("@UserId", $"{UserId}");
@@ -386,20 +415,24 @@ namespace PetGame.Services
                 {
                     while (reader.Read())
                     {
+                        //store the returned PetIds
                         PetIdList.Add((ulong) reader.GetInt64(0));
                     }
                 }
 
+                //if the list of Ids is empty, the user has no pets. return null
                 if (PetIdList.Count == 0)
                 {
                     return null;
                 }
 
+                //get thw Status of each Pet by it's Id and add it to the list
                 foreach (ulong Id in PetIdList)
                 {
                     PetStatusList.Add(GetPetStatusById(Id));
                 }
             }
+            //return the list
             return (PetStatusList);
         }
     }
