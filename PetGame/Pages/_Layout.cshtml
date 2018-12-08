@@ -4,9 +4,6 @@
 <head>
     <meta name="viewport" content="width=device-width" />
     <title>@ViewBag.Title - PGTRTKD3000DGOTY</title>
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="/css/main.css" />
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
@@ -17,29 +14,38 @@
     <meta name="theme-color" content="#ffffff">
 </head>
 <body>
+    <!-- load jQuery before bootstrap -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
     <!-- Title shown at the top of the page, include a link to register. -->
     <nav class="navbar navbar-dark bg-dark navbar-expand-lg">
         <a class="navbar-brand" href="/">
             <!-- Using a .png and not svg because it didn't seem to export correctly as SVG. -->
             <img src="~/img/logo_small.png" width="30" height="30" alt="Logo." />
         </a>
-        <ul class="navbar-nav mr-auto">
-            <li class="nav-item active">
-                <a class="nav-link" href="/login">Login/Register</a>
-            </li>
-            <li class="nav-item active">
-                <a class="nav-link" href="/leaderboard">Leaderboard</a>
-            </li>
-            <li class="nav-item active">
-                <a class="nav-link" href="https://github.com/Chris-Johnston/PGTRTKD3000DGOTY">GitHub</a>
-            </li>
-        </ul>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/login">Login/Register</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/leaderboard">Leaderboard</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="https://github.com/Chris-Johnston/PGTRTKD3000DGOTY">GitHub</a>
+                </li>
+            </ul>
+        </div>
     </nav>
     <div id="body-container" class="container">
         @RenderBody()
     </div>
     <!-- JQuery and Popper.js, used by Bootstrap CSS -->
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
 </body>
 </html>
