@@ -5,11 +5,12 @@
     Layout = "~/Pages/_Layout.cshtml";
     ViewBag.Title = "Race";
 }
+<html lang="en">
 <h1>
     Race Page
 </h1>
 <h2>
-    Spam the button to race!
+    Spam button race!
 </h2>
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -20,8 +21,8 @@
     }
 </style>
 <body onload="startGame()">
-    <script>
-    var myGamePiece; 
+    <script>var myGamePiece;
+
 function startGame() {
     myGamePiece = new component(20, 20, "red", 10, 120);
     myGameArea.start();
@@ -31,7 +32,7 @@ var myGameArea = {
     canvas : document.createElement("canvas"),
     start : function() {
         this.canvas.width = 600;
-        this.canvas.height = 270;
+        this.canvas.height = 200;
         this.context = this.canvas.getContext("2d");
         document.body.insertBefore(this.canvas, document.body.childNodes[0]);
         this.interval = setInterval(updateGameArea, 20);
@@ -39,7 +40,8 @@ var myGameArea = {
     clear : function() {
         this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
     }
-} 
+}
+
 function component(width, height, color, x, y) {
     this.width = width;
     this.height = height;
@@ -51,28 +53,62 @@ function component(width, height, color, x, y) {
         ctx = myGameArea.context;
         ctx.fillStyle = color;
         ctx.fillRect(this.x, this.y, this.width, this.height);
+
+        // checks if gamePiece crosses finish line
+        if(this.x >= myGameArea.canvas.width) {
+            ctx.fillStyle = "#1828D3";
+            ctx.fillRect(this.x, this.y, this.width, this.height);
+            clearInterval(myGameArea.interval);
+            stopCount();
+            document.write("You finished the race in " + seconds + " seconds!");
+
+            //clearInterval()
+            //alert("You Finished the Race");
+        }
     }
     this.newPos = function() {
         this.x = this.speedX;
-
     }
-} 
+}
+
 function updateGameArea() {
     myGameArea.clear();
     myGamePiece.newPos();
     myGamePiece.update();
-} 
-function moveright() {
 
-    var strength = 10;
+}
+
+var seconds = 0;
+var timer;
+var timer_is_on = 0;
+
+function timedCount() {
+    document.getElementById("txt").value = seconds;
+    seconds++;
+    timer = setTimeout(timedCount, 1000);
+}
+
+function startCount() {
+    if (!timer_is_on) {
+        timer_is_on = 1;
+        timedCount();
+    }
+}
+
+function stopCount() {
+    clearTimeout(timer);
+    timer_is_on = 0;
+}
+
+
+function moveRight() {
+    var strength = 100;
     var distance = 600 * (strength/1000);
     myGamePiece.speedX += (distance);
-}   </script>
 
+}</script>
     <div style="text-align:left;width:480px;">
-
-        <button onclick="moveright()">Press Me</button>
-
+        <button onclick="moveRight();startCount()">Press Me</button>
+        <input type="text" id="txt">
     </div>
-
 </body>
