@@ -24,7 +24,7 @@ namespace PetGame.Models
         [JsonProperty]
         [JsonConverter(typeof(IsoDateTimeConverter))]
         public DateTime Timestamp { get; set; }
-        
+
         /// <summary>
         /// The Pet's name
         /// </summary>
@@ -48,5 +48,11 @@ namespace PetGame.Models
         /// </summary>
         [JsonProperty]
         public ulong OwnerId { get; set; }
+
+        /// <summary>
+        ///     The pet's image id
+        /// </summary>
+        [JsonProperty]
+        public int PetImageId { get; set; }
     }
 }

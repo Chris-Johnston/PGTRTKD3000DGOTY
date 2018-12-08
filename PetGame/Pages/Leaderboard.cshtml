@@ -12,6 +12,8 @@
     <thead class="thead-dark">
         <tr>
             <th scope="col">#</th>
+            <!-- image -->
+            <th scope="col"></th>
             <th scope="col">Pet Name</th>
             <th scope="col">Owner</th>
             <th scope="col">Score</th>
@@ -23,6 +25,9 @@
         <tr>
             <td scope="row">
                 @x.index
+            </td>
+            <td>
+                <img class="leaderboard-image" src="/api/image/@x.value.PetImageId" alt="Image of @x.value.PetName" />
             </td>
             <td>
                 @x.value.PetName
