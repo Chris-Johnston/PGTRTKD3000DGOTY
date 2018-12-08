@@ -50,6 +50,34 @@ namespace PetGame
             return Json(pet);
         }
 
+        /// /api/Pet/[PetId]/status (No Request Body)
+        /// <summary>
+        /// Returns the status of a single pet by its ID
+        /// </summary>
+        /// <param name="Request">
+        /// JSON request body containing the Pet's ID
+        /// </param>
+        /// <returns>
+        /// JSON of PetStatus object
+        /// </returns>
+        [HttpGet("{id}/status"), AllowAnonymous]
+        public IActionResult GetPetStatusById(ulong id)
+        {
+            //PetStatus object to be serialized and returned
+            PetStatus ret = petService.GetPetStatusById(id);
+            
+            //if not null, the call to GetPetStatus was successful
+            if (ret != null)
+            {
+                return Json(ret);
+            }
+            //else return 404
+            else
+            {
+                return NotFound();
+            }
+        }
+
         // in postman test with
         // where UserId matches the currently signed-in user
         /** POST /api/Pet

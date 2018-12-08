@@ -66,7 +66,7 @@ namespace PetGame
             // make a new pet
             try
             {
-                var pet = new Pet(model.PetName, u.UserId) { PetImageId = model.PetImageId};
+                var pet = new Pet(model.PetName, u.UserId) { PetImageId = model.PetImageId };
                 pet = petService.InsertPet(pet);
                 if (pet == null)
                 {
@@ -79,6 +79,44 @@ namespace PetGame
             catch (ArgumentException e)
             {
                 return BadRequest(e.Message);
+            }
+        }
+
+        /// <summary>
+        /// Retrieves the UserId of the currently logged in user and
+        /// gets a list containing the status of all of the user's pets
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("status")]
+        public IActionResult Get()
+        {
+            //get currently logged in user
+            var u = login.GetUserFromContext(HttpContext.User);
+            ulong id = 0;
+
+            //if the user is not logged in, inform them
+            if (u == null)
+            {
+                return Unauthorized();
+            }
+            //set the currently logged in user's id as id
+            else
+            {
+                id = u.UserId;
+            }
+
+            //get the list of status of the User's pets
+            var UserPets = petService.GetPetStatusList(id);
+
+            //if the user has no pets, return 404
+            if (UserPets == null)
+            {
+                return NotFound();
+            }
+            //else, return the user's pets in JSON form
+            else
+            {
+                return Json(UserPets);
             }
         }
     }
