@@ -256,7 +256,8 @@ namespace PetGame.Services
 
             //calculate hunger
             //if there are no activities, decrease hunger by number of hours
-            hungerPercentage = CalculateHunger(PastActivities, hungerPercentage, HoursToCheck);
+            //and ensure that hunger cannot be <0 or >1
+            hungerPercentage = ConstrainPercentages(CalculateHunger(PastActivities, hungerPercentage, HoursToCheck));
 
             //check the number of hours since the last activity
             int HoursSinceLastActivity = 0;
@@ -266,14 +267,8 @@ namespace PetGame.Services
             MinutesToNextAction = CalculateMinutesToNextAction(PastActivities, MinutesToNextAction, HoursToCheck);
 
             //multiply HappinessDecrease by the number of hours to get the
-            //happiness percentage
-            happinessPercentage = (HoursSinceLastActivity * (-1 * HappinessDecreasePerHour));
-
-            //ensure that happiness cannot be <0 or >1
-            happinessPercentage = ConstrainPercentages(happinessPercentage);
-
-            //ensure that hunger cannot be <0 or >1
-            hungerPercentage = ConstrainPercentages(hungerPercentage);
+            //happiness percentage and ensure that happiness cannot be <0 or >1
+            happinessPercentage = ConstrainPercentages(HoursSinceLastActivity * (-1 * HappinessDecreasePerHour));
 
             //compile the data into a new PetStatus object
             //return the new object
@@ -366,17 +361,28 @@ namespace PetGame.Services
             return hungerPercentage;
         }
 
+        /// <summary>
+        /// Either adds to or subtracts from the passed in percentage by the supplied changeFactor,
+        /// based on the specified operation
+        /// </summary>
+        /// <param name="percentage">The percentage to modify</param>
+        /// <param name="changeFactor">The about to add or subtract</param>
+        /// <param name="operation">Which operation to perform (add or subtract)</param>
+        /// <returns>The new percentage as a double</returns>
         private double ModifyPercentage(double percentage, double changeFactor, PercentageOperation operation)
         {
             //a stands for add
             if (operation.Equals(PercentageOperation.Add))
             {
+                //percentage is currently less than the max, and after
+                //the operation, will still be less than the max
                 if (percentage < MaximumPercentage &&
                             ((percentage += changeFactor) <= MaximumPercentage))
                 {
                     percentage += changeFactor;
                     return percentage;
                 }
+                //return the max if the operation would exceed it
                 else
                 {
                     return MaximumPercentage;
@@ -385,33 +391,48 @@ namespace PetGame.Services
             //s stands for subtract
             else if (operation.Equals(PercentageOperation.Subtract))
             {
+                //percentage is currently greater than the min, and after
+                //the operation, will still be greater than the min
                 if (percentage > 0 &&
                             ((percentage -= changeFactor) > 0))
                 {
                     percentage -= changeFactor;
                     return percentage;
                 }
+                //return the min if the operation would result
+                //in a lesser value
                 else
                 {
                     return MinimumPercentage;
                 }
             }
+            //if neither case occurs, (i.e on invalid input), do nothing
             else
             {
                 return percentage;
             }
         }
 
+        /// <summary>
+        /// Checks that the supplied percentage is not
+        /// greater than max, or less than min
+        /// </summary>
+        /// <param name="percentage">The percentage value to check</param>
+        /// <returns>The percentage as a double</returns>
         private double ConstrainPercentages(double percentage)
         {
+            //if the percentage is less than min, return min
             if (percentage < MinimumPercentage)
             {
                 return MinimumPercentage;
             }
+            //if the percentage is less than max, return max
             else if (percentage > MaximumPercentage)
             {
                 return MaximumPercentage;
             }
+            //otherwise, the percentage is valid, so return
+            //it with no modification
             else
             {
                 return percentage;
