@@ -111,7 +111,7 @@ function stopCount() {
 // cooldown for button after each press, based off of pet endurance
 function cooldown() {
     var btn = document.getElementById("race");
-    var endurance = 10;
+    var endurance = 20;
 
     // rate that race button can be pressed 0-1000ms
     var bestRate = 0;      
@@ -135,8 +135,8 @@ function cooldown() {
     },enduranceRate);
 }
 function moveRight() {
-    var strength = 100;
-    var distance = 600 * (strength/1000);
+    var strength = 20;
+    var distance = 600 * (strength/500);
     myGamePiece.speedX += (distance);
 
 }</script>
