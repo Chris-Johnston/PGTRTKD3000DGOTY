@@ -21,8 +21,7 @@
     }
 </style>
 <body onload="startGame()">
-    <script>
-var myGamePiece;
+    <script>var myGamePiece;
 
 function startGame() {
     myGamePiece = new component(20, 20, "red", 10, 120);
@@ -91,8 +90,8 @@ var timer;
 var timer_is_on = 0;
 
 function timedCount() {
-    document.getElementById("txt").value = seconds;
     seconds++;
+    document.getElementById("txt").value = seconds;
     timer = setTimeout(timedCount, 1000);
 }
 
