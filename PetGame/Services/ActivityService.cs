@@ -53,8 +53,15 @@ namespace PetGame.Services
                 cmd.Parameters.AddWithValue("@After", after);
                 cmd.Parameters.AddWithValue("@Limit", limit);
                 // if type is null, then insert a null. this will disable filtering by type
-                cmd.Parameters.AddWithValue("@Type", (object) (char)type.GetValueOrDefault() ?? DBNull.Value);
-                
+                if (type.HasValue)
+                {
+                    cmd.Parameters.AddWithValue("@Type", type.Value);
+                }
+                else
+                {
+                    cmd.Parameters.AddWithValue("@Type", DBNull.Value);
+                }
+
                 // read the results
                 using (var reader = cmd.ExecuteReader())
                 {

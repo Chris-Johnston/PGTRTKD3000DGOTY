@@ -64,7 +64,7 @@ namespace PetGame
         public IActionResult GetPetStatusById(ulong id)
         {
             //PetStatus object to be serialized and returned
-            PetStatus ret = petService.GetPetStatus(id);
+            PetStatus ret = petService.GetPetStatusById(id);
             
             //if not null, the call to GetPetStatus was successful
             if (ret != null)

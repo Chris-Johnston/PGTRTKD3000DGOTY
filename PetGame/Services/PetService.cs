@@ -215,9 +215,12 @@ namespace PetGame.Services
         /// <param name="PetId"></param>
         /// <returns>
         /// PetStatus object
+        /// happiness: 0= saddest 1 = happiest
+        /// hunger: 0= very hungry 1 = not hungry
         /// </returns>
-        public PetStatus GetPetStatus(ulong PetId)
+        public PetStatus GetPetStatusById(ulong PetId)
         {
+            //call PetService function to get the Pet
             Pet toReturn = GetPetById(PetId);
 
             //if this pet doesn't exist, don't go any further. return null
@@ -238,11 +241,10 @@ namespace PetGame.Services
             List<Activity> PastActivities = (List<Activity>)activityService.GetActivities(PetId, NumActivities, ToCheck, null);
 
             //calculate hunger
-            //if there are no activities in the last 2 hrs, subtract 10%
-            //5% per hour
-            if (PastActivities == null)
+            //if there are no activities, dcrease hunger by number of hours
+            if (PastActivities.Count == 0)
             {
-                hungerPercentage -= (HungerDecreasePerHour * 2);
+                hungerPercentage -= (HungerDecreasePerHour * HoursToCheck);
             }
             else
             {
@@ -282,6 +284,19 @@ namespace PetGame.Services
                             ((hungerPercentage -= RaceDecrease) > 0))
                         {
                             hungerPercentage -= RaceDecrease;
+                        }
+                        else
+                        {
+                            hungerPercentage = 0;
+                        }
+                    }
+                    //else, decrease hunger
+                    else
+                    {
+                        if (hungerPercentage > 0 &&
+                            ((hungerPercentage -= HungerDecreasePerHour) > 0))
+                        {
+                            hungerPercentage -= HungerDecreasePerHour;
                         }
                         else
                         {
@@ -334,6 +349,16 @@ namespace PetGame.Services
                 happinessPercentage = 1.0;
             }
 
+            //ensure that hunger cannot be <0 or >1
+            if (hungerPercentage < 0.0)
+            {
+                hungerPercentage = 0.0;
+            }
+            else if (hungerPercentage > 1.0)
+            {
+                hungerPercentage = 1.0;
+            }
+
             //compile the data into a new PetStatus object
             //return the new object
             return new PetStatus() { Pet = toReturn, Hunger = hungerPercentage, Happiness = happinessPercentage,
@@ -368,7 +393,7 @@ namespace PetGame.Services
 
                 foreach (ulong Id in PetIdList)
                 {
-                    PetStatusList.Add(GetPetStatus(Id));
+                    PetStatusList.Add(GetPetStatusById(Id));
                 }
             }
             return (PetStatusList);
