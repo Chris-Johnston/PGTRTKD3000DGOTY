@@ -1,5 +1,6 @@
 ﻿@page
 @using PetGame.Pages
+@using PetGame
 @model AddPetModel
 @{
     Layout = "~/Pages/_Layout.cshtml";
@@ -9,7 +10,7 @@
 @if (Model.CurrentUser != null)
 {
     <h1 class="display-2 text-center">Add a Pet</h1>
-    <img class="add-pet-icon" src="~/img/pets/mysterypet.png" alt="Unknown Pet Icon." />
+    <img class="add-pet-icon" src="/api/image/@Model.RandomImageId" alt="Unknown Pet Icon." />
     <form method="post" action="/api/User/Pet">
         <div class="form-group">
             <label for="petname">Name your new pet:</label>
@@ -17,6 +18,8 @@
             <input id="petname" name="PetName" class="form-control form-control-lg" type="text" placeholder="Fluffy" maxlength="50"/>
             <small class="form-text text-muted">Names must be 2-50 characters, including letters, numbers, spaces, and <kbd>\'$.@@_/-?!</kbd>.</small>
         </div>
+        <!-- hidden value will be included in the request -->
+        <input id="image-id" name="PetImageId" type="hidden" value="@Model.RandomImageId" />
         <button type="submit" class="btn btn-primary">Submit</button>
     </form>
 }

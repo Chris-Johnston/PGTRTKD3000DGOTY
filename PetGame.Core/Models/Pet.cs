@@ -94,7 +94,7 @@ namespace PetGame.Models
                     throw new ArgumentOutOfRangeException(nameof(value), $"Strength must be in the bounds [{MinStrength}-{MaxStrength}].");
             }
         }
-        
+
         // backing field for the Strength property
         private int _strength = MinStrength;
 
@@ -126,5 +126,11 @@ namespace PetGame.Models
         /// </summary>
         [JsonProperty]
         public ulong UserId { get; set; }
+
+        /// <summary>
+        ///     Gets or sets the Id associated with the Pet's picture.
+        /// </summary>
+        [JsonProperty]
+        public int PetImageId { get; set; }
     }
 }
