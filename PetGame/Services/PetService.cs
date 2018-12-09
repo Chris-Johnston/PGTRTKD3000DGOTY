@@ -37,7 +37,6 @@ namespace PetGame.Services
         //the min happiness needed to perform an action
         const double HappinessThreshold = 0.5;
 
-
         private readonly SqlManager sqlManager;
         private readonly ActivityService activityService;
 
@@ -286,6 +285,11 @@ namespace PetGame.Services
                 TooHungry = tooHungry, TooUnhappy = tooUnhappy, TimeOfNextAction = TimeToNextAction};
         }//end of function
 
+        /// <summary>
+        /// Checks that Happiness is above the threshold
+        /// </summary>
+        /// <param name="happinessPercentage">current happiness percentage</param>
+        /// <returns>true or false</returns>
         private bool CheckHappinessLevel(double happinessPercentage)
         {
             if (happinessPercentage < HappinessThreshold)
@@ -298,6 +302,11 @@ namespace PetGame.Services
             }
         }
 
+        /// <summary>
+        /// Checks that Hunger is above the threshold
+        /// </summary>
+        /// <param name="HungerPercentage">current hunger percentage</param>
+        /// <returns>true or false</returns>
         private bool CheckHungerLevel(double HungerPercentage)
         {
             if (HungerPercentage < HungerThreshold)
