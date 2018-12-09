@@ -14,7 +14,8 @@
     //],
     "files": [
       "./login.ts",
-      "./petDebugger.ts"
+      "./petDebugger.ts",
+      "./race.ts"
     ],
     "compileOnSave": true
 }
