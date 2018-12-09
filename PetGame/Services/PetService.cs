@@ -340,10 +340,12 @@ namespace PetGame.Services
 
                 if (LastActivity == null)
                 {
-                    LastActivity = Activities[0];
+                    nextTime = DateTime.Now;
                 }
-
-                nextTime = LastActivity.Timestamp.Add(TimeSpan.FromMinutes(CooldownLength));
+                else
+                {
+                    nextTime = LastActivity.Timestamp.Add(TimeSpan.FromMinutes(CooldownLength));
+                }
             }
             return nextTime;
         }
