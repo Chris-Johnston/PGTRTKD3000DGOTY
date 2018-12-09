@@ -29,10 +29,21 @@ namespace PetGame.Models
         public double Hunger { get; set; }
 
         /// <summary>
+        /// Respresent's if the pet can function
+        /// </summary>
+        [JsonProperty]
+        public bool TooHungry { get; private set; }
+
+        [JsonProperty]
+        public bool TooUnhappy { get; private set; }
+
+        /// <summary>
         /// Represents the time when the pet can be fed again
         /// </summary>
         [JsonProperty]
         [JsonConverter(typeof(IsoDateTimeConverter))]
         public DateTime TimeOfNextAction { get; set; }
+
+
     }
 }

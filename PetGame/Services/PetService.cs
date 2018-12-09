@@ -265,10 +265,8 @@ namespace PetGame.Services
             int HoursSinceLastActivity = 0;
             HoursSinceLastActivity = CalculateHoursSinceLastActivity(PastActivities, HoursSinceLastActivity, HoursToCheck);
 
-            int MinutesToNextAction = CooldownLength;
-            DateTime TimeToNextAction = TimeOfNextAction(PastActivities, MinutesToNextAction, HoursToCheck);
+            DateTime TimeToNextAction = TimeOfNextAction(PastActivities, CooldownLength, HoursToCheck);
             TimeSpan span = TimeToNextAction.Subtract(DateTime.Now);
-            MinutesToNextAction = (int) span.TotalMinutes;
 
             //multiply HappinessDecrease by the number of hours to get the
             //happiness percentage and ensure that happiness cannot be <0 or >1
@@ -277,7 +275,7 @@ namespace PetGame.Services
             //compile the data into a new PetStatus object
             //return the new object
             return new PetStatus() { Pet = toReturn, Hunger = hungerPercentage, Happiness = happinessPercentage,
-                TimeOfNextAction = DateTime.Now.AddMinutes(MinutesToNextAction)};
+                TimeOfNextAction = TimeToNextAction};
         }//end of function
 
         private int CalculateHoursSinceLastActivity(IEnumerable<Activity> PastActivities, int HoursSinceLastActivity, int HoursToCheck)
@@ -302,34 +300,23 @@ namespace PetGame.Services
 
         private DateTime TimeOfNextAction(IEnumerable<Activity> PastActivities, int MinutesToNextAction, int HoursToCheck)
         {
-            List<Activity> Activities = (List<Activity>)PastActivities;
+            List<Activity> Activities = new List<Activity>(PastActivities);
             DateTime nextTime = DateTime.Now;
 
             if (Activities.Count == 0)
             {
-                MinutesToNextAction = HoursToCheck * 60;
+                nextTime = DateTime.Now;
             }
             else
             {
-                Activity LastActivity = null;
-
-                foreach (Activity activity in PastActivities)
-                {
-                    if (activity.Type == ActivityType.Feeding ||
-                       activity.Type == ActivityType.Training ||
-                       activity.Type == ActivityType.Race)
-                    {
-                        LastActivity = activity;
-                        break;
-                    }
-                }
+                var LastActivity = Activities.FirstOrDefault(x => x.Type == ActivityType.Feeding || x.Type == ActivityType.Race || x.Type == ActivityType.Training);
 
                 if (LastActivity == null)
                 {
-                    LastActivity = PastActivities.First<Activity>();
+                    LastActivity = Activities[0];
                 }
 
-                nextTime = LastActivity.Timestamp.AddMinutes(5);
+                nextTime = LastActivity.Timestamp.Add(TimeSpan.FromMinutes(CooldownLength));
             }
             return nextTime;
         }
