@@ -23,11 +23,10 @@
 <body onload="startGame()">
     <script>
         var myGamePiece;
-        var score;
+
 function startGame() {
     myGamePiece = new component(20, 20, "red", 10, 120);
     myGameArea.start();
-    updateDB();
 }
 
 var myGameArea = {
@@ -62,7 +61,7 @@ function component(width, height, color, x, y) {
             ctx.fillRect(this.x, this.y, this.width, this.height);
             clearInterval(myGameArea.interval);
             stopCount();
-            score = Math.trunc(1000/seconds);
+            var score = Math.trunc(1000/seconds);
 
             // assign score value from seconds
             if (seconds <= 0){
@@ -87,11 +86,7 @@ function updateGameArea() {
     myGamePiece.update();
 }
 
-function updateDB {
-     @Model.InsertActivity();
-     @Model.CurrentScore = score;
-     @Model.InsertRace();
-}
+
 
 var seconds = 0;
 var timer;
