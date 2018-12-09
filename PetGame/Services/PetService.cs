@@ -328,26 +328,17 @@ namespace PetGame.Services
         private DateTime TimeOfNextAction(IEnumerable<Activity> PastActivities, int MinutesToNextAction, int HoursToCheck)
         {
             List<Activity> Activities = new List<Activity>(PastActivities);
-            DateTime nextTime = DateTime.Now;
 
-            if (Activities.Count == 0)
+            var LastActivity = Activities.FirstOrDefault(x => x.Type == ActivityType.Feeding || x.Type == ActivityType.Race || x.Type == ActivityType.Training);
+
+            if (Activities.Count == 0 || LastActivity == null)
             {
-                nextTime = DateTime.Now;
+                return DateTime.Now;
             }
             else
             {
-                var LastActivity = Activities.FirstOrDefault(x => x.Type == ActivityType.Feeding || x.Type == ActivityType.Race || x.Type == ActivityType.Training);
-
-                if (LastActivity == null)
-                {
-                    nextTime = DateTime.Now;
-                }
-                else
-                {
-                    nextTime = LastActivity.Timestamp.Add(TimeSpan.FromMinutes(CooldownLength));
-                }
+                return LastActivity.Timestamp.Add(TimeSpan.FromMinutes(CooldownLength));
             }
-            return nextTime;
         }
 
         private double CalculateHunger(IEnumerable<Activity> PastActivities, double hungerPercentage, int HoursToCheck)
