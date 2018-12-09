@@ -292,14 +292,7 @@ namespace PetGame.Services
         /// <returns>true or false</returns>
         private bool CheckHappinessLevel(double happinessPercentage)
         {
-            if (happinessPercentage < HappinessThreshold)
-            {
-                return false;
-            }
-            else
-            {
-                return true;
-            }
+            return happinessPercentage < HappinessThreshold;
         }
 
         /// <summary>
@@ -307,16 +300,9 @@ namespace PetGame.Services
         /// </summary>
         /// <param name="HungerPercentage">current hunger percentage</param>
         /// <returns>true or false</returns>
-        private bool CheckHungerLevel(double HungerPercentage)
+        private bool CheckHungerLevel(double hungerPercentage)
         {
-            if (HungerPercentage < HungerThreshold)
-            {
-                return false;
-            }
-            else
-            {
-                return true;
-            }
+            return hungerPercentage < HungerThreshold;
         }
 
         private int CalculateHoursSinceLastActivity(IEnumerable<Activity> PastActivities, int HoursSinceLastActivity, int HoursToCheck)

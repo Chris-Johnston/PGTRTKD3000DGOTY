@@ -29,11 +29,14 @@ namespace PetGame.Models
         public double Hunger { get; set; }
 
         /// <summary>
-        /// Respresent's if the pet can function
+        /// Respresents if the pet can function based on hunger level
         /// </summary>
         [JsonProperty]
         public bool TooHungry { get; set; }
 
+        /// <summary>
+        /// Respresents if the pet can function based on happiness level
+        /// </summary>
         [JsonProperty]
         public bool TooUnhappy { get; set; }
 
