@@ -18,6 +18,7 @@ namespace PetGame.Pages
 
         public Pet CurrentPet { get; private set; } = null;
         public User CurrentUser { get; private set; } = null;
+        public int CurrentScore { get; private set; } = 0;
 
         private readonly SqlManager sqlManager;
         private readonly PetService petService;
@@ -40,6 +41,37 @@ namespace PetGame.Pages
             //null checks performed on previous page
             CurrentUser = loginService.GetUserFromContext(HttpContext.User);
             CurrentPet = petService.GetPetById(id);
+        }
+
+        public bool InsertActivity()
+        {
+            if (CurrentScore == 0)
+            {
+                return false;
+            }
+            else
+            {
+                activityService.MakeActivityForPet(CurrentPet.PetId, ActivityType.Race);
+                return true;
+            }
+        }
+
+        public bool InsertRace()
+        {
+            if (CurrentScore == 0)
+            {
+                return false;
+            }
+            else
+            {
+                raceService.InsertRace(new Race() { Score = CurrentScore, Timestamp = DateTime.Now, PetId = CurrentPet.PetId });
+                return true;
+            }
+        }
+
+        public bool UpdatePet()
+        {
+            return false;
         }
     }
 }

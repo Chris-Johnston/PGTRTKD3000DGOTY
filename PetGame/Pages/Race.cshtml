@@ -22,11 +22,12 @@
 </style>
 <body onload="startGame()">
     <script>
-var myGamePiece;
-
+        var myGamePiece;
+        var score;
 function startGame() {
     myGamePiece = new component(20, 20, "red", 10, 120);
     myGameArea.start();
+    updateDB();
 }
 
 var myGameArea = {
@@ -86,6 +87,12 @@ function updateGameArea() {
     myGamePiece.update();
 }
 
+function updateDB {
+     @Model.InsertActivity();
+     @Model.CurrentScore = score;
+     @Model.InsertRace();
+}
+
 var seconds = 0;
 var timer;
 var timer_is_on = 0;
@@ -111,7 +118,7 @@ function stopCount() {
 // cooldown for button after each press, based off of pet endurance
 function cooldown() {
     var btn = document.getElementById("race");
-    var endurance = 20;
+    var endurance = @Model.CurrentPet.Endurance;
 
     // rate that race button can be pressed 0-1000ms
     var bestRate = 0;
@@ -135,7 +142,7 @@ function cooldown() {
     },enduranceRate);
 }
 function moveRight() {
-    var strength = 20;
+    var strength = @Model.CurrentPet.Strength;
     var distance = myGameArea.canvas.width * (strength/500);
     myGamePiece.speedX += (distance);
 
