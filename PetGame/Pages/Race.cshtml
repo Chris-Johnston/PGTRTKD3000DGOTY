@@ -1,4 +1,4 @@
-﻿@page "{id}/race"
+﻿@page "{id}"
 @using PetGame.Pages
 @model RaceModel
 @{
@@ -7,7 +7,7 @@
 }
 <html lang="en">
 <h1>
-    Race Page
+    Race Page - Race with @Model.CurrentPet.Name (@Model.CurrentPet.PetId)!
 </h1>
 <h2>
     Spam the Race button to race!

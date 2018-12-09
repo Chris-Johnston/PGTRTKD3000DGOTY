@@ -34,27 +34,12 @@ namespace PetGame.Pages
             loginService = new LoginService(sql);
         }
 
-        [HttpGet("{id}/status")]
+        [HttpGet("{id}")]
         public void OnGet(ulong id)
         {
+            //null checks performed on previous page
             CurrentUser = loginService.GetUserFromContext(HttpContext.User);
-
-            if (CurrentUser != null)
-            {
-                CurrentPet = petService.GetPetById(id);
-                if (CurrentPet == null)
-                {
-                    // pet not found, or wrong owner
-                    Response.StatusCode = 404;
-                    return;
-                }
-            }
-            else
-            {
-                // http unauthorized
-                Response.StatusCode = 401;
-                return;
-            }
+            CurrentPet = petService.GetPetById(id);
         }
     }
 }
