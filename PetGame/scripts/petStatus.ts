@@ -1,22 +1,24 @@
 ﻿// declared by the main page, set via razor
 declare const petid: number;
 
-// set up refs to buttons and spans in the page
-var petHunger = $("#pet-hunger")[0];
-var petHappy = $("#pet-happiness")[0];
-var petStrength = $("#pet-strength")[0];
-var petEndurance = $("#pet-endurance")[0];
+var d = document;
 
-var timeUntil = $("#time-until")[0];
-var timeoutAlert = $("#alert-timeout")[0];
+// set up refs to buttons and spans in the page
+var petHunger = d.getElementById("#pet-hunger");
+var petHappy = d.getElementById("#pet-happiness");
+var petStrength = d.getElementById("#pet-strength");
+var petEndurance = d.getElementById("#pet-endurance");
+
+var timeUntil = d.getElementById("#time-until");
+var timeoutAlert = d.getElementById("#alert-timeout");
 
 // buttons
-var btnFeed = $("#btn-feed")[0];
-var btnTrain = $("#btn-train")[0];
+var btnFeed = d.getElementById("#btn-feed");
+var btnTrain = d.getElementById("#btn-train");
 // race button will redirect to the race page, so a reference to that does
 // not have to be hooked up for onclick handling
 // but still needs to be able to be disabled
-var btnRace = $("#btn-race")[0];
+var btnRace = d.getElementById("#btn-race");
 
 // api path to hit to check for an updated status
 const statusApiPath = `/api/Pet/${petid}/status`;
