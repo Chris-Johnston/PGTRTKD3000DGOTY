@@ -20,7 +20,8 @@
       "./login.ts",
       "./pet.ts",
       "./petDebugger.ts",
-      "./petStatus.ts"
+      "./petStatus.ts",
+      "./race.ts"
     ],
   "compileOnSave": true
 }

@@ -1,10 +1,17 @@
-@page
+@page "/pet/{id}/race"
 @using PetGame.Pages
 @model RaceModel
 @{
     Layout = "~/Pages/_Layout.cshtml";
     ViewBag.Title = "Race";
 }
+
+<script type="text/javascript">
+    const petid = @Model.CurrentPet.PetId;
+    const petimageid = @Model.CurrentPet.PetImageId;
+    const endurance = @Model.CurrentPet.Endurance;
+    const strength = @Model.CurrentPet.Strength;
+</script>
 
 <h1>
     Race Page
@@ -13,141 +20,13 @@
     Spam the Race button to race!
 </h2>
 
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<style>
-    canvas {
-        border: 1px solid #d3d3d3;
-        background-color: #f1f1f1;
-    }
-</style>
-    <script>
-        var myGamePiece;
+<canvas id="race-canvas" width="600" height="200">
 
-function startGame() {
-    myGamePiece = new component(20, 20, "red", 10, 120);
-    myGameArea.start();
-}
+</canvas>
+    
 
-var myGameArea = {
-    canvas : document.createElement("canvas"),
-    start : function() {
-        this.canvas.width = 600;
-        this.canvas.height = 200;
-        this.context = this.canvas.getContext("2d");
-        document.body.insertBefore(this.canvas, document.body.childNodes[0]);
-        this.interval = setInterval(updateGameArea, 20);
-    },
-    clear : function() {
-        this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
-    }
-}
+<div>
+    <button class="button" id="race-button">Race</button>
+</div>
 
-function component(width, height, color, x, y) {
-    this.width = width;
-    this.height = height;
-    this.speedX = 0;
-    this.speedY = 0;
-    this.x = x;
-    this.y = y;
-    this.update = function() {
-        ctx = myGameArea.context;
-        ctx.fillStyle = color;
-        ctx.fillRect(this.x, this.y, this.width, this.height);
-
-        // checks if gamePiece crosses finish line
-        if (this.x >= myGameArea.canvas.width) {
-            ctx.fillStyle = "#1828D3";
-            ctx.fillRect(this.x, this.y, this.width, this.height);
-            clearInterval(myGameArea.interval);
-            stopCount();
-            var score = Math.trunc(1000/seconds);
-
-            // assign score value from seconds
-            if (seconds <= 0){
-                score = 1000;
-            }
-            else {
-                score = Math.trunc(1000 / seconds);
-            }
-
-            //document.write("You finished the race in " + seconds + " seconds! <br> Score: " + score);
-            alert("You finished the race in " + seconds + " seconds! \n Score: " + score);
-        }
-    }
-    this.newPos = function() {
-        this.x = this.speedX;
-    }
-}
-
-function updateGameArea() {
-    myGameArea.clear();
-    myGamePiece.newPos();
-    myGamePiece.update();
-}
-
-
-
-var seconds = 0;
-var timer;
-var timer_is_on = 0;
-
-function timedCount() {
-    seconds++;
-    document.getElementById("txt").value = seconds;
-    timer = setTimeout(timedCount, 1000);
-}
-
-function startCount() {
-    if (!timer_is_on) {
-        timer_is_on = 1;
-        timedCount();
-    }
-}
-
-function stopCount() {
-    clearTimeout(timer);
-    timer_is_on = 0;
-}
-
-// cooldown for button after each press, based off of pet endurance
-function cooldown() {
-    var btn = document.getElementById("race");
-    var endurance = @Model.CurrentPet.Endurance;
-
-    // rate that race button can be pressed 0-1000ms
-    var bestRate = 0;
-    var worstRate = 1000;
-    var enduranceRate = worstRate;
-
-    // assumes positive values between 0-100
-    if (endurance >= 100) {
-        enduranceRate = bestRate;
-    } else if (endurance <= 0) {
-        enduranceRate = worstRate;
-    } else {
-        // ranges values from 1000-0ms of button press wait time
-        enduranceRate = 1000 - (endurance * 10);
-    }
-
-    // disable button for enduranceRate length
-    btn.disabled = true;
-    setTimeout(function() {
-        btn.disabled = false;
-    },enduranceRate);
-}
-function moveRight() {
-    var strength = @Model.CurrentPet.Strength;
-    var distance = myGameArea.canvas.width * (strength/500);
-    myGamePiece.speedX += (distance);
-
-}
-
-        startGame();
-    </script>
-    <div style="text-align:left;width:480px;">
-        <button id="race" onclick="moveRight();startCount();cooldown()">Race</button>
-        <input type="text" id="txt">
-        <br> <br> <br>
-        <button onclick="window.location.reload()">Reset Race</button>
-    </div>
-
+<script src="~/scripts/race.js" type="text/javascript"></script>

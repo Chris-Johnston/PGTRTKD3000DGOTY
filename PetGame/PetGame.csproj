@@ -10,6 +10,7 @@
     <None Remove="scripts\login.ts" />
     <None Remove="scripts\pet.ts" />
     <None Remove="scripts\petStatus.ts" />
+    <None Remove="scripts\race.ts" />
   </ItemGroup>
 
   <ItemGroup>
@@ -30,10 +31,10 @@
     <TypeScriptCompile Include="scripts\pet.ts" />
     <TypeScriptCompile Include="scripts\petDebugger.ts" />
     <TypeScriptCompile Include="scripts\petStatus.ts" />
+    <TypeScriptCompile Include="scripts\race.ts" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="wwwroot\css\" />
     <Folder Include="wwwroot\img\" />
-    <Folder Include="wwwroot\scripts\" />
   </ItemGroup>
 </Project>
