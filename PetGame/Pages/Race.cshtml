@@ -5,7 +5,7 @@
     Layout = "~/Pages/_Layout.cshtml";
     ViewBag.Title = "Race";
 }
-<html lang="en">
+
 <h1>
     Race Page
 </h1>
@@ -20,7 +20,6 @@
         background-color: #f1f1f1;
     }
 </style>
-<body onload="startGame()">
     <script>
         var myGamePiece;
 
@@ -141,11 +140,14 @@ function moveRight() {
     var distance = myGameArea.canvas.width * (strength/500);
     myGamePiece.speedX += (distance);
 
-}</script>
+}
+
+        startGame();
+    </script>
     <div style="text-align:left;width:480px;">
         <button id="race" onclick="moveRight();startCount();cooldown()">Race</button>
         <input type="text" id="txt">
         <br> <br> <br>
         <button onclick="window.location.reload()">Reset Race</button>
     </div>
-</body>
+
