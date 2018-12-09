@@ -61,18 +61,22 @@ else // we good
                 </span>
             </div>
             <div class="pet-actions">
-                <div class="alert alert-warning actions-timeout">
-                    @Model.CurrentPetStatus.Pet.Name cannot do anything until @Model.CurrentPetStatus.TimeOfNextAction
+                <div id="alert-timeout" class="alert alert-warning actions-timeout">
+                    @Model.CurrentPetStatus.Pet.Name cannot do anything until
+                    <span id="time-until">
+                        @Model.CurrentPetStatus.TimeOfNextAction
+                    </span>
                 </div>
                 <div class="btn-toolbar" role="toolbar">
                     <div class="btn-group mr-2" role="group">
-                        <button class="btn-feed btn btn-outline-primary btn-lg" disabled>Feed</button>
+                        <button id="btn-feed" class="btn-feed btn btn-outline-primary btn-lg" disabled>Feed</button>
                     </div>
                     <div class="btn-group mr-2" role="group">
-                        <button class="btn-train btn btn-outline-primary btn-lg" disabled>Train</button>
+                        <button id="btn-train" class="btn-train btn btn-outline-primary btn-lg" disabled>Train</button>
                     </div>
                     <div class="btn-group" role="group">
-                        <button class="btn-race btn btn-outline-primary btn-lg" disabled>Race</button>
+                        <!-- direct to the race page for this pet -->
+                        <a id="btn-race" href="/pet/@Model.CurrentPetStatus.Pet.PetId/race " class="btn-race btn btn-outline-primary btn-lg">Race</a>
                     </div>
                 </div>
             </div>
