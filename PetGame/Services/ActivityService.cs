@@ -209,8 +209,8 @@ namespace PetGame.Services
                     pet.Strength = Constrain(pet.Strength + RaceStrengthBoost);
                     break;
                 case ActivityType.RaceHighScore:
-                    pet.Endurance = Constrain(pet.Endurance + RaceEnduranceBoost * RaceMultiplier);
-                    pet.Strength = Constrain(pet.Strength + RaceStrengthBoost * RaceMultiplier);
+                    pet.Endurance = Constrain(pet.Endurance + (RaceEnduranceBoost * RaceMultiplier));
+                    pet.Strength = Constrain(pet.Strength + (RaceStrengthBoost * RaceMultiplier));
                     break;
                 default: return;
             }
@@ -234,6 +234,5 @@ namespace PetGame.Services
             if (value > max) return max;
             return value;
         }
-
     }
 }
