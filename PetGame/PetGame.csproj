@@ -8,6 +8,8 @@
 
   <ItemGroup>
     <None Remove="scripts\login.ts" />
+    <None Remove="scripts\pet.ts" />
+    <None Remove="scripts\petStatus.ts" />
   </ItemGroup>
 
   <ItemGroup>
@@ -25,7 +27,9 @@
   </ItemGroup>
   <ItemGroup>
     <TypeScriptCompile Include="scripts\login.ts" />
+    <TypeScriptCompile Include="scripts\pet.ts" />
     <TypeScriptCompile Include="scripts\petDebugger.ts" />
+    <TypeScriptCompile Include="scripts\petStatus.ts" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="wwwroot\css\" />

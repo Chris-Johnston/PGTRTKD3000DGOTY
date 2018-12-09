@@ -31,7 +31,7 @@ namespace PetGame.Services
         //the max percentage for hunger and happiness
         const double MaximumPercentage = 1.0;
         //the number of minutes between each action
-        const int CooldownLength = 5;
+        public const int CooldownLength = 5;
         //the min hunger needed to perform an action
         const double HungerThreshold = 0.5;
         //the min happiness needed to perform an action

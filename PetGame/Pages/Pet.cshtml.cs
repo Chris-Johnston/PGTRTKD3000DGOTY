@@ -15,16 +15,18 @@ namespace PetGame.Pages
         private readonly SqlManager sql;
         private readonly LoginService login;
         private readonly PetService pet;
+        private readonly ActivityService activity;
 
         public PetStatusModel(SqlManager sql)
         {
             this.sql = sql;
             login = new LoginService(this.sql);
             pet = new PetService(this.sql);
+            activity = new ActivityService(this.sql);
         }
-        
+
         public User CurrentUser { get; private set; } = null;
-        public Pet CurrentPet { get; private set; } = null;
+        public PetStatus CurrentPetStatus { get; private set; } = null;
 
         [HttpGet("{id}")]
         public void OnGet(ulong id)
@@ -33,13 +35,15 @@ namespace PetGame.Pages
             // TODO: need to check that the current user owns this pet, and show an error page accordingly
             if (CurrentUser != null)
             {
-                CurrentPet = pet.GetPetById(id);
-                if (CurrentPet == null)
+                CurrentPetStatus = pet.GetPetStatusById(id);
+                if (CurrentPetStatus == null)
                 {
                     // pet not found, or wrong owner
                     Response.StatusCode = 404;
                     return;
                 }
+                // make a userlogin activity
+                activity.MakeActivityForPet(CurrentPetStatus.Pet.PetId, ActivityType.UserLogin);
             }
             else
             {

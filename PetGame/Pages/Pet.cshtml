@@ -17,7 +17,7 @@
         You have to be signed in to do that. <a href="~/Login">You can sign in here.</a>
     </div>
 }
-else if (Model.CurrentPet == null)
+else if (Model.CurrentPetStatus == null)
 {
     // pet not found
     <br />
@@ -30,53 +30,62 @@ else if (Model.CurrentPet == null)
 }
 else // we good
 {
+    <script type="text/javascript">
+        // set the global var that is used by petStatus.ts later on
+        const petid = @Model.CurrentPetStatus.Pet.PetId;
+    </script>
+
     <h1 class="display-2">
-        @Model.CurrentPet.Name
+        @Model.CurrentPetStatus.Pet.Name
     </h1>
     <h2 class="text-muted">
         Owned by @Model.CurrentUser.Username
     </h2>
 
     <div class="status-pet-wrapper justify-content-center">
-        @if (Model.CurrentPet.IsDead)
+        @if (Model.CurrentPetStatus.Pet.IsDead)
         {
-            <img class="status-image" src="~/img/pets/dead.png" alt="Picture of @Model.CurrentPet.Name (dead)" />
+            <img class="status-image" src="~/img/pets/dead.png" alt="Picture of @Model.CurrentPetStatus.Pet.Name (dead)" />
             <h2 class="text-muted">Rest In Peace</h2>
         }
         else
         {
-            <img class="status-image" src="/api/Image/@Model.CurrentPet.PetImageId" alt="Picture of @Model.CurrentPet.Name" />
+            <img class="status-image" src="/api/Image/@Model.CurrentPetStatus.Pet.PetImageId" alt="Picture of @Model.CurrentPetStatus.Pet.Name" />
             <div class="status-box">
                 <span id="pet-hunger" class="status-hunger text-warning">
-                    56
+                    @Model.CurrentPetStatus.Hunger
                 </span>
                 <span id="pet-happiness" class="status-happiness text-danger">
-                    1
+                    @Model.CurrentPetStatus.Happiness
                 </span>
-                <span class="status-strength">
-                    Strength: @Model.CurrentPet.Strength
+                <span class="status-strength" id="pet-strength">
+                    @Model.CurrentPetStatus.Pet.Strength
                 </span>
-                <span class="status-endurance">
-                    Endurance: @Model.CurrentPet.Endurance
+                <span class="status-endurance" id="pet-endurance">
+                    @Model.CurrentPetStatus.Pet.Endurance
                 </span>
             </div>
             <div class="pet-actions">
-                <div class="alert alert-warning actions-timeout">
-                    @Model.CurrentPet.Name cannot do anything for the next 0:05:00
+                <div id="alert-timeout" class="alert alert-warning actions-timeout">
+                    @Model.CurrentPetStatus.Pet.Name cannot do anything for the next
+                    <span id="time-until">
+                    </span>
                 </div>
                 <div class="btn-toolbar" role="toolbar">
                     <div class="btn-group mr-2" role="group">
-                        <button class="btn-feed btn btn-outline-primary btn-lg" disabled>Feed</button>
+                        <button id="btn-feed" class="btn-feed btn btn-action btn-outline-primary btn-lg" disabled>Feed</button>
                     </div>
                     <div class="btn-group mr-2" role="group">
-                        <button class="btn-train btn btn-outline-primary btn-lg" disabled>Train</button>
+                        <button id="btn-train" class="btn-train btn btn-action btn-outline-primary btn-lg" disabled>Train</button>
                     </div>
                     <div class="btn-group" role="group">
-                        <button class="btn-race btn btn-outline-primary btn-lg" disabled>Race</button>
+                        <!-- direct to the race page for this pet -->
+                        <a id="btn-race" href="/pet/@Model.CurrentPetStatus.Pet.PetId/race " class="disabled btn-race btn-action btn btn-outline-primary btn-lg">Race</a>
                     </div>
                 </div>
             </div>
         }
     </div> 
-
+    <!-- Include the JS that drives interactions on this page. -->
+    <script src="~/scripts/petStatus.js" type="text/javascript"></script>
 }

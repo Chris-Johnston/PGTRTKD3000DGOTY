@@ -5,6 +5,7 @@
 @{
     Layout = "~/Pages/_Layout.cshtml";
     ViewBag.Title = "Home";
+    int lastIndex = 0;
 }
 @if (Model.CurrentUser != null)
 {
@@ -12,31 +13,31 @@
 
     <div class="pets-container">
         <!-- https://stackoverflow.com/a/4337706 -->
-        @foreach (var x in Model.SamplePets.Select((value, index) => new { value, index }))
+        @foreach (var x in Model.Pets.Select((value, index) => new { value, index }))
         {
-        <a class="div-link pet-box pet-@x.index" href="/pet/@x.value.PetId">
-            <div class="pet-name">@x.value.Name</div>
-            @if (x.value.IsDead)
-            {
-                <img class="pet-image" src="~/img/pets/dead.png" alt="Picture of @x.value.Name (dead)" />
-            }
-            else
-            {
-                <img class="pet-image" src="/api/Image/@x.value.PetImageId" alt="Picture of @x.value.Name" />
-            }
-
-            <div class="pet-label">Status:</div>
-            <div class="pet-label hunger">
-                50%
-            </div>
-            <div class="pet-label happy">
-                75%
-            </div>
-        </a>
+            <a class="div-link pet-box pet-@x.index" href="/pet/@x.value.Pet.PetId">
+                <div class="pet-name">@x.value.Pet.Name</div>
+                @if (x.value.Pet.IsDead)
+                {
+                    <img class="pet-image" src="~/img/pets/dead.png" alt="Picture of @x.value.Pet.Name (dead)" />
+                }
+                else
+                {
+                    <img class="pet-image" src="/api/Image/@x.value.Pet.PetImageId" alt="Picture of @x.value.Pet.Name" />
+                }
+                <div class="pet-label">Status:</div>
+                <div class="pet-label hunger">
+                    @(x.value.Hunger * 100)
+                </div>
+                <div class="pet-label happy">
+                    @(x.value.Happiness * 100)
+                </div>
+            </a>
+            lastIndex = x.index + 1;
         }
-        @if (Model.SamplePets.Count < 3)
+        @if (lastIndex < 3)
         {
-            <a class="div-link pet-box new-pet pet-@Model.SamplePets.Count" href="/AddPet">
+            <a class="div-link pet-box new-pet pet-@lastIndex" href="/AddPet">
                 <div class="pet-name">New Pet</div>
                 <img class="pet-image" src="~/img/pets/mysterypet.png" alt="Add a new pet." />
             </a>
