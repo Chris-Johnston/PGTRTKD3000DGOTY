@@ -32,10 +32,10 @@ namespace PetGame.Models
         /// Respresent's if the pet can function
         /// </summary>
         [JsonProperty]
-        public bool TooHungry { get; private set; }
+        public bool TooHungry { get; set; }
 
         [JsonProperty]
-        public bool TooUnhappy { get; private set; }
+        public bool TooUnhappy { get; set; }
 
         /// <summary>
         /// Represents the time when the pet can be fed again

@@ -32,6 +32,11 @@ namespace PetGame.Services
         const double MaximumPercentage = 1.0;
         //the number of minutes between each action
         const int CooldownLength = 5;
+        //the min hunger needed to perform an action
+        const double HungerThreshold = 0.5;
+        //the min happiness needed to perform an action
+        const double HappinessThreshold = 0.5;
+
 
         private readonly SqlManager sqlManager;
         private readonly ActivityService activityService;
@@ -272,11 +277,38 @@ namespace PetGame.Services
             //happiness percentage and ensure that happiness cannot be <0 or >1
             happinessPercentage = ConstrainPercentage(HoursSinceLastActivity * (-1 * HappinessDecreasePerHour));
 
+            bool tooHungry = CheckHungerLevel(hungerPercentage);
+            bool tooUnhappy = CheckHappinessLevel(happinessPercentage);
+
             //compile the data into a new PetStatus object
             //return the new object
             return new PetStatus() { Pet = toReturn, Hunger = hungerPercentage, Happiness = happinessPercentage,
-                TimeOfNextAction = TimeToNextAction};
+                TooHungry = tooHungry, TooUnhappy = tooUnhappy, TimeOfNextAction = TimeToNextAction};
         }//end of function
+
+        private bool CheckHappinessLevel(double happinessPercentage)
+        {
+            if (happinessPercentage < HappinessThreshold)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
+
+        private bool CheckHungerLevel(double HungerPercentage)
+        {
+            if (HungerPercentage < HungerThreshold)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
 
         private int CalculateHoursSinceLastActivity(IEnumerable<Activity> PastActivities, int HoursSinceLastActivity, int HoursToCheck)
         {
