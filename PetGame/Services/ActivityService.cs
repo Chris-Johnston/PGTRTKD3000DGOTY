@@ -55,7 +55,7 @@ namespace PetGame.Services
                 // if type is null, then insert a null. this will disable filtering by type
                 if (type.HasValue)
                 {
-                    cmd.Parameters.AddWithValue("@Type", type.Value);
+                    cmd.Parameters.AddWithValue("@Type", (char)type.Value);
                 }
                 else
                 {
@@ -173,5 +173,67 @@ namespace PetGame.Services
                 Type = type
             });
         }
+
+        /// <summary>
+        ///     Updates a pet as a result of a given activity
+        /// </summary>
+        /// <param name="petid"></param>
+        /// <param name="petService"></param>
+        /// <returns></returns>
+        public void UpdatePetFromActivity(ActivityType activity, ulong petid, PetService petService)
+        {
+            // ensure we are only working with activitytype that we care about
+            if (!(activity == ActivityType.Training || activity == ActivityType.Race || activity == ActivityType.RaceHighScore))
+                return;
+
+            var a = new List<Activity>(GetActivities(petid, 1, DateTime.Now.Subtract(TimeSpan.FromMinutes(5)), activity));
+            // check to see if this happened in the last 5 minutes for safety
+            // other than when we just inserted it
+            if (a.Count > 1)
+                return;
+
+            // hasn't happened in the last 5 minutes or however long, so we can update the pet
+            // get the pet
+            var pet = petService.GetPetById(petid);
+            if (pet == null)
+                return;
+
+            switch (activity)
+            {
+                case ActivityType.Training:
+                    pet.Endurance = Constrain(pet.Endurance + TrainingEnduranceBoost);
+                    pet.Strength = Constrain(pet.Strength + TrainingStrengthBoost);
+                    break;
+                case ActivityType.Race:
+                    pet.Endurance = Constrain(pet.Endurance + RaceEnduranceBoost);
+                    pet.Strength = Constrain(pet.Strength + RaceStrengthBoost);
+                    break;
+                case ActivityType.RaceHighScore:
+                    pet.Endurance = Constrain(pet.Endurance + RaceEnduranceBoost * RaceMultiplier);
+                    pet.Strength = Constrain(pet.Strength + RaceStrengthBoost * RaceMultiplier);
+                    break;
+                default: return;
+            }
+
+            // if one of those three happened, update the pet
+            petService.UpdatePet(petid, pet);
+        }
+
+        // boost to these attributes for Training
+        public const int TrainingEnduranceBoost = 3;
+        public const int TrainingStrengthBoost = 3;
+        // for a race
+        public const int RaceEnduranceBoost = 7;
+        public const int RaceStrengthBoost = 7;
+        // high score multiplier, if you get a high score, boosts this by a bit
+        public const int RaceMultiplier = 2;
+
+        private int Constrain(int value, int min = 0, int max = 100)
+        {
+            if (value < min) return min;
+            if (value > max) return max;
+            return value;
+        }
+
     }
 }

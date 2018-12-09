@@ -31,7 +31,7 @@ namespace PetGame.Services
         //the max percentage for hunger and happiness
         const double MaximumPercentage = 1.0;
         //the number of minutes between each action
-        const int CooldownLength = 1;
+        public const int CooldownLength = 5;
 
         private readonly SqlManager sqlManager;
         private readonly ActivityService activityService;

@@ -201,6 +201,7 @@ namespace PetGame
             var result = activityService.InsertActivity(activity);
             if (result == null)
                 return BadRequest();
+            activityService.UpdatePetFromActivity(activity.Type, petid, petService);
             return Ok(result);
         }
         // TODO, need to require authorization, check that users may only modify their own pets
@@ -224,6 +225,8 @@ namespace PetGame
             var result = activityService.MakeActivityForPet(petid, t);
             if (result == null)
                 return BadRequest();
+
+            activityService.UpdatePetFromActivity(t, petid, petService);
             return Ok(result);
         }
     }

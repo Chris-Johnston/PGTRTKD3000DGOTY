@@ -4,21 +4,21 @@ declare const petid: number;
 var d = document;
 
 // set up refs to buttons and spans in the page
-var petHunger = d.getElementById("#pet-hunger");
-var petHappy = d.getElementById("#pet-happiness");
-var petStrength = d.getElementById("#pet-strength");
-var petEndurance = d.getElementById("#pet-endurance");
+var petHunger = d.getElementById("pet-hunger");
+var petHappy = d.getElementById("pet-happiness");
+var petStrength = d.getElementById("pet-strength");
+var petEndurance = d.getElementById("pet-endurance");
 
-var timeUntil = d.getElementById("#time-until");
-var timeoutAlert = d.getElementById("#alert-timeout");
+var timeUntil = d.getElementById("time-until");
+var timeoutAlert = d.getElementById("alert-timeout");
 
 // buttons
-var btnFeed = d.getElementById("#btn-feed");
-var btnTrain = d.getElementById("#btn-train");
+var btnFeed = d.getElementById("btn-feed");
+var btnTrain = d.getElementById("btn-train");
 // race button will redirect to the race page, so a reference to that does
 // not have to be hooked up for onclick handling
 // but still needs to be able to be disabled
-var btnRace = d.getElementById("#btn-race");
+var btnRace = d.getElementById("btn-race");
 
 // api path to hit to check for an updated status
 const statusApiPath = `/api/Pet/${petid}/status`;
