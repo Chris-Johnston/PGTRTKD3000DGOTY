@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using PetGame.Core;
 using PetGame.Models;
+using PetGame.Services;
 using PetGame.Util;
 using System;
 using System.Collections.Generic;
@@ -331,7 +332,7 @@ namespace PetGame
         /// Registers a new user with the supplied credentials, and returns it's usertoken.
         /// </summary>
         /// <returns></returns>
-        public UserToken RegisterNewUser(ControllerBase controllerContext)
+        public UserToken RegisterNewUser(ControllerBase controllerContext, NotificationService sms = null)
         {
             // create LoginModel from the request
             UserLoginModel data = new UserLoginModel();
@@ -368,6 +369,26 @@ namespace PetGame
 
             // register a new user
             var user = InsertNewUser(data.username, data.password, data.PhoneNumber);
+
+            // if sms svc supplied
+            if (sms != null)
+            {
+                // and user defined
+                if (user.PhoneNumber != null)
+                {
+                    try
+                    {
+                        sms.SendMessage(user.PhoneNumber, $"Thanks for registering, {user.Username}. Welcome to PGTRTKD3000DGOTY.");
+                    }
+                    catch (Exception)
+                    {
+                        // handle all exceptions, we don't care if this errors out
+                    }
+                }
+
+                // send the discord webhook 
+                sms.SendDiscordWebhookNotification($"New user registered: `{user.Username}`");
+            }
 
             // return the user token for this user
             return MakeUserToken(controllerContext, user);

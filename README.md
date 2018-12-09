@@ -30,5 +30,7 @@ In your `PetGame` project configuration, add the following environment variables
 | `PETGAME_TWILIO_PHONENUM` | `+1XXXYYYZZZZ` | Twilio phone number for sending messages. |
 | `PETGAME_TWILIO_DEBUGNUM` | `+1XXXYYYZZZZ` | Phone number for sending debug messages. |
 | `PETGAME_TWILIO_DEBUGONLY` | `True` or `False` | If True, **all** messages will only be sent to the debug phone number. |
+| `PETGAME_DISCORD_USEWEBHOOK` | `True` or `False` | If True, messages will be sent with the supplied webhook. |
+| `PETGAME_DISCORD_WEBHOOK` | `(secret)` | The webhook url to send messages to. |
 
 This will point the ASP.NET connections to your local database.

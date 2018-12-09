@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using PetGame.Core;
 using PetGame.Models;
+using PetGame.Services;
 using PetGame.Util;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -21,10 +22,12 @@ namespace PetGame
     public class LoginController : Controller
     {
         private readonly SqlManager sqlManager;
+        private readonly NotificationService twilio;
 
-        public LoginController(SqlManager sqlManager) : base()
+        public LoginController(SqlManager sqlManager, NotificationService twilio) : base()
         {
             this.sqlManager = sqlManager;
+            this.twilio = twilio;
         }
         private void SignIn(UserToken ut)
         {
@@ -71,7 +74,7 @@ namespace PetGame
         public IActionResult PostRegister()
         {
             var svc = new LoginService(sqlManager);
-            var ut = svc.RegisterNewUser(this as ControllerBase);
+            var ut = svc.RegisterNewUser(this as ControllerBase, twilio);
             if (ut == null)
                 // bad data
                 return Unauthorized();
