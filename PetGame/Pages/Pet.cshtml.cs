@@ -15,12 +15,14 @@ namespace PetGame.Pages
         private readonly SqlManager sql;
         private readonly LoginService login;
         private readonly PetService pet;
+        private readonly ActivityService activity;
 
         public PetStatusModel(SqlManager sql)
         {
             this.sql = sql;
             login = new LoginService(this.sql);
             pet = new PetService(this.sql);
+            activity = new ActivityService(this.sql);
         }
 
         public User CurrentUser { get; private set; } = null;
@@ -40,6 +42,8 @@ namespace PetGame.Pages
                     Response.StatusCode = 404;
                     return;
                 }
+                // make a userlogin activity
+                activity.MakeActivityForPet(CurrentPetStatus.Pet.PetId, ActivityType.UserLogin);
             }
             else
             {

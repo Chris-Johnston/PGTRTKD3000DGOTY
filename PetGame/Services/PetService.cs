@@ -31,7 +31,7 @@ namespace PetGame.Services
         //the max percentage for hunger and happiness
         const double MaximumPercentage = 1.0;
         //the number of minutes between each action
-        const int CooldownLength = 5;
+        const int CooldownLength = 1;
 
         private readonly SqlManager sqlManager;
         private readonly ActivityService activityService;
@@ -300,7 +300,7 @@ namespace PetGame.Services
 
         private int CalculateMinutesToNextAction(IEnumerable<Activity> PastActivities, int MinutesToNextAction, int HoursToCheck)
         {
-            List<Activity> Activities = (List<Activity>)PastActivities;
+            List<Activity> Activities = new List<Activity>(PastActivities);
 
             if (Activities.Count == 0)
             {
@@ -308,7 +308,9 @@ namespace PetGame.Services
             }
             else
             {
-                Activity LastActivity = Activities[0];
+                var LastActivity = Activities.FirstOrDefault(x => x.Type == ActivityType.Feeding || x.Type == ActivityType.Race || x.Type == ActivityType.Training);
+                if (LastActivity == null)
+                    return 0;
 
                 //check the number of minute since the last activity
                 int MinutesSinceLastActivity = 0;

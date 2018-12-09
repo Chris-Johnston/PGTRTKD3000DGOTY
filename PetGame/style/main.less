@@ -2,13 +2,27 @@
     margin-bottom: 60px;
 }
 
+a.disabled
+{
+    pointer-events: none;
+    cursor: default;
+}
+
 .status-image
 {
     display: block;
-    max-height: 70%;
-    max-width: 90%;
+    max-height: 200px;
+    max-width: 50%;
     margin: auto;
-    min-width: 40%;
+    /*min-width: 40%;*/
+}
+
+.status-endurance::before{
+    content: "Endurance: ";
+}
+
+.status-strength::before {
+    content: "Strength: ";
 }
 
 .status-hunger::before

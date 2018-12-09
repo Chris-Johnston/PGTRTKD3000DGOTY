@@ -27,10 +27,10 @@
                 }
                 <div class="pet-label">Status:</div>
                 <div class="pet-label hunger">
-                    @x.value.Hunger
+                    @(x.value.Hunger * 100)
                 </div>
                 <div class="pet-label happy">
-                    @x.value.Happiness
+                    @(x.value.Happiness * 100)
                 </div>
             </a>
             lastIndex = x.index + 1;
