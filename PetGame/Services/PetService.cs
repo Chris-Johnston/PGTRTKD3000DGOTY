@@ -331,7 +331,7 @@ namespace PetGame.Services
 
             var LastActivity = Activities.FirstOrDefault(x => x.Type == ActivityType.Feeding || x.Type == ActivityType.Race || x.Type == ActivityType.Training);
 
-            if (Activities.Count == 0 || LastActivity == null)
+            if (LastActivity == null)
             {
                 return DateTime.Now;
             }
