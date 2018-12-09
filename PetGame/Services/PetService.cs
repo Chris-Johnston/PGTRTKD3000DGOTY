@@ -307,7 +307,7 @@ namespace PetGame.Services
 
         private int CalculateHoursSinceLastActivity(IEnumerable<Activity> PastActivities, int HoursSinceLastActivity, int HoursToCheck)
         {
-            List<Activity> Activities = (List<Activity>)PastActivities;
+            List<Activity> Activities = new List<Activity>(PastActivities);
             //check to see if there were any activities in the specified interval
             if (Activities.Count == 0)
             {
