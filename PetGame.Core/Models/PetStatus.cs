@@ -33,6 +33,6 @@ namespace PetGame.Models
         /// </summary>
         [JsonProperty]
         [JsonConverter(typeof(IsoDateTimeConverter))]
-        public DateTime TimeOfNextAction { get; set; } = DateTime.Now.AddMinutes(5);
+        public DateTime TimeOfNextAction { get; set; }
     }
 }

@@ -266,7 +266,9 @@ namespace PetGame.Services
             HoursSinceLastActivity = CalculateHoursSinceLastActivity(PastActivities, HoursSinceLastActivity, HoursToCheck);
 
             int MinutesToNextAction = CooldownLength;
-            MinutesToNextAction = CalculateMinutesToNextAction(PastActivities, MinutesToNextAction, HoursToCheck);
+            DateTime TimeToNextAction = TimeOfNextAction(PastActivities, MinutesToNextAction, HoursToCheck);
+            TimeSpan span = TimeToNextAction.Subtract(DateTime.Now);
+            MinutesToNextAction = (int) span.TotalMinutes;
 
             //multiply HappinessDecrease by the number of hours to get the
             //happiness percentage and ensure that happiness cannot be <0 or >1
@@ -298,9 +300,10 @@ namespace PetGame.Services
             return HoursSinceLastActivity;
         }
 
-        private int CalculateMinutesToNextAction(IEnumerable<Activity> PastActivities, int MinutesToNextAction, int HoursToCheck)
+        private DateTime TimeOfNextAction(IEnumerable<Activity> PastActivities, int MinutesToNextAction, int HoursToCheck)
         {
             List<Activity> Activities = (List<Activity>)PastActivities;
+            DateTime nextTime = DateTime.Now;
 
             if (Activities.Count == 0)
             {
@@ -308,21 +311,27 @@ namespace PetGame.Services
             }
             else
             {
-                Activity LastActivity = Activities[0];
+                Activity LastActivity = null;
 
-                //check the number of minute since the last activity
-                int MinutesSinceLastActivity = 0;
-                TimeSpan span = DateTime.Now.Subtract(LastActivity.Timestamp);
-                MinutesSinceLastActivity = (int)span.TotalMinutes;
-
-                //if it's been more than 5 minutes, the user can perform another action
-                //otherwise, leave the default value in place
-                if (MinutesSinceLastActivity > CooldownLength)
+                foreach (Activity activity in PastActivities)
                 {
-                    MinutesToNextAction = 0;
+                    if (activity.Type == ActivityType.Feeding ||
+                       activity.Type == ActivityType.Training ||
+                       activity.Type == ActivityType.Race)
+                    {
+                        LastActivity = activity;
+                        break;
+                    }
                 }
+
+                if (LastActivity == null)
+                {
+                    LastActivity = PastActivities.First<Activity>();
+                }
+
+                nextTime = LastActivity.Timestamp.AddMinutes(5);
             }
-            return MinutesToNextAction;
+            return nextTime;
         }
 
         private double CalculateHunger(IEnumerable<Activity> PastActivities, double hungerPercentage, int HoursToCheck)
