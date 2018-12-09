@@ -1,11 +1,12 @@
 {
-    "compilerOptions": {
-        "noImplicitAny": true,
-        "noEmitOnError": true,
-        "removeComments": true,
-        "sourceMap": true,
-        "target": "es5"
-    },
+  "compilerOptions": {
+    "noImplicitAny": true,
+    "noEmitOnError": true,
+    "removeComments": true,
+    "sourceMap": true,
+    "target": "es5",
+    "allowSyntheticDefaultImports": true
+  },
     // explicitly set all of the files that we wish to include,
     // instead of just excluding directories
     //"exclude": [
@@ -14,7 +15,8 @@
     //],
     "files": [
       "./login.ts",
-      "./petDebugger.ts"
+      "./petDebugger.ts",
+      "./petStatus.ts"
     ],
-    "compileOnSave": true
+  "compileOnSave": true
 }

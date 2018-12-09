@@ -53,10 +53,10 @@ else // we good
                 <span id="pet-happiness" class="status-happiness text-danger">
                     @Model.CurrentPetStatus.Happiness
                 </span>
-                <span class="status-strength">
+                <span class="status-strength" id="pet-strength">
                     Strength: @Model.CurrentPetStatus.Pet.Strength
                 </span>
-                <span class="status-endurance">
+                <span class="status-endurance" id="pet-endurance">
                     Endurance: @Model.CurrentPetStatus.Pet.Endurance
                 </span>
             </div>
@@ -82,5 +82,6 @@ else // we good
             </div>
         }
     </div> 
-
+    <!-- Include the JS that drives interactions on this page. -->
+    <script src="~/scripts/petStatus.js" type="text/javascript"></script>
 }
