@@ -1,8 +1,110 @@
+.shaker {
+    /* https://codepen.io/onion2k/pen/xfepi */
+    -webkit-animation: kf_shake 0.4s 1 linear;
+    -moz-animation: kf_shake 0.4s 1 linear;
+    -o-animation: kf_shake 0.4s 1 linear;
+    background-color: red !important;
+    border-color: red !important;
+}
+
+#race-button {
+    transition-property: background-color border-color opacity;
+    transition-duration: 0.1s;
+    transition-timing-function: ease-in-out;
+}
+
+@-webkit-keyframes kf_shake {
+    0% {
+        -webkit-transform: translate(30px);
+    }
+
+    20% {
+        -webkit-transform: translate(-30px);
+    }
+
+    40% {
+        -webkit-transform: translate(15px);
+    }
+
+    60% {
+        -webkit-transform: translate(-15px);
+    }
+
+    80% {
+        -webkit-transform: translate(8px);
+    }
+
+    100% {
+        -webkit-transform: translate(0px);
+    }
+}
+
+@-moz-keyframes kf_shake {
+    0% {
+        -moz-transform: translate(30px);
+    }
+
+    20% {
+        -moz-transform: translate(-30px);
+    }
+
+    40% {
+        -moz-transform: translate(15px);
+    }
+
+    60% {
+        -moz-transform: translate(-15px);
+    }
+
+    80% {
+        -moz-transform: translate(8px);
+    }
+
+    100% {
+        -moz-transform: translate(0px);
+    }
+}
+
+@-o-keyframes kf_shake {
+    0% {
+        -o-transform: translate(30px);
+    }
+
+    20% {
+        -o-transform: translate(-30px);
+    }
+
+    40% {
+        -o-transform: translate(15px);
+    }
+
+    60% {
+        -o-transform: translate(-15px);
+    }
+
+    80% {
+        -o-transform: translate(8px);
+    }
+
+    100% {
+        -o-origin-transform: translate(0px);
+    }
+}
+
+
+.button-wrapper
+{
+    max-width: 50%;
+    margin: 10pt auto;
+}
+
 canvas {
     border: 1px solid #d3d3d3;
     background-color: #f1f1f1;
+    display: block;
+    margin: auto;
+    max-width: 90%;
 }
-
 
 .body-container {
     margin-bottom: 60px;
