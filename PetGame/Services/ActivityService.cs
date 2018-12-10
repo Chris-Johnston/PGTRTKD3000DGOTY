@@ -71,6 +71,7 @@ namespace PetGame.Services
                         {
                             ActivityId = (ulong)reader.GetInt64(0),
                             PetId = (ulong)reader.GetInt64(1),
+                            // timestamp is in UTC
                             Timestamp = reader.GetDateTime(2),
                             // hack: get the first character from this col, read as a string
                             Type = (ActivityType)reader.GetString(3)[0]

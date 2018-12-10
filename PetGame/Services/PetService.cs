@@ -269,7 +269,8 @@ namespace PetGame.Services
             int HoursSinceLastActivity = 0;
             HoursSinceLastActivity = CalculateHoursSinceLastActivity(PastActivities, HoursSinceLastActivity, HoursToCheck);
 
-            DateTime TimeToNextAction = TimeOfNextAction(PastActivities, CooldownLength, HoursToCheck).ToUniversalTime();
+            // this does not have a timezone set
+            DateTime TimeToNextAction = TimeOfNextAction(PastActivities, CooldownLength, HoursToCheck);
             TimeSpan span = TimeToNextAction.Subtract(DateTime.UtcNow);
 
             //multiply HappinessDecrease by the number of hours to get the
@@ -282,7 +283,7 @@ namespace PetGame.Services
             //compile the data into a new PetStatus object
             //return the new object
             return new PetStatus() { Pet = toReturn, Hunger = hungerPercentage, Happiness = happinessPercentage,
-                TooHungry = tooHungry, TooUnhappy = tooUnhappy, TimeOfNextAction = TimeToNextAction.ToUniversalTime(), ServerTime = DateTime.UtcNow };
+                TooHungry = tooHungry, TooUnhappy = tooUnhappy, TimeOfNextAction = TimeToNextAction, ServerTime = DateTime.UtcNow };
         }//end of function
 
         /// <summary>
@@ -337,7 +338,7 @@ namespace PetGame.Services
             }
             else
             {
-                return LastActivity.Timestamp.Add(TimeSpan.FromMinutes(CooldownLength)).ToUniversalTime();
+                return LastActivity.Timestamp.Add(TimeSpan.FromMinutes(CooldownLength));
             }
         }
 

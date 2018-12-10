@@ -102,7 +102,8 @@ function UpdateView(status: PetStatus)
     var next = new Date(status.timeOfNextAction);
 
     var serverTimeS = Math.floor((time.getTime() + time.getTimezoneOffset() * 60 * 1000) / 1000);
-    var nextTimeS = Math.floor((next.getTime() + next.getTimezoneOffset() * 60 * 1000) / 1000);
+    // next time does not have timezone, so skip it
+    var nextTimeS = Math.floor((next.getTime()) / 1000);
 
     var canPerformActions = serverTimeS >= nextTimeS;
     var pet = status.pet;
