@@ -16,12 +16,12 @@
     //    "node_modules",
     //    "wwwroot"
     //],
-    "files": [
-      "./login.ts",
-      "./pet.ts",
-      "./petDebugger.ts",
-      "./petStatus.ts",
-      "./race.ts"
-    ],
+  "files": [
+    "./login.ts",
+    "./pet.ts",
+    "./petDebugger.ts",
+    "./race.ts",
+    "./petStatus.ts"
+  ],
   "compileOnSave": true
 }
