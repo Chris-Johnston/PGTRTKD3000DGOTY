@@ -14,7 +14,7 @@ const maxEndurance = 100;
 const minStrength = 0;
 const maxStrength = 100;
 
-// determine the cooldown length for the endurance value, constrained to be between 
+// determine the cooldown length for the endurance value, constrained to be between
 // the worst and the best rate
 const enduranceRate = constrain(map(endurance, 0, 100, maxCooldown, minCooldown), maxCooldown, minCooldown);;
 
@@ -35,7 +35,7 @@ var raceButton = document.getElementById("race-button");
 var startButton = document.getElementById("start-race") as HTMLButtonElement;
 
 var beforerace = document.getElementById("before-race") as HTMLDivElement;
-var duringrace = document.getElementById("during-race") as HTMLDivElement; 
+var duringrace = document.getElementById("during-race") as HTMLDivElement;
 var afterRace = document.getElementById("after-race") as HTMLDivElement;
 
 var finalScore = document.getElementById("final-score") as HTMLSpanElement;
@@ -152,7 +152,6 @@ function updateGameArea() {
 
     // check if distance >1
     if (distance > 1) {
-        // placeholer
         win();
     }
 }
