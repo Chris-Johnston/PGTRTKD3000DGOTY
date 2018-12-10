@@ -229,5 +229,34 @@ namespace PetGame
             activityService.UpdatePetFromActivity(t, petid, petService);
             return Ok(result);
         }
+
+        // creates a new score
+        [HttpPost("{petid}/race/{score}")]
+        public IActionResult PostNewScore(ulong petid, int score)
+        {
+            var u = loginService.GetUserFromContext(HttpContext.User);
+            if (u == null) return Unauthorized();
+
+            // get the pet
+            var pet = petService.GetPetById(petid);
+            if (pet == null)
+                return NotFound();
+            // check ownership
+            if (pet.UserId != u.UserId)
+                return Unauthorized();
+
+            if (score <= 0)
+                return BadRequest();
+
+            RaceService race = new RaceService(this.sqlManager);
+            var r = race.InsertRace(new Race()
+            {
+                PetId = petid,
+                RaceId = 0,
+                Score = score,
+                Timestamp = DateTime.Now
+            });
+            return Json(r);
+        }
     }
 }

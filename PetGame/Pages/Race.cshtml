@@ -14,19 +14,30 @@
 </script>
 
 <h1>
-    Race Page
+    Race with @Model.CurrentPet.Name (@Model.CurrentPet.PetId)!
 </h1>
 <h2>
     Spam the Race button to race!
 </h2>
 
-<canvas id="race-canvas" width="600" height="200">
+<div id="before-race" class="before-wrapper">
+    <h1 id="countdowntext" class="display-2 text-center text-success countdown" style="display: none !important;">Race begins in..</h1>
+    <button class="btn btn-primary btn-lg" id="start-race">Start!</button>
+</div>
 
-</canvas>
-    
+<div id="after-race" style="display: none;">
+    <h1 class="display-1 text-success text-center">Congratulations!</h1>
+    <h2 class="display-3">
+        @Model.CurrentPet.Name completed the race with a score of:
+    <span class="text-info" id="final-score">????</span>
+</h2>
+</div>
 
-<div>
-    <button class="button" id="race-button">Race</button>
+<div id="during-race" style="display: none;">
+    <canvas id="race-canvas" width="600" height="500"></canvas>
+    <div class="button-wrapper">
+        <button class="btn btn-primary btn-lg btn-block" id="race-button">Dash!</button>
+    </div>
 </div>
 
 <script src="~/scripts/race.js" type="text/javascript"></script>
