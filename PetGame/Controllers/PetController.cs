@@ -266,6 +266,15 @@ namespace PetGame
             {
                 activityService.MakeActivityForPet(petid, ActivityType.RaceHighScore);
                 activityService.UpdatePetFromActivity(ActivityType.RaceHighScore, petid, petService);
+
+                // new high score was posted
+                var n = new NotificationService();
+                if (u.PhoneNumber != null)
+                {
+                    n.SendMessage(u.PhoneNumber, $"Great job {u.Username}, you just placed #{rank} on the leaderboard!");
+                }
+                //n.SendDiscordWebhookNotification($"**Cool!** {u.Username} just placed #{rank} on the leaderboard with their pet {pet.Name} and a score of {score}.");
+                n.SendDiscordNotifyHighScore(rank, score, pet, u);
             }
             else
             {
