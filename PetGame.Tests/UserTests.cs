@@ -73,9 +73,9 @@ namespace PetGame.Tests
         [InlineData("+11231231234", true)]
         // null ok
         [InlineData(null, true)]
-        // empty / whitespace not ok
-        [InlineData("", false)]
-        [InlineData("  ", false)]
+        // empty / whitespace ok
+        [InlineData("", true)]
+        [InlineData("  ", true)]
         [InlineData("1231231234", false)]
         // missing one char
         [InlineData("+1231231234", false)]
