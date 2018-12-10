@@ -4,6 +4,10 @@ image:
 - Ubuntu
 before_build:
 - nuget restore
+- pwsh: >-
+    cd PetGame
+    npm install
+    gulp default  
 build:
   publish_aspnet_core: true
   verbosity: minimal
