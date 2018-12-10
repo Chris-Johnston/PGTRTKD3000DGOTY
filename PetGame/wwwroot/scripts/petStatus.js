@@ -54,7 +54,7 @@ function UpdateView(status) {
     }
     var time = new Date(status.serverTime);
     var next = new Date(status.timeOfNextAction);
-    var canPerformActions = time >= next;
+    var canPerformActions = time.getTime() >= next.getTime();
     var pet = status.pet;
     nextTime = next;
     UpdateAlert(next, canPerformActions);
