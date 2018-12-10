@@ -149,7 +149,7 @@ function win()
     {
         gameActive = false;
         // determine the score
-        var score = Math.floor(map(seconds, 0, 60, 100000000, 10));
+        var score = Math.floor(map(seconds, 0, 60, 1000000, 10));
         if (score < 0)
             score = 0;
         // set the final score
