@@ -1,12 +1,12 @@
 # Ignore generated js files from typescript
-*/wwwroot/scripts/*.js
-*/wwwroot/scripts/*.ts
-*/wwwroot/scripts/*.json
-*/wwwroot/scripts/*.map
+#*/wwwroot/scripts/*.js
+#*/wwwroot/scripts/*.ts
+#*/wwwroot/scripts/*.json
+#*/wwwroot/scripts/*.map
 # ignore css from less
 */wwwroot/css/*.css
-*/scripts/*.js
-*.map
+#*/scripts/*.js
+#*.map
 
 launchSettings.json
 
