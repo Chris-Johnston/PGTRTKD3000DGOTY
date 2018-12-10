@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -67,14 +68,19 @@ namespace PetGame
             try
             {
                 var pet = new Pet(model.PetName, u.UserId) { PetImageId = model.PetImageId };
-                pet = petService.InsertPet(pet);
-                if (pet == null)
+                try
+                {
+                    pet = petService.InsertPet(pet);
+                    if (pet == null)
+                    {
+                        return BadRequest();
+                    }
+                    return Redirect($"/pet/{pet.PetId}");
+                }
+                catch (SqlException)
                 {
                     return BadRequest();
                 }
-                // TODO: redirect the user to the pet status page for their new pet
-                // HACK: Throw the new pet id into the query string just so we know that an id was added
-                return Redirect($"/?PetId={pet.PetId}");
             }
             catch (ArgumentException e)
             {

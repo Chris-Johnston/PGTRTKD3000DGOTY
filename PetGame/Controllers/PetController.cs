@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -107,7 +108,20 @@ namespace PetGame
             var user = loginService.GetUserFromContext(HttpContext.User);
             if (user?.UserId == value.UserId)
             {
-                return Json(petService.InsertPet(value));
+                try
+                {
+                    return Json(petService.InsertPet(value));
+                }
+                catch (ArgumentException)
+                {
+                    // likely invalid args
+                    return BadRequest();
+                }
+                catch (SqlException)
+                {
+                    // could be constraint that yelled at us
+                    return BadRequest();
+                }
             }
             // unauthorized
             return Unauthorized();
@@ -273,7 +287,6 @@ namespace PetGame
                 {
                     n.SendMessage(u.PhoneNumber, $"Great job {u.Username}, you just placed #{rank} on the leaderboard!");
                 }
-                //n.SendDiscordWebhookNotification($"**Cool!** {u.Username} just placed #{rank} on the leaderboard with their pet {pet.Name} and a score of {score}.");
                 n.SendDiscordNotifyHighScore(rank, score, pet, u);
             }
             else
