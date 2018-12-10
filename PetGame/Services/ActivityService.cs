@@ -31,7 +31,7 @@ namespace PetGame.Services
         {
             if (after == null)
                 // get the datetime a day ago
-                after = DateTime.Now.Subtract(TimeSpan.FromDays(1));
+                after = DateTime.UtcNow.Subtract(TimeSpan.FromDays(1));
 
             // set the default limit to 10 entries
             if (limit == null)
@@ -169,7 +169,7 @@ namespace PetGame.Services
             {
                 ActivityId = 0,
                 PetId = PetId,
-                Timestamp = DateTime.Now,
+                Timestamp = DateTime.UtcNow,
                 Type = type
             });
         }
@@ -186,7 +186,7 @@ namespace PetGame.Services
             if (!(activity == ActivityType.Training || activity == ActivityType.Race || activity == ActivityType.RaceHighScore))
                 return;
 
-            var a = new List<Activity>(GetActivities(petid, 1, DateTime.Now.Subtract(TimeSpan.FromMinutes(5)), activity));
+            var a = new List<Activity>(GetActivities(petid, 1, DateTime.UtcNow.Subtract(TimeSpan.FromMinutes(5)), activity));
             // check to see if this happened in the last 5 minutes for safety
             // other than when we just inserted it
             if (a.Count > 1)

@@ -268,7 +268,7 @@ namespace PetGame
                 PetId = petid,
                 RaceId = 0,
                 Score = score,
-                Timestamp = DateTime.Now
+                Timestamp = DateTime.UtcNow
             });
 
             // also post a new activity

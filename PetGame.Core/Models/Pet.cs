@@ -23,7 +23,7 @@ namespace PetGame.Models
             Name = name;
             UserId = userid;
             PetId = 0;
-            Birthday = DateTime.Now;
+            Birthday = DateTime.UtcNow;
             IsDead = false;
             // Easy TODO: Randomize the Strength and Endurance properties of pet when created for AddPet
             Strength = 5;

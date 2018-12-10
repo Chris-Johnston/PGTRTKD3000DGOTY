@@ -79,8 +79,8 @@ namespace PetGame.Util
             var ut = new UserToken()
             {
                 UserId = user.UserId,
-                Created = DateTime.Now,
-                LastUsed = DateTime.Now
+                Created = DateTime.UtcNow,
+                LastUsed = DateTime.UtcNow
             };
 
             // generate a new token

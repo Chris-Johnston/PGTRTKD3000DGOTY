@@ -22,7 +22,7 @@ namespace PetGame.Models
         public PetActivityRequestOptions()
         {
             Limit = 10;
-            After = DateTime.Now.Subtract(TimeSpan.FromDays(1));
+            After = DateTime.UtcNow.Subtract(TimeSpan.FromDays(1));
             Type = (char) ActivityType.Default;
         }
     }

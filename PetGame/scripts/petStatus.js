@@ -54,7 +54,9 @@ function UpdateView(status) {
     }
     var time = new Date(status.serverTime);
     var next = new Date(status.timeOfNextAction);
-    var canPerformActions = time.getTime() >= next.getTime();
+    var serverTimeS = Math.floor((time.getTime() + time.getTimezoneOffset() * 60 * 1000) / 1000);
+    var nextTimeS = Math.floor((next.getTime() + next.getTimezoneOffset() * 60 * 1000) / 1000);
+    var canPerformActions = serverTimeS >= nextTimeS;
     var pet = status.pet;
     nextTime = next;
     UpdateAlert(next, canPerformActions);
@@ -89,15 +91,15 @@ function EnableButtons(canPerformActions) {
 function UpdateAlert(timeRequired, canPerformActions) {
     var a = timeoutAlert;
     a.style.display = !canPerformActions ? "block" : "none";
-    UpdateTime();
+    UpdateTime(canPerformActions);
 }
-function UpdateTime() {
-    if (nextTime == null)
+function UpdateTime(canPerformActions) {
+    if (nextTime == null || canPerformActions)
         return;
-    var now = new Date();
-    if (nextTime > now) {
+    var now = Date.now() + (new Date().getTimezoneOffset() * 60 * 1000);
+    if (true || Math.floor(nextTime.getTime() / 1000) >= Math.floor(now / 1000)) {
         var t = timeUntil;
-        var mseconds = nextTime.getTime() - now.getTime();
+        var mseconds = nextTime.getTime() - now;
         var seconds = Math.floor(mseconds / 1000);
         var min = Math.floor(seconds / 60);
         var sec = Math.floor(seconds % 60);

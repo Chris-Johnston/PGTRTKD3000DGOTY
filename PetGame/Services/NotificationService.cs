@@ -163,6 +163,7 @@ namespace PetGame.Services
 
         public void SendDiscordNotifyHighScore(long rank, int score, Pet pet, User owner)
         {
+            if (!DiscordEnable) return;
             if (pet == null || owner == null) return;
 
             string petImageUrl = $"http://pgtrtkd3000dgoty.fun/api/image/{pet.PetImageId}";
@@ -181,9 +182,12 @@ namespace PetGame.Services
                     }
                 };
                 var httpContent = new StringContent(JsonConvert.SerializeObject(content), Encoding.UTF8, "application/json");
-                var uri = new Uri(DiscordWebhook);
-                // post, ignore the result
-                var result = client.PostAsync(uri, httpContent).Result;
+                if (!string.IsNullOrWhiteSpace(DiscordWebhook))
+                {
+                    var uri = new Uri(DiscordWebhook);
+                    // post, ignore the result
+                    var result = client.PostAsync(uri, httpContent).Result;
+                }
             }
         }
     }

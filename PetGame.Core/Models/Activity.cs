@@ -30,7 +30,7 @@ namespace PetGame.Models
         /// </summary>
         [JsonProperty]
         [JsonConverter(typeof(IsoDateTimeConverter))]
-        public DateTime Timestamp { get; set; } = DateTime.Now;
+        public DateTime Timestamp { get; set; } = DateTime.UtcNow;
 
         /// <summary>
         ///     Gets or sets the type of activity performed.

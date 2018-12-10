@@ -100,7 +100,11 @@ function UpdateView(status: PetStatus)
 
     var time = new Date(status.serverTime);
     var next = new Date(status.timeOfNextAction);
-    var canPerformActions = time.getTime() >= next.getTime();
+
+    var serverTimeS = Math.floor((time.getTime() + time.getTimezoneOffset() * 60 * 1000) / 1000);
+    var nextTimeS = Math.floor((next.getTime() + next.getTimezoneOffset() * 60 * 1000) / 1000);
+
+    var canPerformActions = serverTimeS >= nextTimeS;
     var pet = status.pet;
     nextTime = next;
     
@@ -158,18 +162,18 @@ function UpdateAlert(timeRequired: Date, canPerformActions: boolean)
     var a = (timeoutAlert as HTMLDivElement);
     a.style.display = !canPerformActions ? "block" : "none";
 
-    UpdateTime();
+    UpdateTime(canPerformActions);
 }
 
-function UpdateTime() {
-    if (nextTime == null)
+function UpdateTime(canPerformActions: boolean) {
+    if (nextTime == null || canPerformActions)
         return;
 
-    var now: Date = new Date();
-    if (nextTime > now) {
+    var now: number = Date.now() + (new Date().getTimezoneOffset() * 60 * 1000);
+    if (true || Math.floor(nextTime.getTime() / 1000) >= Math.floor(now / 1000)) {
         var t = (timeUntil as HTMLSpanElement);
 
-        var mseconds: number = nextTime.getTime() - now.getTime();
+        var mseconds: number = nextTime.getTime() - now;
         var seconds = Math.floor(mseconds / 1000);
         var min = Math.floor(seconds / 60);
         var sec = Math.floor(seconds % 60);

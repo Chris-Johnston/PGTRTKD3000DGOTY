@@ -255,7 +255,7 @@ namespace PetGame.Services
             //happiness starts at 100%
             double happinessPercentage = MaximumPercentage;
 
-            DateTime ToCheck = DateTime.Now.Subtract(TimeSpan.FromDays(NumDaysToCheck));
+            DateTime ToCheck = DateTime.UtcNow.Subtract(TimeSpan.FromDays(NumDaysToCheck));
             int HoursToCheck = NumDaysToCheck * 24;
 
             IEnumerable<Activity> PastActivities = activityService.GetActivities(PetId, NumActivities, ToCheck, null);
@@ -269,8 +269,8 @@ namespace PetGame.Services
             int HoursSinceLastActivity = 0;
             HoursSinceLastActivity = CalculateHoursSinceLastActivity(PastActivities, HoursSinceLastActivity, HoursToCheck);
 
-            DateTime TimeToNextAction = TimeOfNextAction(PastActivities, CooldownLength, HoursToCheck);
-            TimeSpan span = TimeToNextAction.Subtract(DateTime.Now);
+            DateTime TimeToNextAction = TimeOfNextAction(PastActivities, CooldownLength, HoursToCheck).ToUniversalTime();
+            TimeSpan span = TimeToNextAction.Subtract(DateTime.UtcNow);
 
             //multiply HappinessDecrease by the number of hours to get the
             //happiness percentage and ensure that happiness cannot be <0 or >1
@@ -282,7 +282,7 @@ namespace PetGame.Services
             //compile the data into a new PetStatus object
             //return the new object
             return new PetStatus() { Pet = toReturn, Hunger = hungerPercentage, Happiness = happinessPercentage,
-                TooHungry = tooHungry, TooUnhappy = tooUnhappy, TimeOfNextAction = TimeToNextAction};
+                TooHungry = tooHungry, TooUnhappy = tooUnhappy, TimeOfNextAction = TimeToNextAction.ToUniversalTime(), ServerTime = DateTime.UtcNow };
         }//end of function
 
         /// <summary>
@@ -319,7 +319,7 @@ namespace PetGame.Services
                 Activity LastActivity = Activities[0];
 
                 //check the number of hours since the last activity
-                TimeSpan span = DateTime.Now.Subtract(LastActivity.Timestamp);
+                TimeSpan span = DateTime.UtcNow.Subtract(LastActivity.Timestamp);
                 HoursSinceLastActivity = (int) span.TotalHours;
             }
             return HoursSinceLastActivity;
@@ -333,11 +333,11 @@ namespace PetGame.Services
 
             if (LastActivity == null)
             {
-                return DateTime.Now;
+                return DateTime.UtcNow;
             }
             else
             {
-                return LastActivity.Timestamp.Add(TimeSpan.FromMinutes(CooldownLength));
+                return LastActivity.Timestamp.Add(TimeSpan.FromMinutes(CooldownLength)).ToUniversalTime();
             }
         }
 
