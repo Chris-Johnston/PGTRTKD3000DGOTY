@@ -7,6 +7,8 @@ before_build:
 - pwsh: >-
     cd PetGame
 
+    npm install gulp --global
+
     npm install
 
     gulp default  
