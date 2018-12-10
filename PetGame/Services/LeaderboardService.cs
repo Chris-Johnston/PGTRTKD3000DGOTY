@@ -36,7 +36,7 @@ namespace PetGame
                 var cmd = conn.CreateCommand();
 
                 //to be optimized later, if time allows
-                cmd.CommandText = @"SELECT Race.Score, Race.Timestamp, Pet.[Name] AS 'PetName', Pet.PetId, [User].Username AS 'OwnerName', [User].UserId
+                cmd.CommandText = @"SELECT Race.Score, Race.Timestamp, Pet.[Name] AS 'PetName', Pet.PetId, [User].Username AS 'OwnerName', [User].UserId, Pet.PetImageId
                                     FROM Pet, Race, [User]
                                     WHERE Race.PetId = Pet.PetId AND [User].UserId = Pet.UserId ORDER BY Score DESC
                                     OFFSET @Offset ROWS FETCH NEXT @NumResults ROWS ONLY;";
@@ -57,7 +57,8 @@ namespace PetGame
                             PetName = reader.GetString(2),
                             PetId = (ulong) reader.GetInt64(3),
                             OwnerName = reader.GetString(4),
-                            OwnerId = (ulong) reader.GetInt64(5)
+                            OwnerId = (ulong) reader.GetInt64(5),
+                            PetImageId = reader.GetInt32(6)
                         });
                     }
                 }

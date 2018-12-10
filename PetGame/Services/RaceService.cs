@@ -59,6 +59,33 @@ namespace PetGame.Services
         }
 
         /// <summary>
+        ///     Gets the ranking of a given race.
+        /// </summary>
+        /// <param name="raceid"></param>
+        /// <returns></returns>
+        public long GetRaceRank(ulong raceid)
+        {
+            using (var conn = sqlManager.EstablishDataConnection)
+            {
+                var cmd = conn.CreateCommand();
+                cmd.CommandText =
+                    @"SELECT Ranking
+                    FROM (SELECT RaceId, RANK() OVER (ORDER BY Score DESC) AS Ranking FROM Race) R
+                      WHERE R.RaceId = @RaceId;";
+                cmd.Parameters.AddWithValue("@RaceId", $"{raceid}");
+
+                using (var reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        return reader.GetInt64(0);
+                    }
+                }
+            }
+            return -1;
+        }
+
+        /// <summary>
         ///     Inserts a race into the database.
         /// </summary>
         /// <param name="race"> The race to insert into the database. </param>

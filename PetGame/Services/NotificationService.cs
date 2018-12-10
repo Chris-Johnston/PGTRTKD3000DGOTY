@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using PetGame.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -141,14 +142,44 @@ namespace PetGame.Services
         {
             // perform some basic sanitization, to prevent users injecting @everyone's
             // so pad @'s with zero width space
-            const char zwsp = '​';
-            var msg = message.Replace("@", $"@{zwsp}");
+            var msg = SanitizeForPings(message);
 
             using (var client = new HttpClient())
             {
                 // https://discordapp.com/developers/docs/resources/webhook#execute-webhook
                 // inline anon type that matches the params of the discord webhook execute endpoint
                 var content = new { content = msg, username = "PGTRTKD3000DGOTY", avatar_url = "https://raw.githubusercontent.com/Chris-Johnston/PGTRTKD3000DGOTY/master/PetRaceTurbo30xx.png" };
+                var httpContent = new StringContent(JsonConvert.SerializeObject(content), Encoding.UTF8, "application/json");
+                var uri = new Uri(DiscordWebhook);
+                // post, ignore the result
+                var result = client.PostAsync(uri, httpContent).Result;
+            }
+        }
+
+        const char zwsp = '​';
+
+        private string SanitizeForPings(string message)
+            => message.Replace("@", $"@{zwsp}");
+
+        public void SendDiscordNotifyHighScore(long rank, int score, Pet pet, User owner)
+        {
+            if (pet == null || owner == null) return;
+
+            string petImageUrl = $"http://pgtrtkd3000dgoty.fun/api/image/{pet.PetImageId}";
+
+            using (var client = new HttpClient())
+            {
+                // https://discordapp.com/developers/docs/resources/webhook#execute-webhook
+                // inline anon type that matches the params of the discord webhook execute endpoint
+                var content = new { content = " ", username = "PGTRTKD3000DGOTY", avatar_url = petImageUrl,
+                    embeds = new[] {
+                        new { title = "New High Score!", url = "http://pgtrtkd3000dgoty.fun/leaderboard", image = new { url = petImageUrl },
+                            color = 0x4ef442,
+                            author = new { name = "PGTRTKD3000DGOTY(tm)", url = "http://pgtrtkd3000dgoty.fun", icon_url = "https://raw.githubusercontent.com/Chris-Johnston/PGTRTKD3000DGOTY/master/PetRaceTurbo30xx.png" },
+                            description =
+                        $"Wow! **{SanitizeForPings(owner.Username)}** just placed **#{rank}** on the leaderboard with a score of **{score}** with their pet **{SanitizeForPings(pet.Name)}**" }
+                    }
+                };
                 var httpContent = new StringContent(JsonConvert.SerializeObject(content), Encoding.UTF8, "application/json");
                 var uri = new Uri(DiscordWebhook);
                 // post, ignore the result

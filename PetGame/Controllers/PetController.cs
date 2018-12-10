@@ -229,5 +229,59 @@ namespace PetGame
             activityService.UpdatePetFromActivity(t, petid, petService);
             return Ok(result);
         }
+
+        // creates a new score
+        [HttpPost("{petid}/race/{score}")]
+        public IActionResult PostNewScore(ulong petid, int score)
+        {
+            var u = loginService.GetUserFromContext(HttpContext.User);
+            if (u == null) return Unauthorized();
+
+            // get the pet
+            var pet = petService.GetPetById(petid);
+            if (pet == null)
+                return NotFound();
+            // check ownership
+            if (pet.UserId != u.UserId)
+                return Unauthorized();
+
+            if (score <= 0)
+                return BadRequest();
+
+            RaceService race = new RaceService(this.sqlManager);
+            var r = race.InsertRace(new Race()
+            {
+                PetId = petid,
+                RaceId = 0,
+                Score = score,
+                Timestamp = DateTime.Now
+            });
+
+            // also post a new activity
+            activityService.MakeActivityForPet(petid, ActivityType.Race);
+
+            // if the score was podium
+            var rank = race.GetRaceRank(r.RaceId);
+            if (rank != -1 && rank < 4)
+            {
+                activityService.MakeActivityForPet(petid, ActivityType.RaceHighScore);
+                activityService.UpdatePetFromActivity(ActivityType.RaceHighScore, petid, petService);
+
+                // new high score was posted
+                var n = new NotificationService();
+                if (u.PhoneNumber != null)
+                {
+                    n.SendMessage(u.PhoneNumber, $"Great job {u.Username}, you just placed #{rank} on the leaderboard!");
+                }
+                //n.SendDiscordWebhookNotification($"**Cool!** {u.Username} just placed #{rank} on the leaderboard with their pet {pet.Name} and a score of {score}.");
+                n.SendDiscordNotifyHighScore(rank, score, pet, u);
+            }
+            else
+            {
+                activityService.UpdatePetFromActivity(ActivityType.Race, petid, petService);
+            }
+
+            return Json(r);
+        }
     }
 }
