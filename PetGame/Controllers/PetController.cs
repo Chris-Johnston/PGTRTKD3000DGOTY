@@ -256,6 +256,22 @@ namespace PetGame
                 Score = score,
                 Timestamp = DateTime.Now
             });
+
+            // also post a new activity
+            activityService.MakeActivityForPet(petid, ActivityType.Race);
+
+            // if the score was podium
+            var rank = race.GetRaceRank(r.RaceId);
+            if (rank != -1 && rank < 4)
+            {
+                activityService.MakeActivityForPet(petid, ActivityType.RaceHighScore);
+                activityService.UpdatePetFromActivity(ActivityType.RaceHighScore, petid, petService);
+            }
+            else
+            {
+                activityService.UpdatePetFromActivity(ActivityType.Race, petid, petService);
+            }
+
             return Json(r);
         }
     }

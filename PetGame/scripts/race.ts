@@ -52,7 +52,6 @@ function press() {
     if (gameActive) {
         if (!cooldownActive) {
             moveRight();
-            startCount();
             cooldown();
         }
         // already in cooldown
@@ -83,6 +82,7 @@ function startGame() {
     myGameArea.start();
     distance = 0;
     gameActive = true;
+    startGameTimer();
 }
 
 var myGameArea = {
@@ -164,9 +164,9 @@ function win()
         stopCount();
         gameActive = false;
         // determine the score
-        var score = Math.floor(map(getMSeconds(), 0, 60000, 1000000, 10));
-        if (score < 0)
-            score = 0;
+        var score = 1 + Math.floor(map(getMSeconds(), 0, 120000, 1000000, 10));
+        if (score < 1)
+            score = 1;
         // set the final score
         finalScore.innerText = `${score}`;
 
@@ -197,7 +197,7 @@ var timerIsOn: boolean = false;
 var timeStart: Date;
 var timeStop: Date;
 
-function startCount() {
+function startGameTimer() {
     if (!timerIsOn) {
         timerIsOn = true;
         timeStart = new Date();

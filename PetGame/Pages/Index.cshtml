@@ -27,15 +27,15 @@
                 }
                 <div class="pet-label">Status:</div>
                 <div class="pet-label hunger">
-                    @(x.value.Hunger * 100)
+                    @(Math.Floor(x.value.Hunger * 100))
                 </div>
                 <div class="pet-label happy">
-                    @(x.value.Happiness * 100)
+                    @(Math.Floor(x.value.Happiness * 100))
                 </div>
             </a>
             lastIndex = x.index + 1;
         }
-        @if (lastIndex < 3)
+        @if (lastIndex < 8)
         {
             <a class="div-link pet-box new-pet pet-@lastIndex" href="/AddPet">
                 <div class="pet-name">New Pet</div>
