@@ -126,8 +126,24 @@ class PlayerObject {
 
         // draw the current time
         this.ctx.font = "30px Arial";
-        this.ctx.fillText(`Time: ${seconds}`, 10, 50);
+        this.ctx.fillText(`Time: ${getSeconds()}`, 10, 50);
     }
+}
+
+function getMSeconds(): number {
+    if (timeStart == null)
+        return 0;
+    if (timerIsOn) {
+        return (new Date().getTime() - timeStart.getTime());
+    }
+    else {
+        if (timeStop == null) return;
+        return (timeStop.getTime() - timeStart.getTime());
+    }
+}
+
+function getSeconds() {
+    return Math.floor(getMSeconds() / 1000);
 }
 
 function updateGameArea() {
@@ -136,7 +152,6 @@ function updateGameArea() {
 
     // check if distance >1
     if (distance > 1) {
-        stopCount();
         // placeholer
         win();
     }
@@ -147,9 +162,10 @@ function win()
     setCooldown(true);
     if (gameActive)
     {
+        stopCount();
         gameActive = false;
         // determine the score
-        var score = Math.floor(map(seconds, 0, 60, 1000000, 10));
+        var score = Math.floor(map(getMSeconds(), 0, 60000, 1000000, 10));
         if (score < 0)
             score = 0;
         // set the final score
@@ -172,30 +188,27 @@ function win()
 
         // show the results text
         afterRace.style.display = "block";
+        duringrace.style.display = "none";
     }
 }
 
-
-var seconds = 0;
 var timer : number;
-var timer_is_on : boolean = false;
+var timerIsOn: boolean = false;
 
-function timedCount() {
-    // would have preferred to use a DateTime here instead
-    seconds++;
-    timer = setTimeout(timedCount, 1000);
-}
+var timeStart: Date;
+var timeStop: Date;
 
 function startCount() {
-    if (!timer_is_on) {
-        timer_is_on = true;
-        timedCount();
+    if (!timerIsOn) {
+        timerIsOn = true;
+        timeStart = new Date();
     }
 }
 
 function stopCount() {
     clearTimeout(timer);
-    timer_is_on = false;
+    timerIsOn = false;
+    timeStop = new Date();
 }
 
 

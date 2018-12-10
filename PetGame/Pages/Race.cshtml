@@ -16,25 +16,22 @@
 <h1>
     Race with @Model.CurrentPet.Name (@Model.CurrentPet.PetId)!
 </h1>
-<h2>
-    Spam the Race button to race!
-</h2>
-
 <div id="before-race" class="before-wrapper">
     <h1 id="countdowntext" class="text-center text-success countdown" style="display: none !important;">Race begins in..</h1>
     <button class="btn btn-primary btn-lg" id="start-race">Start!</button>
 </div>
 
-<div id="after-race" style="display: none;">
+<div id="after-race" style="display: none;" class="text-center">
     <h1 class="display-1 text-success text-center">Congratulations!</h1>
-    <h2 class="display-3">
-        @Model.CurrentPet.Name completed the race with a score of:
+    <h2>
+        <span class="text-info">@Model.CurrentPet.Name</span> completed the race with a score of:
         <span class="text-info" id="final-score">????</span>
     </h2>
     <a class="btn btn-secondary btn-lg" href="/Leaderboard" role="button">View Leaderboard</a>
 </div>
 
 <div id="during-race" style="display: none;">
+    <p>Press the <em>Dash!</em> button, or the <kbd>Spacebar</kbd> button to give your pet an extra boost!</p>
     <canvas id="race-canvas" width="600" height="500"></canvas>
     <div class="button-wrapper">
         <button class="btn btn-primary btn-lg btn-block" id="race-button">Dash!</button>
