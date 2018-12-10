@@ -15,7 +15,7 @@ CREATE TABLE [dbo].[Pet](
     -- name of the pet, uses the same regex as a username, but with spaces
     -- can only have a single space between words, cannot have leading
     -- spaces, but *can* have trailing spaces
-	[Name] [varchar](50) UNIQUE NOT NULL
+	[Name] [varchar](50) NOT NULL
     -- Check that the pet name is valid
     CONSTRAINT CHK_PetName_Valid
 	--name must be between 2 and 50 characters
