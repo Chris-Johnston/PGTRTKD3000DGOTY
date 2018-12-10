@@ -1,17 +1,10 @@
- <Project Sdk="Microsoft.NET.Sdk.Web">
+﻿ <Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
     <UserSecretsId>2e87377c-fae7-40cb-9a43-b2ee6d7cf61a</UserSecretsId>
     <TypeScriptToolsVersion>Latest</TypeScriptToolsVersion>
   </PropertyGroup>
-
-  <ItemGroup>
-    <None Remove="scripts\login.ts" />
-    <None Remove="scripts\pet.ts" />
-    <None Remove="scripts\petStatus.ts" />
-    <None Remove="scripts\race.ts" />
-  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.App" />
@@ -36,5 +29,6 @@
   <ItemGroup>
     <Folder Include="wwwroot\css\" />
     <Folder Include="wwwroot\img\" />
+    <Folder Include="wwwroot\scripts\" />
   </ItemGroup>
 </Project>
