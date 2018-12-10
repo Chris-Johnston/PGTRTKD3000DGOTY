@@ -21,7 +21,7 @@
 </h2>
 
 <div id="before-race" class="before-wrapper">
-    <h1 id="countdowntext" class="display-2 text-center text-success countdown" style="display: none !important;">Race begins in..</h1>
+    <h1 id="countdowntext" class="text-center text-success countdown" style="display: none !important;">Race begins in..</h1>
     <button class="btn btn-primary btn-lg" id="start-race">Start!</button>
 </div>
 
@@ -29,8 +29,9 @@
     <h1 class="display-1 text-success text-center">Congratulations!</h1>
     <h2 class="display-3">
         @Model.CurrentPet.Name completed the race with a score of:
-    <span class="text-info" id="final-score">????</span>
-</h2>
+        <span class="text-info" id="final-score">????</span>
+    </h2>
+    <a class="btn btn-secondary btn-lg" href="/Leaderboard" role="button">View Leaderboard</a>
 </div>
 
 <div id="during-race" style="display: none;">

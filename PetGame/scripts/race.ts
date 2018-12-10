@@ -79,7 +79,7 @@ var myGamePiece: any = null;
 var distance = 0;
 
 function startGame() {
-    myGamePiece = component(250, 250, `/api/image/${petimageid}`, 10, 120);
+    myGamePiece = new PlayerObject(250, 250, `/api/image/${petimageid}`, 10, 120);
     myGameArea.start();
     distance = 0;
     gameActive = true;
@@ -101,29 +101,33 @@ function getTotalDistance(): number {
     return (myGameArea.canvas as HTMLCanvasElement).width - 150 - 50;
 }
 
-function component(width: number, height: number, imageSrc: string, x: any, y: any) {
-    this.width = width;
-    this.height = height;
-    this.speedX = 0;
-    this.speedY = 0;
-    this.x = x;
-    this.y = y;
-    this.image = new Image();
-    this.image.src = imageSrc;
-    var ctx = null;
-    this.update = function ()
-    {
+class PlayerObject {
+    width: number;
+    height: number;
+    x: number;
+    y: number;
+    image: any;
+    ctx: any;
+    constructor(width: number, height: number, imagesrc: string, x: any, y: any) {
+        this.width = width;
+        this.height = height;
+        this.image = new Image();
+        this.image.src = imagesrc;
+        this.x = x;
+        this.y = y;
+        this.ctx = null;
+    }
+    update() {
         updateRunning();
         this.x = distance * getTotalDistance();
         // draw the image on the canvas
-        ctx = (myGameArea.canvas as HTMLCanvasElement).getContext("2d");
-        ctx.drawImage(this.image, this.x, this.y, this.width, this.height);
+        this.ctx = (myGameArea.canvas as HTMLCanvasElement).getContext("2d");
+        this.ctx.drawImage(this.image, this.x, this.y, this.width, this.height);
 
         // draw the current time
-        ctx.font = "30px Arial";
-        ctx.fillText(`Time: ${seconds}`, 10, 50);
+        this.ctx.font = "30px Arial";
+        this.ctx.fillText(`Time: ${seconds}`, 10, 50);
     }
-    return this;
 }
 
 function updateGameArea() {
@@ -140,30 +144,35 @@ function updateGameArea() {
 
 function win()
 {
-    gameActive = false;
+    setCooldown(true);
+    if (gameActive)
+    {
+        gameActive = false;
+        // determine the score
+        var score = Math.floor(map(seconds, 0, 60, 100000000, 10));
+        if (score < 0)
+            score = 0;
+        // set the final score
+        finalScore.innerText = `${score}`;
 
-    // determine the score
-    var score = Math.floor(map(seconds, 0, 60, 100000000, 10));
-    if (score < 0)
-        score = 0;
-    // set the final score
-    finalScore.innerText = `${score}`;
+        // post the score
+        // this is very insecure, but I don't really care atm
+        const to = `/api/pet/${petid}/race/${score}`;
+        var request = new XMLHttpRequest();
+        request.open('POST', to);
+        request.addEventListener('load', function (ev: ProgressEvent) {
+            if (this.status >= 300) {
+                console.log(this);
+                console.log(ev);
+                alert('got a non 200 status, uh oh.');
+            }
 
-    // post the score
-    // this is very insecure, but I don't really care atm
-    const to = `/api/pet/${petid}/race/${score}`;
-    var request = new XMLHttpRequest();
-    request.open('POST', to);
-    request.addEventListener('load', function (ev: ProgressEvent) {
-        if (this.status >= 300) {
-            console.log(this);
-            console.log(ev);
-            alert('got a non 200 status, uh oh.');
-        }
-            
-    })
-    request.send();
-    // does this need a callback?
+        })
+        request.send();
+
+        // show the results text
+        afterRace.style.display = "block";
+    }
 }
 
 
@@ -279,4 +288,4 @@ function actuallyStart() {
     duringrace.style.display = "block";
     beforerace.style.display = "none";
 }
-
+ 

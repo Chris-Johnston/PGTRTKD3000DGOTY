@@ -1,7 +1,4 @@
-﻿// declared by the main page, set via razor
-declare const petid: number;
-
-var d = document;
+﻿var d = document;
 
 // set up refs to buttons and spans in the page
 var petHunger = d.getElementById("pet-hunger");
