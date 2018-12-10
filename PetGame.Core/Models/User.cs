@@ -88,7 +88,7 @@ namespace PetGame.Models
             get => _PhoneNumber;
             set
             {
-                if (value == null)
+                if (string.IsNullOrWhiteSpace(value))
                     _PhoneNumber = null;
                 else
                 {

@@ -31,10 +31,14 @@
     <div class="form-group">
         <label for="password_register">Password:</label>
         <input id="password_register" type="password" name="password" placeholder="Password" required />
+        <small id="passwordHelp" class="form-text text-muted">Passwords must be at least 8 characters.
+            <span class="text-info">While we are using a HMACSHA256 algorithm on your password, it's
+            always a good practice to never reuse passwords.</span>
+        </small>
     </div>
     <div class="form-group">
-        <label for="phone_number">SMS Phone Number:</label>
-        <input id="phone_number_register" type="text" name="PhoneNumber" placeholder="+10005551234" />
+        <label for="phone_number"><span class="text-info">(Optional)</span> SMS Phone Number:</label>
+        <input id="phone_number_register" type="text" name="PhoneNumber" placeholder="+10005551234" value="+10000000000" />
         <small id="phone_number_help" class="form-text text-muted">
             Required format: +10005551234
             <br />

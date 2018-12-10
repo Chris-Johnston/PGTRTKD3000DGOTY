@@ -74,7 +74,19 @@ namespace PetGame
         public IActionResult PostRegister()
         {
             var svc = new LoginService(sqlManager);
-            var ut = svc.RegisterNewUser(this as ControllerBase, twilio);
+            UserToken ut;
+            try
+            {
+                ut = svc.RegisterNewUser(this as ControllerBase, twilio);
+            }
+            catch (InsecurePasswordException e)
+            {
+                return BadRequest(e.Message);
+            }
+            catch (ArgumentException e)
+            {
+                return BadRequest(e.Message);
+            }
             if (ut == null)
                 // bad data
                 return Unauthorized();
