@@ -46,5 +46,7 @@ namespace PetGame.Models
         [JsonProperty]
         [JsonConverter(typeof(IsoDateTimeConverter))]
         public DateTime TimeOfNextAction { get; set; }
+        [JsonProperty]
+        public DateTime ServerTime { get; } = DateTime.Now;
     }
 }

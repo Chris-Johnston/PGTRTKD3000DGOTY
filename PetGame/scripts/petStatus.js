@@ -52,7 +52,7 @@ function UpdateView(status) {
     if (status == null) {
         return;
     }
-    var time = new Date();
+    var time = new Date(status.serverTime);
     var next = new Date(status.timeOfNextAction);
     var canPerformActions = time >= next;
     var pet = status.pet;

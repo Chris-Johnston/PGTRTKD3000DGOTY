@@ -28,6 +28,7 @@ interface PetStatus {
     happiness: number;
     hunger: number;
     timeOfNextAction: string;
+    serverTime: string;
 }
 
 function SendActivityType(type: string) {
@@ -97,7 +98,7 @@ function UpdateView(status: PetStatus)
         return;
     }
 
-    var time = new Date();
+    var time = new Date(status.serverTime);
     var next = new Date(status.timeOfNextAction);
     var canPerformActions = time >= next;
     var pet = status.pet;
