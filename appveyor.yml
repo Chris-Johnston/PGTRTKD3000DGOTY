@@ -7,13 +7,10 @@ install:
   - sh: nvm install 6
 before_build:
 - nuget restore
-- pwsh: >-
+- ps: |
     cd PetGame
-
     npm install gulp-cli --global
-
     npm install
-
     gulp default  
 build:
   publish_aspnet_core: true
