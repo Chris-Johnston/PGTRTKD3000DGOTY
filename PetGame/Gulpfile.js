@@ -23,6 +23,8 @@ gulp.task('cleanless', function () {
 gulp.task('clean', gulp.parallel(['cleanscripts', 'cleanless']));
 
 gulp.task('scripts', function () {
+    // log the cwd
+    console.log("running in path " + __filename);
     return gulp.src(paths.scripts)
         .pipe(gulp.dest('wwwroot/scripts'))
         .pipe(debug({ title: 'scripts output:' }));
