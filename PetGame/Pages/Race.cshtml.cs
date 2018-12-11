@@ -19,6 +19,8 @@ namespace PetGame.Pages
         public Pet CurrentPet { get; private set; } = null;
         public User CurrentUser { get; private set; } = null;
 
+        public bool CanRace { get; private set; } = true;
+
         private readonly SqlManager sqlManager;
         private readonly PetService petService;
         private readonly LoginService loginService;
@@ -42,6 +44,16 @@ namespace PetGame.Pages
                 {
                     // pet not found, or wrong owner
                     Response.StatusCode = 404;
+                    return;
+                }
+                // check that the user can race right now
+                var status = petService.GetPetStatusById(id);
+                if (status.ServerTime < status.TimeOfNextAction)
+                {
+                    // cannot perform action
+                    // bad request
+                    Response.StatusCode = 400;
+                    CanRace = false;
                     return;
                 }
             }
