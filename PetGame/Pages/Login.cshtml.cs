@@ -9,8 +9,16 @@ namespace PetGame.Pages
 {
     public class LoginModel : PageModel
     {
-        public void OnGet()
+        public string ErrorType { get; set; } = null;
+
+        public void OnGet(string Error="")
         {
+            if (string.IsNullOrWhiteSpace(Error))
+                ErrorType = null;
+            else
+            {
+                ErrorType = Error;
+            }
         }
     }
 }
