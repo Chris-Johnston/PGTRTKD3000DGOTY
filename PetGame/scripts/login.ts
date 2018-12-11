@@ -1,4 +1,4 @@
 ﻿// This is an example of how to include typescript files
 // it is currently unused, but I will leave this here until we add more typescript files.
 
-const test = "this is a test";
+console.log("test");
