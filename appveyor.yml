@@ -3,7 +3,8 @@ image:
 - Visual Studio 2017
 - Ubuntu
 install:
-  - ps: Install-Product node 6
+  - cmd: powershell Install-Product node 6
+  - sh: nvm install 6
 before_build:
 - nuget restore
 - pwsh: >-
