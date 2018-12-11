@@ -48,7 +48,6 @@ namespace PetGame.Pages
                     // if the user matches
                     activity.MakeActivityForPet(CurrentPetStatus.Pet.PetId, ActivityType.UserLogin);
                 }
-                
             }
             else
             {
