@@ -8,6 +8,8 @@ var gulp = require('gulp');
 var del = require('del');
 var less = require('gulp-less');
 var debug = require('gulp-debug');
+var ts = require("gulp-typescript");
+var tsProject = ts.createProject("scripts/tsconfig.json");
 
 var paths = {
     scripts: ['scripts/**/*.js', 'scripts/**/*.ts', 'scripts/**/*.map'],
@@ -23,10 +25,10 @@ gulp.task('cleanless', function () {
 gulp.task('clean', gulp.parallel(['cleanscripts', 'cleanless']));
 
 gulp.task('scripts', function () {
-    // log the cwd
-    console.log("running in path " + __filename);
-    return gulp.src(paths.scripts)
-        .pipe(gulp.dest('wwwroot/scripts'))
+    console.log("gulpefile located in " + __filename);
+    return tsProject.src()
+        .pipe(tsProject())
+        .js.pipe(gulp.dest("wwwroot/scripts"))
         .pipe(debug({ title: 'scripts output:' }));
 });
 

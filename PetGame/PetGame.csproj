@@ -7,6 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="scripts\testScript.ts" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="2.6.2">
       <PrivateAssets>all</PrivateAssets>
@@ -20,6 +24,7 @@
     <ProjectReference Include="..\PetGame.Core\PetGame.Core.csproj" />
   </ItemGroup>
   <ItemGroup>
+    <TypeScriptCompile Include="scripts\testScript.ts" />
     <TypeScriptCompile Include="scripts\login.ts" />
     <TypeScriptCompile Include="scripts\pet.ts" />
     <TypeScriptCompile Include="scripts\petDebugger.ts" />
