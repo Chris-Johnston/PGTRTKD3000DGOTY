@@ -236,6 +236,13 @@ namespace PetGame
                 // invalid type
                 return BadRequest();
             }
+            // double check the pet status, ensure that they can actually perform actions
+            var status = petService.GetPetStatusById(petid);
+            if (status.ServerTime < status.TimeOfNextAction)
+            {
+                // server time is before we can actually do the next action
+                return BadRequest();
+            }
             var result = activityService.MakeActivityForPet(petid, t);
             if (result == null)
                 return BadRequest();
@@ -261,6 +268,9 @@ namespace PetGame
 
             if (score <= 0)
                 return BadRequest();
+
+            // TODO: Consider limiting this based on when the last score was inserted and when the last activity for this pet appears
+            // could use the activity id as a way to do this.
 
             RaceService race = new RaceService(this.sqlManager);
             var r = race.InsertRace(new Race()
