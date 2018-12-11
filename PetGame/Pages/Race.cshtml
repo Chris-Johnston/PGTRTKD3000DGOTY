@@ -27,13 +27,29 @@ else if (Model.CurrentPet == null)
         Couldn't find that pet. Are you sure it exists, and that it belongs to you?
     </div>
 }
+else if (!Model.CanRace)
+{
+    // pet not found
+    <br />
+    <div class="alert alert-warning">
+        <h1>
+            Uh-oh!
+        </h1>
+        <p>
+            <span class="text-info">@Model.CurrentPet.Name</span> needs a break before it can race.
+        </p>
+        <p>
+            <a href="/Pet/@Model.CurrentPet.PetId">Navigate back to the Pet status page.</a>
+        </p>
+    </div>
+}
 else // we good
 {
     <script type="text/javascript">
-    const petid = @Model.CurrentPet.PetId;
-    const petimageid = @Model.CurrentPet.PetImageId;
-    const endurance = @Model.CurrentPet.Endurance;
-    const strength = @Model.CurrentPet.Strength;
+            const petid = @Model.CurrentPet.PetId;
+            const petimageid = @Model.CurrentPet.PetImageId;
+            const endurance = @Model.CurrentPet.Endurance;
+            const strength = @Model.CurrentPet.Strength;
     </script>
     <h1>
         Race with @Model.CurrentPet.Name (@Model.CurrentPet.PetId)!
