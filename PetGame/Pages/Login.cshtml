@@ -1,13 +1,42 @@
 ﻿@page
 @using PetGame.Pages
+@using PetGame
 @model LoginModel
 @{
     Layout = "~/Pages/_Layout.cshtml";
     ViewBag.Title = "Login";
 }
-
 <h1>Login</h1>
-
+<!-- Show error messages, if relevant. -->
+@if (!string.IsNullOrWhiteSpace(Model.ErrorType))
+{
+<div class="alert alert-danger">
+    <h2>
+        Uh-oh!
+    </h2>
+    <p>We couldn't process this request.</p>
+    @if (Model.ErrorType == LoginController.ErrorInvalidArguments)
+    {
+        <p>One or more of your arguments were invalid.</p>
+    }
+    else if (Model.ErrorType == LoginController.ErrorInsecurePassword)
+    {
+        <p>The supplied password was too insecure. Please ensure that your passwords are at least 8 characters long.</p>
+    }
+    else if (Model.ErrorType == LoginController.ErrorProbablyDuplicate)
+    {
+        <p>There was an error registering this user. Are you sure you haven't already made an account?</p>
+    }
+    else if (Model.ErrorType == LoginController.ErrorBadCredentials)
+    {
+        <p>The supplied credentials were invalid.</p>
+    }
+    else
+    {
+        <p>There was an unspecified error.</p>
+    }
+</div>
+}
 <!-- POST this data to /api/login on successful login, will show name of logged in user-->
 <form method="post" action="api/login">
     <div class="form-group">
@@ -31,9 +60,12 @@
     <div class="form-group">
         <label for="password_register">Password:</label>
         <input id="password_register" type="password" name="password" placeholder="Password" required />
-        <small id="passwordHelp" class="form-text text-muted">Passwords must be at least 8 characters.
-            <span class="text-info">While we are using a HMACSHA256 algorithm on your password, it's
-            always a good practice to never reuse passwords.</span>
+        <small id="passwordHelp" class="form-text text-muted">
+            Passwords must be at least 8 characters.
+            <span class="text-info">
+                While we are using a HMACSHA256 algorithm on your password, it's
+                always a good practice to never reuse passwords.
+            </span>
         </small>
     </div>
     <div class="form-group">

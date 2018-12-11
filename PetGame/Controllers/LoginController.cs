@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
 using System.Security.Claims;
@@ -58,13 +59,29 @@ namespace PetGame
         public IActionResult PostLogin()
         {
             var svc = new LoginService(sqlManager);
-            var ut = svc.GetUserToken(this as ControllerBase);
-            if (ut == null)
-                return Unauthorized();
-            SignIn(ut);
-            // return to landing page
-            return Redirect("/");
+            try
+            {
+                var ut = svc.GetUserToken(this as ControllerBase);
+                if (ut == null)
+                {
+                    return Redirect($"/Login?Error={ErrorBadCredentials}");
+                    //return Unauthorized();
+                }
+
+                SignIn(ut);
+                // return to landing page
+                return Redirect("/");
+            }
+            catch (ArgumentException)
+            {
+                return Redirect($"/Login?Error={ErrorInvalidArguments}");
+            }
         }
+
+        public const string ErrorBadCredentials = "InvalidCredentials";
+        public const string ErrorInsecurePassword = "InsecurePassword";
+        public const string ErrorInvalidArguments = "InvalidArguments";
+        public const string ErrorProbablyDuplicate = "Duplicate";
 
         /// <summary>
         ///     Registers a new user with the supplied credentials.
@@ -81,14 +98,22 @@ namespace PetGame
             }
             catch (InsecurePasswordException e)
             {
-                return BadRequest(e.Message);
+                // redirect back to itself
+                return Redirect($"/Login?Error={ErrorInsecurePassword}");
             }
             catch (ArgumentException e)
             {
-                return BadRequest(e.Message);
+                return Redirect($"/Login?Error={ErrorInvalidArguments}");
+            }
+            catch (SqlException e)
+            {
+                // this could also be thrown if the sql server connection is dead
+                // or if the connection string is invalid or something, but we are assuming not the case.
+                return Redirect($"/Login?Error={ErrorProbablyDuplicate}");
             }
             if (ut == null)
                 // bad data
+                // not sure this would ever happen in this case.
                 return Unauthorized();
             SignIn(ut);
             // return to landing page
