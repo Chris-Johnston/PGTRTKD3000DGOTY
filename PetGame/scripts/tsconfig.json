@@ -21,7 +21,8 @@
     "./pet.ts",
     "./petDebugger.ts",
     "./race.ts",
-    "./petStatus.ts"
+    "./petStatus.ts",
+    "./testScript.ts"
   ],
   "compileOnSave": true
 }
