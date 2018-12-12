@@ -68,6 +68,7 @@ namespace PetGame
             try
             {
                 var pet = new Pet(model.PetName, u.UserId) { PetImageId = model.PetImageId };
+                PetEasterEggs.CheckIfSpecialName(pet);
                 try
                 {
                     pet = petService.InsertPet(pet);
