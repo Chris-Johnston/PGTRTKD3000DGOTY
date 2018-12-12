@@ -50,6 +50,12 @@ namespace PetGame
                 { 12, (Path: "~/img/pets/pet_12.png", MIME: "image/png") },
                 { 13, (Path: "~/img/pets/pet_13.png", MIME: "image/png") },
                 { 14, (Path: "~/img/pets/pet_14.jpg", MIME: "image/jpeg") },
+                { 15, (Path: "~/img/pets/pet_15.png", MIME: "image/png") },
+                { 16, (Path: "~/img/pets/benjamin.png", MIME: "image/png") },
+                { 17, (Path: "~/img/pets/sadcat.png", MIME: "image/png") },
+                { 18, (Path: "~/img/pets/pet_16.png", MIME: "image/png") },
+                { 19, (Path: "~/img/pets/loops.png", MIME: "image/png") },
+                { 20, (Path: "~/img/pets/fast.png", MIME: "image/png") },
             };
 
         public const int ImageGoldOrangId = 1001;
@@ -57,6 +63,7 @@ namespace PetGame
         public const int ImageThinking = 1003;
         public const int ImageLegs = 1003;
         public const int ImageVim = 1004;
+        public const int ImageRasinBran = 1005;
 
         private static Dictionary<int, (string Path, string MIME)> SecretImages
             => new Dictionary<int, (string Path, string MIME)>()
@@ -66,6 +73,7 @@ namespace PetGame
                 { ImageThinking, (Path: "~/img/pets/thinking.png", MIME: "image/png") },
                 { ImageLegs, (Path: "~/img/pets/legs.png", MIME: "image/png") },
                 { ImageVim, (Path: "~/img/pets/vim.png", MIME: "image/png") },
+                { ImageRasinBran, (Path: "~/img/pets/rasinbran.png", MIME: "image/png") },
             };
 
         /// <summary>

@@ -44,14 +44,20 @@ namespace PetGame
             else if (pet.Name.ToLowerInvariant() == "legs")
             {
                 pet.Strength = 99;
-                pet.Strength = 99;
+                pet.Endurance = 99;
                 pet.PetImageId = PetImages.ImageLegs;
             }
             else if (pet.Name.ToLowerInvariant() == "vim" || Regex.IsMatch(pet.Name, "^[Rr]+[eE]+") || Regex.IsMatch(ownerName, "^[Rr]+[eE]+"))
             {
                 pet.Strength = 99;
-                pet.Strength = 99;
+                pet.Endurance = 99;
                 pet.PetImageId = PetImages.ImageVim;
+            }
+            else if (pet.Name == "rasin  bran man")
+            {
+                pet.Endurance = 1;
+                pet.Strength = 1;
+                pet.PetImageId = PetImages.ImageRasinBran;
             }
         }
     }
