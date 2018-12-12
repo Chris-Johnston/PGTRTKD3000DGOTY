@@ -61,7 +61,7 @@ namespace PetGame
         public const int ImageGoldOrangId = 1001;
         public const int ImageHacker = 1002;
         public const int ImageThinking = 1003;
-        public const int ImageLegs = 1003;
+        public const int ImageLegs = 1006;
         public const int ImageVim = 1004;
         public const int ImageRasinBran = 1005;
 
