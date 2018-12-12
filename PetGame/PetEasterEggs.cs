@@ -41,6 +41,12 @@ namespace PetGame
                 pet.Endurance = 20;
                 pet.PetImageId = PetImages.ImageThinking;
             }
+            else if (pet.Name.ToLowerInvariant() == "legs")
+            {
+                pet.Strength = 99;
+                pet.Strength = 99;
+                pet.PetImageId = PetImages.ImageLegs;
+            }
         }
     }
 }
