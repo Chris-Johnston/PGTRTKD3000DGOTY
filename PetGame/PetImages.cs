@@ -47,6 +47,8 @@ namespace PetGame
                 { 9, (Path: "~/img/pets/pet_09.png", MIME: "image/png") },
                 { 10, (Path: "~/img/pets/pet_10.png", MIME: "image/png") },
                 { 11, (Path: "~/img/pets/pet_11.png", MIME: "image/png") },
+                { 12, (Path: "~/img/pets/pet_12.png", MIME: "image/png") },
+                { 13, (Path: "~/img/pets/pet_13.png", MIME: "image/png") },
             };
 
         public const int ImageGoldOrangId = 1001;
