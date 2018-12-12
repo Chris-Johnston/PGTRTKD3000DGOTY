@@ -20,7 +20,7 @@ namespace PetGame
         ///     Checks if a pet has a special name, and makes modifications to it accordingly.
         /// </summary>
         /// <param name="pet"></param>
-        public static void CheckIfSpecialName(Pet pet)
+        public static void CheckIfSpecialName(Pet pet, string ownerName)
         {
             if (pet.Name == GoldOrang)
             {
@@ -46,6 +46,12 @@ namespace PetGame
                 pet.Strength = 99;
                 pet.Strength = 99;
                 pet.PetImageId = PetImages.ImageLegs;
+            }
+            else if (pet.Name.ToLowerInvariant() == "vim" || Regex.IsMatch(pet.Name, "^[Rr]+[eE]+") || Regex.IsMatch(ownerName, "^[Rr]+[eE]+"))
+            {
+                pet.Strength = 99;
+                pet.Strength = 99;
+                pet.PetImageId = PetImages.ImageVim;
             }
         }
     }

@@ -56,6 +56,7 @@ namespace PetGame
         public const int ImageHacker = 1002;
         public const int ImageThinking = 1003;
         public const int ImageLegs = 1003;
+        public const int ImageVim = 1004;
 
         private static Dictionary<int, (string Path, string MIME)> SecretImages
             => new Dictionary<int, (string Path, string MIME)>()
@@ -64,6 +65,7 @@ namespace PetGame
                 { ImageHacker, (Path: "~/img/pets/hacker.png", MIME: "image/png") },
                 { ImageThinking, (Path: "~/img/pets/thinking.png", MIME: "image/png") },
                 { ImageLegs, (Path: "~/img/pets/legs.png", MIME: "image/png") },
+                { ImageVim, (Path: "~/img/pets/vim.png", MIME: "image/png") },
             };
 
         /// <summary>
