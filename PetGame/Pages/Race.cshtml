@@ -43,10 +43,23 @@ else if (!Model.CanRace)
         </p>
     </div>
 }
+else if (Model.CurrentPet.UserId != Model.CurrentPet.UserId)
+{
+    // pet not found
+    <br />
+    <div class="alert alert-warning">
+        <h1>
+            Uh-oh!
+        </h1>
+        <p>
+            This pet does not belong to you.
+        </p>
+    </div>
+}
 else // we good
 {
     <script type="text/javascript">
-            const petid = @Model.CurrentPet.PetId;
+                    const petid = @Model.CurrentPet.PetId;
             const petimageid = @Model.CurrentPet.PetImageId;
             const endurance = @Model.CurrentPet.Endurance;
             const strength = @Model.CurrentPet.Strength;
