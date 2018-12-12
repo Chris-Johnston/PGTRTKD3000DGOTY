@@ -7,7 +7,7 @@ install:
   - sh: nvm install 6
 before_build:
 - nuget restore
-- ps: |
+- cmd: |
     cd PetGame
     npm install gulp-cli --global
     npm install
