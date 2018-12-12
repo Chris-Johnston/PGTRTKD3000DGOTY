@@ -27,9 +27,22 @@ else if (Model.CurrentPet == null)
         Couldn't find that pet. Are you sure it exists, and that it belongs to you?
     </div>
 }
-else if (!Model.CanRace)
+else if (Model.CurrentPet.UserId != Model.CurrentUser.UserId)
 {
     // pet not found
+    <br />
+    <div class="alert alert-warning">
+        <h1>
+            Uh-oh!
+        </h1>
+        <p>
+            This pet does not belong to you.
+        </p>
+    </div>
+}
+else if (!Model.CanRace)
+{
+    // pet cannot race, already has recently
     <br />
     <div class="alert alert-warning">
         <h1>
@@ -40,19 +53,6 @@ else if (!Model.CanRace)
         </p>
         <p>
             <a href="/Pet/@Model.CurrentPet.PetId">Navigate back to the Pet status page.</a>
-        </p>
-    </div>
-}
-else if (Model.CurrentPet.UserId != Model.CurrentPet.UserId)
-{
-    // pet not found
-    <br />
-    <div class="alert alert-warning">
-        <h1>
-            Uh-oh!
-        </h1>
-        <p>
-            This pet does not belong to you.
         </p>
     </div>
 }

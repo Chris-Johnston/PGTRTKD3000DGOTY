@@ -56,6 +56,13 @@ namespace PetGame.Pages
                     CanRace = false;
                     return;
                 }
+                //  ensure ownership
+                if (CurrentUser.UserId != CurrentPet.UserId)
+                {
+                    CanRace = false;
+                    Response.StatusCode = 401;
+                    return;
+                }
             }
             else
             {
