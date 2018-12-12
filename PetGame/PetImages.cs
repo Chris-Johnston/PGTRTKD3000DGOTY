@@ -32,11 +32,6 @@ namespace PetGame
         public static int GetRandomId
             => rng.Next(Count);
 
-        public const int ImageGoldOrangId = 1001;
-        public const int ImageHacker = 1002;
-        public const int ImageThinking = 1003;
-        public const int ImageLegs = 1003;
-
         private static Dictionary<int, (string Path, string MIME)> Images
             => new Dictionary<int, (string Path, string MIME)>()
             {
@@ -51,6 +46,17 @@ namespace PetGame
                 { 8, (Path: "~/img/pets/pet_08.png", MIME: "image/png") },
                 { 9, (Path: "~/img/pets/pet_09.png", MIME: "image/png") },
                 { 10, (Path: "~/img/pets/pet_10.png", MIME: "image/png") },
+                { 11, (Path: "~/img/pets/pet_11.png", MIME: "image/png") },
+            };
+
+        public const int ImageGoldOrangId = 1001;
+        public const int ImageHacker = 1002;
+        public const int ImageThinking = 1003;
+        public const int ImageLegs = 1003;
+
+        private static Dictionary<int, (string Path, string MIME)> SecretImages
+            => new Dictionary<int, (string Path, string MIME)>()
+            {
                 { ImageGoldOrangId, (Path: "~/img/pets/ORANGOLD_small.png", MIME: "image/png") },
                 { ImageHacker, (Path: "~/img/pets/hacker.png", MIME: "image/png") },
                 { ImageThinking, (Path: "~/img/pets/thinking.png", MIME: "image/png") },
@@ -72,6 +78,8 @@ namespace PetGame
             // get the image path if it exists in the database
             if (Images.ContainsKey(imageId))
                 return Images[imageId];
+            if (SecretImages.ContainsKey(imageId))
+                return SecretImages[imageId];
             return DefaultImage;
         }
     }
