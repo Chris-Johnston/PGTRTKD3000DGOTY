@@ -6,7 +6,6 @@
     Layout = "~/Pages/_Layout.cshtml";
     ViewBag.Title = "Add a Pet";
 }
-
 @if (Model.CurrentUser != null)
 {
     <h1 class="display-2 text-center">Add a Pet</h1>
@@ -15,13 +14,38 @@
         <div class="form-group">
             <label for="petname">Name your new pet:</label>
             <br />
-            <input id="petname" name="PetName" class="form-control form-control-lg" type="text" placeholder="Fluffy" maxlength="50"/>
-            <small class="form-text text-muted">Names must be 2-50 characters, including letters, numbers, spaces, and <kbd>\'$.@@_/-?!</kbd>.</small>
+            <input id="petname" name="PetName" class="form-control form-control-lg" type="text" placeholder="Fluffy" maxlength="50"
+                   pattern="^(['$@@._/-?!0-9a-zA-Z])(['$@@._/-?!0-9a-zA-Z ]){0,48}['$@@._/-?!0-9a-zA-Z]$"
+                   title="Please ensure that your name includes only the allowed characters"
+                   required />
+            <small class="form-text text-muted">Names must be 2-50 characters, including letters, numbers, spaces, and <kbd>'$.@@_/-?!</kbd>.</small>
         </div>
         <!-- hidden value will be included in the request -->
         <input id="image-id" name="PetImageId" type="hidden" value="@Model.RandomImageId" />
         <button type="submit" class="btn btn-primary">Submit</button>
     </form>
+
+    <!-- https://getbootstrap.com/docs/4.0/components/forms/#validation -->
+    <script>
+    // Example starter JavaScript for disabling form submissions if there are invalid fields
+    (function () {
+        'use strict';
+        window.addEventListener('load', function () {
+            // Fetch all the forms we want to apply custom Bootstrap validation styles to
+            var forms = document.getElementsByClassName('needs-validation');
+            // Loop over them and prevent submission
+            var validation = Array.prototype.filter.call(forms, function (form) {
+                form.addEventListener('submit', function (event) {
+                    if (form.checkValidity() === false) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                    }
+                    form.classList.add('was-validated');
+                }, false);
+            });
+        }, false);
+    })();
+    </script>
 }
 else
 {
