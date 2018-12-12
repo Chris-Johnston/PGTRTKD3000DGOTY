@@ -6,7 +6,6 @@
     Layout = "~/Pages/_Layout.cshtml";
     ViewBag.Title = "Add a Pet";
 }
-
 @if (Model.CurrentUser != null)
 {
     <h1 class="display-2 text-center">Add a Pet</h1>
@@ -15,8 +14,11 @@
         <div class="form-group">
             <label for="petname">Name your new pet:</label>
             <br />
-            <input id="petname" name="PetName" class="form-control form-control-lg" type="text" placeholder="Fluffy" maxlength="50"/>
-            <small class="form-text text-muted">Names must be 2-50 characters, including letters, numbers, spaces, and <kbd>\'$.@@_/-?!</kbd>.</small>
+            <input id="petname" name="PetName" class="form-control form-control-lg" type="text" placeholder="Fluffy" maxlength="50"
+                   pattern="^(['$@@._/-?!0-9a-zA-Z])(['$@@._/-?!0-9a-zA-Z ]){0,48}['$@@._/-?!0-9a-zA-Z]$"
+                   title="Please ensure that your name includes only the allowed characters"
+                   required />
+            <small class="form-text text-muted">Names must be 2-50 characters, including letters, numbers, spaces, and <kbd>'$.@@_/-?!</kbd>.</small>
         </div>
         <!-- hidden value will be included in the request -->
         <input id="image-id" name="PetImageId" type="hidden" value="@Model.RandomImageId" />

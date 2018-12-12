@@ -1,23 +1,54 @@
 ﻿@page
 @using PetGame.Pages
+@using PetGame
 @model LoginModel
 @{
     Layout = "~/Pages/_Layout.cshtml";
     ViewBag.Title = "Login";
 }
-
 <h1>Login</h1>
-
+<!-- Show error messages, if relevant. -->
+@if (!string.IsNullOrWhiteSpace(Model.ErrorType))
+{
+    <div class="alert alert-danger">
+        <h2>
+            Uh-oh!
+        </h2>
+        <p>We couldn't process this request.</p>
+        @if (Model.ErrorType == LoginController.ErrorInvalidArguments)
+        {
+            <p>One or more of your arguments were invalid.</p>
+        }
+        else if (Model.ErrorType == LoginController.ErrorInsecurePassword)
+        {
+            <p>The supplied password was too insecure. Please ensure that your passwords are at least 8 characters long.</p>
+        }
+        else if (Model.ErrorType == LoginController.ErrorProbablyDuplicate)
+        {
+            <p>There was an error registering this user. Are you sure you haven't already made an account?</p>
+        }
+        else if (Model.ErrorType == LoginController.ErrorBadCredentials)
+        {
+            <p>The supplied credentials were invalid.</p>
+        }
+        else
+        {
+            <p>There was an unspecified error.</p>
+        }
+    </div>
+}
 <!-- POST this data to /api/login on successful login, will show name of logged in user-->
 <form method="post" action="api/login">
     <div class="form-group">
         <label for="username">Username:</label>
-        <input id="username" type="text" name="username" placeholder="Username" />
+        <input id="username" type="text" name="username" placeholder="Username" required maxlength="50" pattern="^([$@@._/-?!0-9a-zA-Z]){2,50}$"
+               title="Please use only 2-50 characters that are A-z, 0-9, or !?-/_.@@$."/>
         <small id="usernameHelp" class="form-text text-muted">Usernames must consist of 2-50 characters.</small>
     </div>
     <div class="form-group">
         <label for="password">Password</label>
-        <input id="password" type="password" name="password" placeholder="Password" />
+        <input id="password" type="password" name="password" placeholder="Password" pattern="(.){8,}$" required
+               title="Passwords must be at least 8 characters in length."/>
     </div>
     <button type="submit" value="Submit" class="btn btn-primary">Login</button>
 </form>
@@ -25,20 +56,30 @@
 <form method="post" action="api/login/register">
     <div class="form-group">
         <label for="username_register">Username:</label>
-        <input id="username_register" type="text" name="username" placeholder="Username" required />
+        <input id="username_register" type="text" name="username" placeholder="Username" required pattern="^([$@@._/-?!0-9a-zA-Z]){2,50}$"
+               title="Please use only 2-50 characters that are A-z, 0-9, or !?-/_.@@$."/>
         <small id="usernameHelp" class="form-text text-muted">Usernames must consist of 2-50 characters.</small>
     </div>
     <div class="form-group">
         <label for="password_register">Password:</label>
-        <input id="password_register" type="password" name="password" placeholder="Password" required />
-        <small id="passwordHelp" class="form-text text-muted">Passwords must be at least 8 characters.
-            <span class="text-info">While we are using a HMACSHA256 algorithm on your password, it's
-            always a good practice to never reuse passwords.</span>
+        <input id="password_register" type="password" name="password" placeholder="Password" required 
+               title="Passwords must be at least 8 characters in length."/>
+        <small id="passwordHelp" class="form-text text-muted">
+            Passwords must be at least 8 characters.
+            <span class="text-info">
+                While we are using a HMACSHA256 algorithm on your password, it's
+                always a good practice to never reuse passwords.
+            </span>
         </small>
     </div>
     <div class="form-group">
         <label for="phone_number"><span class="text-info">(Optional)</span> SMS Phone Number:</label>
-        <input id="phone_number_register" type="text" name="PhoneNumber" placeholder="+10005551234" />
+        <input id="phone_number_register" type="text" name="PhoneNumber" placeholder="+10005551234" pattern="^\+1([0-9]){10}$"
+               title="Phone numbers must start with +1, and include all 10 digits with no other symbols, or left blank."
+               />
+        <div class="invalid-feedback">
+            Please provide a valid phone number, or leave the field blank.
+        </div>
         <small id="phone_number_help" class="form-text text-muted">
             Required format: +10005551234
             <br />

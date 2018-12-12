@@ -32,7 +32,6 @@ namespace PetGame.Pages
         public void OnGet(ulong id)
         {
             CurrentUser = login.GetUserFromContext(HttpContext.User);
-            // TODO: need to check that the current user owns this pet, and show an error page accordingly
             if (CurrentUser != null)
             {
                 CurrentPetStatus = pet.GetPetStatusById(id);
@@ -42,8 +41,13 @@ namespace PetGame.Pages
                     Response.StatusCode = 404;
                     return;
                 }
-                // make a userlogin activity
-                activity.MakeActivityForPet(CurrentPetStatus.Pet.PetId, ActivityType.UserLogin);
+                // this check is handled in the front end
+                if (CurrentPetStatus.Pet.PetId == CurrentUser.UserId)
+                {
+                    // make a userlogin activity
+                    // if the user matches
+                    activity.MakeActivityForPet(CurrentPetStatus.Pet.PetId, ActivityType.UserLogin);
+                }
             }
             else
             {

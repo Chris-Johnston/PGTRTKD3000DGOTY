@@ -36,20 +36,7 @@ namespace PetGame
                 return NotFound();
             return Ok(race);
         }
-
-        /// <summary>
-        ///     Deletes a race by Race ID.
-        /// </summary>
-        /// <param name="id">The ID of the race to delete.</param>
-        [HttpDelete("{id}")]
-        public IActionResult DeleteRace(ulong id)
-        {
-            var result = service.DeleteRace(id);
-            if (result)
-                return Ok();
-            return NotFound();
-        }
-
+        
         /// <summary>
         ///     Inserts a new race into the database.
         /// </summary>
@@ -61,33 +48,18 @@ namespace PetGame
             if (value == null)
                 return BadRequest();
 
+            var loginService = new LoginService(this.sqlManager);
+            var user = loginService.GetUserFromContext(HttpContext.User);
+            if (user == null) return Unauthorized();
+
+            var petService = new PetService(this.sqlManager);
+            var pet = petService.GetPetById(value.PetId);
+            if (pet == null) return NotFound();
+
+            if (user.UserId != pet.UserId) return Unauthorized();
+
             var result = service.InsertRace(value);
             return Ok(result);
-        }
-
-        /// <summary>
-        ///     Updates a race in the database.
-        /// </summary>
-        /// <param name="id">
-        ///     The Id of the race to update.
-        /// </param>
-        /// <param name="value">
-        ///     The values of the Race to update.
-        ///     Ignores the RaceId property of this object.
-        /// </param>
-        /// <returns>
-        ///     The updated Race object.
-        /// </returns>
-        [HttpPut("{id}")]
-        public IActionResult PutRace(ulong id, [FromBody] Race value)
-        {
-            if (value == null)
-                return BadRequest("The Race cannot be null.");
-
-            var race = service.UpdateRace(id, value);
-            if (race == null)
-                return NotFound();
-            return Ok(race);
         }
     }
 }

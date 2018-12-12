@@ -143,6 +143,18 @@ namespace PetGame
         {
             if (value == null)
                 return BadRequest("The supplied Pet cannot be null.");
+
+            // validate that the pet exists and is owned by the current user
+            var toUpdate = petService.GetPetById(id);
+            if (toUpdate == null)
+                return NotFound();
+
+            var user = loginService.GetUserFromContext(HttpContext.User);
+            if (user == null) return Unauthorized();
+            else if (user.UserId != toUpdate.UserId)
+            {
+                return Unauthorized();
+            }
             // don't necessarily care if the PetId inside value does not match
             // the id passed separately, since only the Id is going to be used
             var pet = petService.UpdatePet(id, value);
@@ -188,6 +200,14 @@ namespace PetGame
             if (options == null)
                 options = new PetActivityRequestOptions();
 
+            var user = loginService.GetUserFromContext(HttpContext.User);
+            if (user == null) return Unauthorized();
+
+            var pet = petService.GetPetById(petId);
+            if (pet == null) return NotFound();
+
+            if (user.UserId != pet.UserId) return Unauthorized();
+
             // get all of the activities using the request options
             var results = activityService.GetActivities(petId, options.Limit, options.After, options.FixedType);
             if (results == null)
@@ -209,6 +229,14 @@ namespace PetGame
             // ensure validity of params
             if (activity == null)
                 return BadRequest();
+
+            var user = loginService.GetUserFromContext(HttpContext.User);
+            if (user == null) return Unauthorized();
+
+            var pet = petService.GetPetById(petid);
+            if (pet == null) return NotFound();
+
+            if (user.UserId != pet.UserId) return Unauthorized();
 
             // enforce the pet id
             activity.PetId = petid;
@@ -236,6 +264,22 @@ namespace PetGame
                 // invalid type
                 return BadRequest();
             }
+
+            var user = loginService.GetUserFromContext(HttpContext.User);
+            if (user == null) return Unauthorized();
+
+            var pet = petService.GetPetById(petid);
+            if (pet == null) return NotFound();
+
+            if (user.UserId != pet.UserId) return Unauthorized();
+
+            // double check the pet status, ensure that they can actually perform actions
+            var status = petService.GetPetStatusById(petid);
+            if (status.ServerTime < status.TimeOfNextAction)
+            {
+                // server time is before we can actually do the next action
+                return BadRequest();
+            }
             var result = activityService.MakeActivityForPet(petid, t);
             if (result == null)
                 return BadRequest();
@@ -261,6 +305,9 @@ namespace PetGame
 
             if (score <= 0)
                 return BadRequest();
+
+            // TODO: Consider limiting this based on when the last score was inserted and when the last activity for this pet appears
+            // could use the activity id as a way to do this.
 
             RaceService race = new RaceService(this.sqlManager);
             var r = race.InsertRace(new Race()
