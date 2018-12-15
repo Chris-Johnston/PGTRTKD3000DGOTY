@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title>Login - PGTRTKD3000DGOTY</title>
+    <link rel="stylesheet" href="login_files/main.css">
+    <meta name="msapplication-TileColor" content="#f22630">
+
+    <meta name="application-name" content="PGTRTKD3000DGOTY">
+    <meta name="description" content="Pet GTR Turbo Kart Drift 3000 Deluxe Game of the Year Edition">
+
+    <meta property="og:title" content="PGTRTKD3000DGOTY">
+    <meta property="og:site_name" content="PGTRTKD3000DGOTY">
+    <meta property="og:url" content="pgtrtkd3000dgoty.fun">
+    <meta property="og:description" content="Pet GTR Turbo Kart Drift 3000 Deluxe Game of the Year Edition">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="/apple-touch-icon.png">
+    <meta name="theme-color" content="#f22630">
+
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="http://pgtrtkd3000dgoty.fun/">
+    <meta property="twitter:title" content="Login - PGTRTKD3000DGOTY">
+    <meta property="twitter:description" content="Train your pet to the top of the scoreboard!">
+    <meta property="twitter:image" content="/apple-touch-icon.png">
+
+</head>
+<body>
+    <!-- Hack to get around typescript quirk, https://stackoverflow.com/a/43702240-->
+    <script>var exports = {};</script>
+    <!-- load jQuery before bootstrap -->
+    <script src="login_files/jquery-3.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="login_files/bootstrap.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <script src="login_files/bootstrap.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+    <!-- Title shown at the top of the page, include a link to register. -->
+    <nav class="navbar navbar-dark bg-dark navbar-expand-lg">
+        <a class="navbar-brand" href="index.html">
+            <!-- Using a .png and not svg because it didn't seem to export correctly as SVG. -->
+            <img src="login_files/logo_small.png" alt="Logo." width="30" height="30">
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="index.html">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="login.html">Login/Register</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="leaderboard.html">Leaderboard</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="https://github.com/Chris-Johnston/PGTRTKD3000DGOTY">GitHub</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <div id="body-container" class="container">
+        <h1>Login</h1>
+<!-- Show error messages, if relevant. -->
+<!-- POST this data to /api/login on successful login, will show name of logged in user-->
+<form method="post" action="">
+    <div class="form-group">
+        <label for="username">Username:</label>
+        <input id="username" type="text" name="username" placeholder="Username" required="" maxlength="50" pattern="^([$@._/-?!0-9a-zA-Z]){2,50}$" title="Please use only 2-50 characters that are A-z, 0-9, or !?-/_.@$.">
+        <small id="usernameHelp" class="form-text text-muted">Usernames must consist of 2-50 characters.</small>
+    </div>
+    <div class="form-group">
+        <label for="password">Password</label>
+        <input id="password" type="password" name="password" placeholder="Password" pattern="(.){8,}$" required="" title="Passwords must be at least 8 characters in length.">
+    </div>
+    <button type="submit" value="Submit" class="btn btn-primary">Login</button>
+</form>
+<h1>Register</h1>
+<form method="post" action="">
+    <div class="form-group">
+        <label for="username_register">Username:</label>
+        <input id="username_register" type="text" name="username" placeholder="Username" required="" pattern="^([$@._/-?!0-9a-zA-Z]){2,50}$" title="Please use only 2-50 characters that are A-z, 0-9, or !?-/_.@$.">
+        <small id="usernameHelp" class="form-text text-muted">Usernames must consist of 2-50 characters.</small>
+    </div>
+    <div class="form-group">
+        <label for="password_register">Password:</label>
+        <input id="password_register" type="password" name="password" placeholder="Password" required="" title="Passwords must be at least 8 characters in length.">
+        <small id="passwordHelp" class="form-text text-muted">
+            Passwords must be at least 8 characters.
+            <span class="text-info">
+                While we are using a HMACSHA256 algorithm on your password, it's
+                always a good practice to never reuse passwords.
+            </span>
+        </small>
+    </div>
+    <div class="form-group">
+        <label for="phone_number"><span class="text-info">(Optional)</span> SMS Phone Number:</label>
+        <input id="phone_number_register" type="text" name="PhoneNumber" placeholder="+10005551234" pattern="^\+1([0-9]){10}$" title="Phone numbers must start with +1, and include all 10 digits with no other symbols, or left blank.">
+        <div class="invalid-feedback">
+            Please provide a valid phone number, or leave the field blank.
+        </div>
+        <small id="phone_number_help" class="form-text text-muted">
+            Required format: +10005551234
+            <br>
+            <span class="text-info">Only enter your phone number if you wish to recieve SMS notifications.</span>
+            <span class="text-danger">Note: because of Twilio free-tier restrctions, only certain pre-approved numbers are supported.</span>
+        </small>
+    </div>
+    <div class="alert alert-warning" role="alert">
+        TODO: Add a "confirm password" field.
+    </div>
+    <button type="submit" value="Submit" class="btn btn-primary">Register</button>
+</form>
+    </div>
+    <!-- JQuery and Popper.js, used by Bootstrap CSS -->
+    <script src="login_files/popper.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+
+
+</body></html>

@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title>Race - PGTRTKD3000DGOTY</title>
+    <link rel="stylesheet" href="race_files/main.css">
+    <meta name="msapplication-TileColor" content="#f22630">
+
+    <meta name="application-name" content="PGTRTKD3000DGOTY">
+    <meta name="description" content="Pet GTR Turbo Kart Drift 3000 Deluxe Game of the Year Edition">
+
+    <meta property="og:title" content="PGTRTKD3000DGOTY">
+    <meta property="og:site_name" content="PGTRTKD3000DGOTY">
+    <meta property="og:url" content="pgtrtkd3000dgoty.fun">
+    <meta property="og:description" content="Pet GTR Turbo Kart Drift 3000 Deluxe Game of the Year Edition">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="/apple-touch-icon.png">
+    <meta name="theme-color" content="#f22630">
+
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="http://pgtrtkd3000dgoty.fun/">
+    <meta property="twitter:title" content="Race - PGTRTKD3000DGOTY">
+    <meta property="twitter:description" content="Train your pet to the top of the scoreboard!">
+    <meta property="twitter:image" content="/apple-touch-icon.png">
+</head>
+<body>
+    <!-- Hack to get around typescript quirk, https://stackoverflow.com/a/43702240-->
+    <script>var exports = {};</script>
+    <!-- load jQuery before bootstrap -->
+    <script src="race_files/jquery-3.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="race_files/bootstrap.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <script src="race_files/bootstrap.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+    <!-- Title shown at the top of the page, include a link to register. -->
+    <nav class="navbar navbar-dark bg-dark navbar-expand-lg">
+        <a class="navbar-brand" href="index.html">
+            <!-- Using a .png and not svg because it didn't seem to export correctly as SVG. -->
+            <img src="race_files/logo_small.png" alt="Logo." width="30" height="30">
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="index.html">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="login.html">Login/Register</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="leaderboard.html">Leaderboard</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="https://github.com/Chris-Johnston/PGTRTKD3000DGOTY">GitHub</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <div id="body-container" class="container">
+            <script type="text/javascript">
+                    const petid = 93;
+            const petimageid = 4;
+            const endurance = 50;
+            const strength = 99;
+    </script>
+    <h1>
+        Race with Pirate Snek (93)!
+    </h1>
+    <div id="before-race" class="before-wrapper" style="display: block;">
+        <h1 id="countdowntext" class="text-center text-success countdown" style="display: none;">Race begins in 1...</h1>
+        <button class="btn btn-primary btn-lg" id="start-race">Start!</button>
+    </div>
+    <div id="after-race" style="display: none;" class="text-center">
+        <h1 class="display-1 text-success text-center">Congratulations!</h1>
+        <h2>
+            <span class="text-info">Pirate Snek</span> completed the race with a score of:
+            <span class="text-info" id="final-score">????</span>
+        </h2>
+        <a class="btn btn-secondary btn-lg" href="leaderboard.html" role="button">View Leaderboard</a>
+    </div>
+    <div id="during-race" style="display: none;">
+        <p>Press the <em>Dash!</em> button, or the <kbd>Spacebar</kbd> button to give your pet an extra boost!</p>
+        <canvas id="race-canvas" width="600" height="500"></canvas>
+        <div class="button-wrapper">
+            <button class="btn btn-primary btn-lg btn-block" id="race-button">Dash!</button>
+        </div>
+    </div>
+    <script src="race_files/race.js" type="text/javascript"></script>
+
+    </div>
+    <!-- JQuery and Popper.js, used by Bootstrap CSS -->
+    <script src="race_files/popper.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+
+
+</body></html>

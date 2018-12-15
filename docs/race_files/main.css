@@ -1,0 +1,271 @@
+.shaker {
+  /* https://codepen.io/onion2k/pen/xfepi */
+  -webkit-animation: kf_shake 0.4s 1 linear;
+  -moz-animation: kf_shake 0.4s 1 linear;
+  -o-animation: kf_shake 0.4s 1 linear;
+  background-color: red !important;
+  border-color: red !important;
+}
+#race-button {
+  transition-property: background-color border-color opacity;
+  transition-duration: 0.1s;
+  transition-timing-function: ease-in-out;
+}
+@-webkit-keyframes kf_shake {
+  0% {
+    -webkit-transform: translate(30px);
+  }
+  20% {
+    -webkit-transform: translate(-30px);
+  }
+  40% {
+    -webkit-transform: translate(15px);
+  }
+  60% {
+    -webkit-transform: translate(-15px);
+  }
+  80% {
+    -webkit-transform: translate(8px);
+  }
+  100% {
+    -webkit-transform: translate(0);
+  }
+}
+@-moz-keyframes kf_shake {
+  0% {
+    -moz-transform: translate(30px);
+  }
+  20% {
+    -moz-transform: translate(-30px);
+  }
+  40% {
+    -moz-transform: translate(15px);
+  }
+  60% {
+    -moz-transform: translate(-15px);
+  }
+  80% {
+    -moz-transform: translate(8px);
+  }
+  100% {
+    -moz-transform: translate(0);
+  }
+}
+@-o-keyframes kf_shake {
+  0% {
+    -o-transform: translate(30px);
+  }
+  20% {
+    -o-transform: translate(-30px);
+  }
+  40% {
+    -o-transform: translate(15px);
+  }
+  60% {
+    -o-transform: translate(-15px);
+  }
+  80% {
+    -o-transform: translate(8px);
+  }
+  100% {
+    -o-origin-transform: translate(0);
+  }
+}
+.button-wrapper {
+  max-width: 50%;
+  margin: 10pt auto;
+}
+canvas {
+  border: 1px solid #d3d3d3;
+  background-color: #f1f1f1;
+  display: block;
+  margin: auto;
+  max-width: 90%;
+}
+.body-container {
+  margin-bottom: 60px;
+}
+a.disabled {
+  pointer-events: none;
+  cursor: default;
+}
+.status-image {
+  display: block;
+  max-height: 200px;
+  max-width: 50%;
+  margin: auto;
+  /*min-width: 40%;*/
+}
+.status-endurance::before {
+  content: "Endurance: ";
+}
+.status-strength::before {
+  content: "Strength: ";
+}
+.status-hunger::before {
+  content: "Hunger: ";
+}
+.status-hunger::after {
+  content: "%";
+}
+.status-happiness::before {
+  content: "Happiness: ";
+}
+.status-happiness::after {
+  content: "%";
+}
+.status-box {
+  margin: 10px auto;
+  max-width: 60%;
+  text-align: center;
+}
+.landing-logo {
+  max-height: 90%;
+  max-width: 90%;
+}
+.pet-image {
+  max-width: 90%;
+  margin: auto;
+  display: block;
+}
+.leaderboard-image {
+  display: block;
+  margin: auto;
+  max-height: 70%;
+  max-width: 70%;
+}
+.pets-container {
+  /* for testing */
+  border: 1px solid black;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: auto;
+  width: 100%;
+}
+.pet-0 {
+  grid-row-start: 1;
+  grid-row-end: 1;
+  grid-column-start: 1;
+  grid-column-end: 2;
+}
+.pet-1 {
+  grid-row-start: 1;
+  grid-row-end: 1;
+  grid-column-start: 2;
+  grid-column-end: 3;
+}
+.pet-2 {
+  grid-row-start: 1;
+  grid-row-end: 1;
+  grid-column-start: 3;
+  grid-column-end: 4;
+}
+.pet-3 {
+  grid-row-start: 2;
+  grid-row-end: 2;
+  grid-column-start: 1;
+  grid-column-end: 2;
+}
+.pet-4 {
+  grid-row-start: 2;
+  grid-row-end: 2;
+  grid-column-start: 2;
+  grid-column-end: 3;
+}
+.pet-5 {
+  grid-row-start: 2;
+  grid-row-end: 2;
+  grid-column-start: 3;
+  grid-column-end: 4;
+}
+.pet-6 {
+  grid-row-start: 3;
+  grid-row-end: 3;
+  grid-column-start: 1;
+  grid-column-end: 2;
+}
+.pet-7 {
+  grid-row-start: 3;
+  grid-row-end: 3;
+  grid-column-start: 2;
+  grid-column-end: 3;
+}
+.pet-8 {
+  grid-row-start: 3;
+  grid-row-end: 3;
+  grid-column-start: 3;
+  grid-column-end: 4;
+}
+.pet-box {
+  border-radius: 5px;
+  display: block;
+  margin: 5pt;
+  border: 1px solid black;
+  padding: 5pt;
+  background-color: lightgray;
+  transition-property: box-shadow, background-color;
+  transition-duration: 0.2s;
+  transition-timing-function: ease-in-out;
+}
+.pet-box:hover {
+  cursor: pointer;
+  background-color: lightblue;
+  box-shadow: 5px 5px 10px rgba(0, 116, 154, 0.3);
+}
+.pet-box:hover .pet-name {
+  text-decoration: underline;
+}
+.wrap-dis {
+  /* These are technically the same, but use both */
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  -ms-word-break: break-all;
+  /* This is the dangerous one in WebKit, as it breaks things wherever */
+  word-break: break-all;
+  /* Instead use this non-standard one: */
+  word-break: break-word;
+  /* Adds a hyphen where the word breaks, if supported (No Blink) */
+  -ms-hyphens: auto;
+  -moz-hyphens: auto;
+  -webkit-hyphens: auto;
+  hyphens: auto;
+}
+.pet-name {
+  /* These are technically the same, but use both */
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  -ms-word-break: break-all;
+  /* This is the dangerous one in WebKit, as it breaks things wherever */
+  word-break: break-all;
+  /* Instead use this non-standard one: */
+  word-break: break-word;
+  /* Adds a hyphen where the word breaks, if supported (No Blink) */
+  -ms-hyphens: auto;
+  -moz-hyphens: auto;
+  -webkit-hyphens: auto;
+  hyphens: auto;
+  position: center;
+  font-size: 24pt;
+  font-weight: bold;
+}
+.pet-label {
+  font-size: 14pt;
+}
+.pet-label.hunger::before {
+  content: "Hunger: ";
+}
+.pet-label.happy::before {
+  content: "Happy: ";
+}
+.pet-label.hunger::after,
+.pet-label.happy::after {
+  content: "%";
+}
+.new-pet {
+  border: 1px dashed #808080;
+}
+.add-pet-icon {
+  display: block;
+  max-height: 300px;
+  margin: 0 auto;
+}

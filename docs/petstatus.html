@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title>Pet Status - PGTRTKD3000DGOTY</title>
+    <link rel="stylesheet" href="petstatus_files/main.css">
+    <meta name="msapplication-TileColor" content="#f22630">
+
+    <meta name="application-name" content="PGTRTKD3000DGOTY">
+    <meta name="description" content="Pet GTR Turbo Kart Drift 3000 Deluxe Game of the Year Edition">
+
+    <meta property="og:title" content="PGTRTKD3000DGOTY">
+    <meta property="og:site_name" content="PGTRTKD3000DGOTY">
+    <meta property="og:url" content="pgtrtkd3000dgoty.fun">
+    <meta property="og:description" content="Pet GTR Turbo Kart Drift 3000 Deluxe Game of the Year Edition">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="/apple-touch-icon.png">
+    <meta name="theme-color" content="#f22630">
+
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="http://pgtrtkd3000dgoty.fun/">
+    <meta property="twitter:title" content="Pet Status - PGTRTKD3000DGOTY">
+    <meta property="twitter:description" content="Train your pet to the top of the scoreboard!">
+    <meta property="twitter:image" content="/apple-touch-icon.png">
+</head>
+<body>
+    <!-- Hack to get around typescript quirk, https://stackoverflow.com/a/43702240-->
+    <script>var exports = {};</script>
+    <!-- load jQuery before bootstrap -->
+    <script src="petstatus_files/jquery-3.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="petstatus_files/bootstrap.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <script src="petstatus_files/bootstrap.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+    <!-- Title shown at the top of the page, include a link to register. -->
+    <nav class="navbar navbar-dark bg-dark navbar-expand-lg">
+        <a class="navbar-brand" href="index.html">
+            <!-- Using a .png and not svg because it didn't seem to export correctly as SVG. -->
+            <img src="petstatus_files/logo_small.png" alt="Logo." width="30" height="30">
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="index.html">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="login.html">Login/Register</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="leaderboard.html">Leaderboard</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="https://github.com/Chris-Johnston/PGTRTKD3000DGOTY">GitHub</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <div id="body-container" class="container">
+            <script type="text/javascript">
+        // set the global var that is used by petStatus.ts later on
+        const petid = 93;
+    </script>
+    <h1 class="display-2 wrap-dis">
+        Pirate Snek
+    </h1>
+    <h2 class="text-muted">
+        Owned by example
+    </h2>
+    <div class="status-pet-wrapper justify-content-center">
+            <img class="status-image" src="petstatus_files/4.png" alt="Picture of Pirate Snek">
+            <div class="status-box">
+                <span id="pet-hunger" class="status-hunger text-warning">0</span>
+                <span id="pet-happiness" class="status-happiness text-danger">0</span>
+                <span class="status-strength" id="pet-strength">5</span>
+                <span class="status-endurance" id="pet-endurance">5</span>
+            </div>
+            <div class="pet-actions">
+                <div id="alert-timeout" class="alert alert-warning actions-timeout" style="display: none;">
+                    Pirate Snek cannot do anything for the next
+                    <span id="time-until">-481 min. -5 sec.</span>
+                </div>
+                <div class="btn-toolbar" role="toolbar">
+                    <div class="btn-group mr-2" role="group">
+                        <button id="btn-feed" class="btn-feed btn btn-action btn-outline-primary btn-lg">Feed</button>
+                    </div>
+                    <div class="btn-group mr-2" role="group">
+                        <button id="btn-train" class="btn-train btn btn-action btn-outline-primary btn-lg">Train</button>
+                    </div>
+                    <div class="btn-group" role="group">
+                        <!-- direct to the race page for this pet -->
+                        <a id="btn-race" href="race.html" class="btn-race btn-action btn btn-outline-primary btn-lg">Race</a>
+                    </div>
+                </div>
+            </div>
+    </div>
+    <!-- Include the JS that drives interactions on this page. -->
+    <script src="petstatus_files/petStatus.js" type="text/javascript"></script>
+
+    </div>
+    <!-- JQuery and Popper.js, used by Bootstrap CSS -->
+    <script src="petstatus_files/popper.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+
+
+</body></html>
